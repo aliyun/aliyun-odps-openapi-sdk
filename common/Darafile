@@ -1,0 +1,34 @@
+{
+  "scope": "maxcompute",
+  "name": "test",
+  "version": "v0.0.1-alpha",
+  "main": "main.dara",
+
+  "libraries": {
+    "McUtil": "maxcompute:Util:*",
+    "String": "darabonba:String:*",
+    "Util": "darabonba:Util:*",
+    "Credential": "alibabacloud:Credential:*",
+    "XML": "darabonba:XML:*"
+  },
+
+  "java": {
+    "package": "com.aliyun.odps",
+    "packageInfo": {
+      "version": "0.0.1-alpha",
+      "groupId": "com.aliyun.odps",
+      "artifactId": "openapi",
+      "name": "openapi",
+      "description": "Alibaba Cloud MaxCompute (20220104) SDK for Java",
+      "url": "https://github.com/aliyun/alibabacloud-java-sdk",
+      "licenseName": "The Apache License, Version 2.0",
+      "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0.txt",
+      "developerId": "aliyunproducts",
+      "developerName": "Aliyun SDK",
+      "developerEmail": "aliyunsdk@aliyun.com"
+    }
+  },
+  "releases": {
+    "java": "com.aliyun.odps:openapi:0.0.1-alpha"
+  }
+}

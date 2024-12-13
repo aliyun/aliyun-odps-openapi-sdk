@@ -1,0 +1,41 @@
+import OpenApi;
+import OpenApiUtil;
+import Util;
+extends OpenApi;
+
+init(config: OpenApi.Config){
+  super(config);
+}
+
+model GetTableRequest {
+  projectName?: string(name='projectName', description='The name of the project.', example=''),  
+  tableName?: string(name='tableName', description='The name of the table.', example=''),
+}
+
+model GetTableResponse = {
+  headers?: map[string]string(name='headers'),
+  statusCode?: int32(name='statusCode'),
+  body?: string(name='body'),
+}
+
+async function getTableWithOptions(request: GetTableRequest, runtime: Util.RuntimeOptions): GetTableResponse {
+  Util.validateModel(request);
+  var query : map[string]string = {};
+  query['curr_project'] = request.projectName;
+  var req = new OpenApi.OpenApiRequest{
+    query = query,
+  };
+  var params = new OpenApi.Params{
+    pathname = `/projects/${OpenApiUtil.getEncodeParam(request.projectName)}/tables/${OpenApiUtil.getEncodeParam(request.tableName)}`,
+    method = 'GET',
+    authType = 'AK',
+    bodyType = 'string',
+  };
+  return callApi(params, req, runtime);
+}
+
+
+async function getTable(request: GetTableRequest): GetTableResponse {
+  var runtime = new Util.RuntimeOptions{};
+  return getTableWithOptions(request, runtime);
+}

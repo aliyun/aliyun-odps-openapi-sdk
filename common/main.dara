@@ -1,0 +1,364 @@
+
+import McUtil;
+import Util;
+import Credential;
+import String;
+
+type @endpoint = string
+type @project = string
+type @regionId = string
+type @protocol = string
+type @method = string
+type @userAgent = string
+type @readTimeout = integer
+type @connectTimeout = integer
+type @credential = Credential
+type @signatureVersion = string
+type @headers = map[string]string
+type @suffix = string
+type @globalParameters = GlobalParameters
+
+model GlobalParameters {
+  headers?: map[string]string,
+  queries?: map[string]string,
+}
+/**
+ * Model for initing client
+ */
+model Config {
+  project?: string(description='project',example='',default=''),
+  accessKeyId?: string(description='accesskey id',default=''),
+  accessKeySecret?: string(description='accesskey secret',default=''),
+  securityToken?: string(description='security token',example='a.txt',default=''),
+  bearerToken?: string(description='bearer token',example='the-bearer-token',default=''),
+  protocol?: string(description='http protocol',example='http',default='http'),
+  method?: string(description='http method',example='GET',default=''),
+  regionId?: string(description='region id',example='cn-hangzhou',default=''),
+  readTimeout?: integer(description='read timeout',example='60',default='60'),
+  connectTimeout?: integer(description='connect timeout',example='60',default='60'),
+  credential?: Credential(description='credential',example='',default=''),
+  endpoint?: string(description='endpoint',example='cs.aliyuncs.com',default=''),
+  type?: string(description='credential type',example='access_key',default=''),
+  userAgent?: string(description='user agent',example='maxcompute-openapi',default='maxcompute-openapi'),
+  suffix?: string(description='suffix for endpoint',example='aliyun',default=''),
+  signatureVersion?: string(description='Signature Version',example='v2',default='v2'),
+  globalParameters?: GlobalParameters(description='Global Parameters'),
+}
+
+/**
+ * Init client with Config
+ * @param config config contains the necessary information to create a client
+ */
+init(config: Config) {
+  if (Util.isUnset(config)) {
+    throw {
+      code = 'ParameterMissing',
+      message = '\'config\' can not be unset'
+    };
+  }
+
+  if(!Util.empty(config.accessKeyId) && !Util.empty(config.accessKeySecret)){
+    if (!Util.empty(config.securityToken)) {
+      config.type = 'sts';
+    } else {
+      config.type = 'access_key';
+    }
+    var credentialConfig = new Credential.Config{
+      accessKeyId = config.accessKeyId,
+      type = config.type,
+      accessKeySecret = config.accessKeySecret
+    };
+    credentialConfig.securityToken = config.securityToken;
+    @credential = new Credential(credentialConfig);
+  } else if (!Util.empty(config.bearerToken)) {
+    var cc = new Credential.Config{
+      type = 'bearer',
+      bearerToken = config.bearerToken
+    };
+    @credential = new Credential(cc);
+  } else if(!Util.isUnset(config.credential)) {
+    @credential = config.credential;
+  }
+  @project = config.project;
+  @endpoint = config.endpoint;
+  @protocol = config.protocol;
+  @method = config.method;
+  @regionId = config.regionId;
+  @userAgent = config.userAgent;
+  @readTimeout = config.readTimeout;
+  @connectTimeout = config.connectTimeout;
+  @signatureVersion = config.signatureVersion;
+  @globalParameters = config.globalParameters;
+  @suffix = config.suffix;
+}
+
+
+model Params = {
+  action?: string,
+  version?: string,
+  protocol?: string,
+  pathname: string,
+  method: string,
+  authType?: string,
+  bodyType?: string,
+  reqBodyType?: string,
+  style?: string
+}
+
+model OpenApiRequest {
+  headers?: map[string]string,
+  query?: map[string]string,
+  body?: any,
+  stream?: readable,
+  hostMap?: map[string]string,
+  endpointOverride?: string,
+}
+
+async function callApi(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOptions): object {
+  if (Util.isUnset(params)) {
+    throw {
+      code = 'ParameterMissing',
+      message = '\'params\' can not be unset'
+    };
+  }
+  return doRequest(params, request, runtime);
+}
+
+/**
+ * Encapsulate the request and invoke the network
+ * @param action api name
+ * @param version product version
+ * @param protocol http or https
+ * @param method e.g. GET
+ * @param authType authorization type e.g. AK
+ * @param bodyType response body type e.g. String
+ * @param request object of OpenApiRequest
+ * @param runtime which controls some details of call api, such as retry times
+ * @return the response
+ */
+api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOptions): object {
+  __request.protocol = Util.defaultString(@protocol, params.protocol);
+  __request.method = params.method;
+  __request.pathname = `/${@suffix}${params.pathname}`;
+  var globalQueries : map[string]string = {};
+  var globalHeaders : map[string]string = {};
+  if (!Util.isUnset(@globalParameters)) {
+    var globalParams = @globalParameters;
+    if (!Util.isUnset(globalParams.queries)) {
+      globalQueries = globalParams.queries;
+    }
+    if (!Util.isUnset(globalParams.headers)) {
+      globalHeaders = globalParams.headers;
+    }
+  }
+  var extendsHeaders : map[string]string = {};
+  var extendsQueries : map[string]string = {};
+  if (!Util.isUnset(runtime.extendsParameters)) {
+    var extendsParameters = runtime.extendsParameters;
+    if (!Util.isUnset(extendsParameters.headers)) {
+      extendsHeaders = extendsParameters.headers;
+    }
+    if (!Util.isUnset(extendsParameters.queries)) {
+      extendsQueries = extendsParameters.queries;
+    }
+  }
+  __request.query = {
+    curr_project=@project,
+    ...globalQueries,
+    ...extendsQueries,
+    ...request.query,
+  };
+
+  // endpoint is setted in product client
+  __request.headers = {
+    host = @endpoint,
+    user-agent = getUserAgent(),
+    x-odps-user-agent = getUserAgent(),
+    Date = McUtil.getApiTimestamp(),
+    ...globalHeaders,
+    ...extendsHeaders,
+    ...request.headers,
+  };
+
+
+  if (!Util.isUnset(request.stream)) {
+    var tmp = Util.readAsBytes(request.stream);
+    
+    __request.body = tmp;
+  }
+  var canonicalString = McUtil.buildCanonicalString(params.method, params.pathname, __request.query, __request.headers);
+
+  if (!Util.equalString(params.authType, 'Anonymous')) {
+    if (Util.isUnset(@credential)) {
+      throw {
+        code = `InvalidCredentials`,
+        message = `Please set up the credentials correctly. If you are setting them through environment variables, please ensure that ALIBABA_CLOUD_ACCESS_KEY_ID and ALIBABA_CLOUD_ACCESS_KEY_SECRET are set correctly. See https://help.aliyun.com/zh/sdk/developer-reference/configure-the-alibaba-cloud-accesskey-environment-variable-on-linux-macos-and-windows-systems for more details.`
+      }
+    }
+    var credentialModel = @credential.getCredential();
+    var authType = credentialModel.type;
+    if (Util.equalString(authType, 'bearer')) {
+      var bearerToken = credentialModel.bearerToken;
+      __request.headers.x-odps-bearer-token = bearerToken;
+    } else {
+      var accessKeyId = credentialModel.accessKeyId;
+      var accessKeySecret = credentialModel.accessKeySecret;
+      var securityToken = credentialModel.securityToken;
+
+      __request.headers.Authorization = McUtil.getSignature(canonicalString, accessKeyId, accessKeySecret);
+      if (!Util.empty(securityToken)) {
+        __request.headers.authorization-sts-token = securityToken;
+      }
+    }
+  }
+} returns {
+  if (Util.equalNumber(__response.statusCode, 204)) {
+    return {
+      headers = __response.headers
+    };
+  }
+
+  if (Util.is4xx(__response.statusCode) || Util.is5xx(__response.statusCode)) {
+    var _res = Util.readAsJSON(__response.body);
+    var err = Util.assertAsMap(_res);
+    var requestId = defaultAny(err.RequestId, err.requestId);
+    requestId = defaultAny(requestId, err.requestid);
+    err.statusCode = __response.statusCode;
+     throw {
+      code = `${defaultAny(err.Code, err.code)}`,
+      message = `code: ${__response.statusCode}, ${defaultAny(err.Message, err.message)} request id: ${requestId}`,
+      data = err,
+      description = `${defaultAny(err.Description, err.description)}`,
+      accessDeniedDetail = defaultAny(err.AccessDeniedDetail, err.accessDeniedDetail),
+    };
+  }
+
+
+  if (Util.equalString(params.bodyType, 'binary')) {
+    var resp = {
+      body = __response.body,
+      headers = __response.headers,
+      statusCode = __response.statusCode
+    };
+    return resp;
+  } else if (Util.equalString(params.bodyType, 'byte')) {
+    var byt = Util.readAsBytes(__response.body);
+    return {
+      body = byt,
+      headers = __response.headers,
+      statusCode = __response.statusCode
+    };
+  } else if (Util.equalString(params.bodyType, 'string')) {
+    var str = Util.readAsString(__response.body);
+    return {
+      body = str,
+      headers = __response.headers,
+      statusCode = __response.statusCode
+    };
+  } else if (Util.equalString(params.bodyType, 'json')){
+    var obj = Util.readAsJSON(__response.body);
+    var res = Util.assertAsMap(obj);
+    return {
+      body = res,
+      headers = __response.headers,
+      statusCode = __response.statusCode
+    };
+  } else if (Util.equalString(params.bodyType, 'array')){
+    var arr = Util.readAsJSON(__response.body);
+    return {
+      body = arr,
+      headers = __response.headers,
+      statusCode = __response.statusCode
+    };
+  } else {
+    var anything = Util.readAsString(__response.body);
+    return {
+      body = anything,
+      headers = __response.headers,
+      statusCode = __response.statusCode
+    };
+  }
+} runtime {
+  timeouted = 'retry',
+  readTimeout = Util.defaultNumber(runtime.readTimeout, @readTimeout),
+  connectTimeout = Util.defaultNumber(runtime.connectTimeout, @connectTimeout),
+  retry = {
+    retryable = runtime.autoretry,
+    maxAttempts = Util.defaultNumber(runtime.maxAttempts, 3)
+  },
+  backoff = {
+    policy = Util.defaultString(runtime.backoffPolicy, 'no'),
+    period = Util.defaultNumber(runtime.backoffPeriod, 1)
+  },
+  ignoreSSL = runtime.ignoreSSL
+}
+
+/**
+ * Get user agent
+ * @return user agent
+ */
+function getUserAgent(): string {
+  var userAgent = Util.getUserAgent(@userAgent);
+  return userAgent;
+}
+
+/**
+ * Get accesskey id by using credential
+ * @return accesskey id
+ */
+async function getAccessKeyId(): string {
+  if (Util.isUnset(@credential)) {
+    return '';
+  }
+  var accessKeyId = @credential.getAccessKeyId();
+  return accessKeyId;
+}
+
+/**
+ * Get accesskey secret by using credential
+ * @return accesskey secret
+ */
+async function getAccessKeySecret(): string {
+  if (Util.isUnset(@credential)) {
+    return '';
+  }
+  var secret = @credential.getAccessKeySecret();
+  return secret;
+}
+
+/**
+ * Get security token by using credential
+ * @return security token
+ */
+async function getSecurityToken(): string {
+  if (Util.isUnset(@credential)) {
+    return '';
+  }
+  var token = @credential.getSecurityToken();
+  return token;
+}
+
+/**
+ * Get bearer token by credential
+ * @return bearer token
+ */
+async function getBearerToken(): string {
+  if (Util.isUnset(@credential)) {
+    return '';
+  }
+  var token = @credential.getBearerToken();
+  return token;
+}
+
+/**
+ * If inputValue is not null, return it or return defaultValue
+ * @param inputValue  users input value
+ * @param defaultValue default value
+ * @return the final result
+ */
+static function defaultAny(inputValue: any, defaultValue: any): any {
+  if (Util.isUnset(inputValue)) {
+    return defaultValue;
+  }
+  return inputValue;
+}
