@@ -114,6 +114,20 @@ model OpenApiRequest {
   endpointOverride?: string,
 }
 
+async function request(model: $Model, method: string, path: string, params: map[string]string, runtime: Util.RuntimeOptions): object {
+  Util.validateModel(model);
+  var req = new OpenApiRequest{
+    query = params,
+    body = Util.toMap(model)
+  };
+  var openapiParams = new Params{
+    pathname = path,
+    method = method,
+  };
+  return callApi(openapiParams, req, runtime);
+}
+
+
 async function callApi(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOptions): object {
   if (Util.isUnset(params)) {
     throw {
@@ -139,7 +153,11 @@ async function callApi(params: Params, request: OpenApiRequest, runtime: Util.Ru
 api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOptions): object {
   __request.protocol = Util.defaultString(@protocol, params.protocol);
   __request.method = params.method;
-  __request.pathname = `/${@suffix}${params.pathname}`;
+  if(!Util.isUnset(@suffix)) {
+    __request.pathname = `/${@suffix}${params.pathname}`;
+  } else {
+    __request.pathname = params.pathname;
+  }
   var globalQueries : map[string]string = {};
   var globalHeaders : map[string]string = {};
   if (!Util.isUnset(@globalParameters)) {
@@ -183,9 +201,15 @@ api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOpti
 
   if (!Util.isUnset(request.stream)) {
     var tmp = Util.readAsBytes(request.stream);
-    
     __request.body = tmp;
   }
+
+  if (!Util.isUnset(request.body)) {
+    var jsonObj = Util.toJSONString(request.body);
+    __request.body = jsonObj;
+    __request.headers.content-type = 'application/json; charset=utf-8';
+  }
+
   var canonicalString = McUtil.buildCanonicalString(params.method, params.pathname, __request.query, __request.headers);
 
   if (!Util.equalString(params.authType, 'Anonymous')) {
