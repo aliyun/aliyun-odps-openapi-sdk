@@ -1,5 +1,4 @@
 import OpenApi;
-import OpenApiUtil;
 import Util;
 extends OpenApi;
 
@@ -7,35 +6,86 @@ init(config: OpenApi.Config){
   super(config);
 }
 
-model GetTableRequest {
-  projectName?: string(name='projectName', description='The name of the project.', example=''),  
-  tableName?: string(name='tableName', description='The name of the table.', example=''),
+
+model TableFieldSchema {
+  fieldName?: string(name='fieldName', description='列名（如果是顶层列），或者 struct 字段名。', example=''),
+  sqlTypeDefinition?: string(name='sqlTypeDefinition', description='在 SQL DDL 语句中填写的表示列类型的字符串定义。', example=''),
+  typeCategory?: string(name='typeCategory', description='字段类型。'),
+  mode?: string(name='mode', description='REQUIRED 或 NULLABLE。'),
+  fields?: [TableFieldSchema](name='fields', description='如果是 STRUCT 类型，表示 STRUCT 的子字段。'),
+  description?: string(name='description', description='列的评论。', example=''),
+  policyTags?: PolicyTag(name='policyTags', description='可选。列绑定的 policy tag。'),
+  maxLength?: string(name='maxLength', description='如果是 CHAR/VARCHAR 类型，表示字段的最大长度。', example=''),
+  precision?: string(name='precision', description='如果 DECIMAL 类型，表示精度。', example=''),
+  scale?: string(name='scale', description='如果 DECIMAL 类型，表示 scale。', example=''),
+  defaultValueExpression?: string(name='defaultValueExpression', description='可选。默认值的表达式字符串。', example='')
+}
+
+model PolicyTag {
+  names ?: [string]
+}
+
+model Field {
+  fieldName?: string(name='fieldName', description='列名（如果是顶层列），或者 struct 字段名。', example='')
+}
+
+model SortingField {
+    fieldName?: string(name='fieldName', description='列名（如果是顶层列），或者 struct 字段名。', example=''),
+    order?: string(name='order', description='排序顺序', example='DESC')
+}
+
+model Clustering {
+  type?: string(name='type', description='表的聚簇类型，目前支持 hash/range。'),
+  clusteringFields?: [Field](name='clusteringFields', description='聚簇列定义。'),
+  sortingFields?: [SortingField](name='sortingFields', description='桶内排序列定义。')
+}
+
+model Fields {
+  fields?: [string](name='fields', description='主键列名列表。')
+}
+
+model TableConstraints {
+  primaryKey?: Fields(name='primaryKey', description='表的主键。系统不为主键自动去重。')
+}
+
+model PartitionDefinition {
+  partitionedColumn?: [PartitionedColumn]
+}
+
+model PartitionedColumn {
+  field?: string
+}
+
+model Table {
+  etag?: string(name='etag', description='用于 read-modify-write 一致性校验。', example=''),
+  name?: string(name='name', description='表的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/tables/{tableName}', example=''),
+  projectId?: string(name='projectId', description='表所属的 project ID。', example=''),
+  schemaName?: string(name='schemaName', description='表所属的 schema 名。', example=''),
+  tableName?: string(name='tableName', description='表名。', example=''),
+  type?: string(name='type', description='表的类型。', example=''),
+  description?: string(name='description', description='表的描述。等价于 SQL DDL 中表的 comment。', example=''),
+  tableSchema?: [TableFieldSchema](name='tableSchema', description='表列的 schema 定义。'),
+  clustering?: Clustering(name='clustering', description='表的 cluster 属性定义，只有 cluster 表才有。'),
+  tableConstraints?: TableConstraints(name='tableConstraints', description='表的主键约束定义，只有 delta 表才有。'),
+  partitionDefinition?: PartitionDefinition(name='partitionDefinition', description='表的分区列定义，只有分区表才有。'),
+  createTime?: int64(name='createTime', description='表的创建时间（毫秒）。仅输出。',example=''),
+  lastModifiedTime?: int64(name='lastModifiedTime', description='表的修改时间（毫秒）。仅输出。', example=''),
 }
 
 model GetTableResponse = {
   headers?: map[string]string(name='headers'),
   statusCode?: int32(name='statusCode'),
-  body?: string(name='body'),
+  body?: string(name='body')
 }
 
-async function getTableWithOptions(request: GetTableRequest, runtime: Util.RuntimeOptions): GetTableResponse {
-  Util.validateModel(request);
-  var query : map[string]string = {};
-  query['curr_project'] = request.projectName;
-  var req = new OpenApi.OpenApiRequest{
-    query = query,
-  };
-  var params = new OpenApi.Params{
-    pathname = `/projects/${OpenApiUtil.getEncodeParam(request.projectName)}/tables/${OpenApiUtil.getEncodeParam(request.tableName)}`,
-    method = 'GET',
-    authType = 'AK',
-    bodyType = 'string',
-  };
-  return callApi(params, req, runtime);
+async function updateTableWithOptions(table: Table, runtime: Util.RuntimeOptions): GetTableResponse {
+  var params : map[string]string = {};
+  params['name'] = table.name;
+  return request(table, 'PUT', '/v1alpha/', params, runtime);
 }
 
 
-async function getTable(request: GetTableRequest): GetTableResponse {
+async function updateTable(table: Table): GetTableResponse {
   var runtime = new Util.RuntimeOptions{};
-  return getTableWithOptions(request, runtime);
+  return updateTableWithOptions(table, runtime);
 }

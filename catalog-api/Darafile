@@ -5,7 +5,6 @@
   "main": "./main.dara",
   "libraries": {
     "OpenApi": "maxcompute:test:*",
-    "OpenApiUtil": "alibabacloud:OpenApiUtil:*",
     "Util": "darabonba:Util:*"
   },
   "java": {

@@ -1,8 +1,12 @@
 package tech.dingxin;
 
-import com.aliyun.odps.catalog.models.GetTableRequest;
 import com.aliyun.odps.catalog.models.GetTableResponse;
+import com.aliyun.odps.catalog.models.Table;
+import com.aliyun.odps.catalog.models.TableFieldSchema;
 import com.aliyun.odps.models.Config;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dingxin (zhangdingxin.zdx@alibaba-inc.com)
@@ -10,18 +14,24 @@ import com.aliyun.odps.models.Config;
 public class Main {
     public static void main(String[] args) throws Exception {
         Config config = new Config();
-        config.setEndpoint("100.69.248.78:8002");
+        config.setEndpoint("11.158.225.37:12370");
         config.setAccessKeyId("");
         config.setAccessKeySecret("");
-        config.setSuffix("odps_dailyrunnew");
 
         com.aliyun.odps.catalog.Client catalogClient = new com.aliyun.odps.catalog.Client(config);
 
-        GetTableRequest request = new GetTableRequest();
-        request.setProjectName("dingxin_volume");
-        request.setTableName("auto_pt");
+        Table table = new Table();
+        table.setName("odps_dailyrunnew.test_table");
 
-        GetTableResponse response = catalogClient.getTable(request);
+        TableFieldSchema column = new TableFieldSchema();
+        column.setFieldName("test_column");
+        column.setTypeCategory("bigint");
+
+        List<TableFieldSchema> tableFieldSchemas = new ArrayList<>();
+        tableFieldSchemas.add(column);
+        table.setTableSchema(tableFieldSchemas);
+
+        GetTableResponse response = catalogClient.updateTable(table);
         System.out.println(response.getBody());
     }
 }

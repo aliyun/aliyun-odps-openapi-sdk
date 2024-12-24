@@ -1,7 +1,7 @@
 {
   "scope": "maxcompute",
   "name": "test",
-  "version": "v0.0.1-alpha",
+  "version": "v0.0.2-alpha",
   "main": "main.dara",
 
   "libraries": {
