@@ -11,21 +11,19 @@ import java.util.Collections;
 public class TableTest {
     public static void main(String[] args) throws Exception {
         Config config = new Config();
-        // config.setEndpoint("11.158.225.37:12370");
+        //config.setEndpoint("11.158.225.37:12370");
         config.setEndpoint("11.158.243.229:12330");
         config.setAccessKeyId("");
         config.setAccessKeySecret("");
 
         com.aliyun.odps.catalog.Client catalogClient = new com.aliyun.odps.catalog.Client(config);
-
         Table table = new Table();
         table.projectId = "odps_test_tunnel_project_orc";
-        // table.schemaName = "default";
-        table.tableName = "test";
-        //catalogClient.deleteTable(table);
+        table.schemaName = "default";
+        table.tableName = "dingxin_test";
+       catalogClient.deleteTable(table);
 
         table.description = "For test.";
-
         TableFieldSchema c0 = new TableFieldSchema();
         c0.description = "col comments";
         c0.fieldName = "c0";
@@ -34,13 +32,12 @@ public class TableTest {
         policyTag.names = Collections.singletonList("namespaces/123/taxonomies/456/policyTags/789");
         c0.policyTags = policyTag;
         c0.typeCategory = "STRING";
-
         TableFieldSchema tableSchema = new TableFieldSchema();
         tableSchema.fields = Collections.singletonList(c0);
-
         table.tableSchema = tableSchema;
         table.type = "TABLE";
 
-        catalogClient.createTable(table);
+        Table table1 = catalogClient.createTable(table);
+        System.out.println(table1);
     }
 }

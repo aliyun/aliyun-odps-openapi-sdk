@@ -2,8 +2,8 @@
 <project version="4">
   <component name="SmartFoxWorkToolsProjectState">
     <option name="branch" value="master" />
-    <option name="gitUrl" value="git@gitlab.alibaba-inc.com:zhangdingxin.zdx/openapi.git" />
+    <option name="gitUrl" value="git@gitlab.alibaba-inc.com:odps/opensdk.git" />
     <option name="localBranch" value="master" />
-    <option name="revision" value="f55ebeff18d8f7d323973b9d8ce75553ba10b232" />
+    <option name="revision" value="a2d67c72ed3c462780c8ac7e571632fc62e2320d" />
   </component>
 </project>

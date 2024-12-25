@@ -59,9 +59,9 @@ model PartitionedColumn {
 model Table {
   etag?: string(name='etag', description='用于 read-modify-write 一致性校验。', example=''),
   name?: string(name='name', description='表的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/tables/{tableName}', example=''),
-  projectId?: string(name='projectId', description='表所属的 project ID。', example=''),
+  projectId: string(name='projectId', description='表所属的 project ID。', example=''),
   schemaName?: string(name='schemaName', description='表所属的 schema 名。', example=''),
-  tableName?: string(name='tableName', description='表名。', example=''),
+  tableName: string(name='tableName', description='表名。', example=''),
   type?: string(name='type', description='表的类型。', example=''),
   description?: string(name='description', description='表的描述。等价于 SQL DDL 中表的 comment。', example=''),
   tableSchema?: TableFieldSchema(name='tableSchema', description='表列的 schema 定义。'),
@@ -92,9 +92,9 @@ async function deleteTable(table: Table): CommonResponse {
   return request(table, 'DELETE', getTablePath(table), runtime);
 }
 
-async function createTable(table: Table): CommonResponse {
+async function createTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
-  return request(table, 'POST', getTablePath(table), runtime);
+  return request(table, 'POST', getTablesPath(table), runtime);
 }
 
 async function getTable(table: Table): Table {
@@ -104,8 +104,16 @@ async function getTable(table: Table): Table {
 
 function getTablePath(table: Table): string {
   if(Util.isUnset(table.schemaName)) {
-    return `/api/catalog/v1alpha/projects/${table.projectId}/tables/${table.tableName}`;
+    return `/api/catalog/v1alpha/projects/${table.projectId}/schemas/default/tables/${table.tableName}`;
   } else {
     return `/api/catalog/v1alpha/projects/${table.projectId}/schemas/${table.schemaName}/tables/${table.tableName}`;
+  }
+}
+
+function getTablesPath(table: Table): string {
+  if(Util.isUnset(table.schemaName)) {
+    return `/api/catalog/v1alpha/projects/${table.projectId}/schemas/default/tables`;
+  } else {
+    return `/api/catalog/v1alpha/projects/${table.projectId}/schemas/${table.schemaName}/tables`;
   }
 }
