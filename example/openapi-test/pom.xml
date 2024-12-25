@@ -16,11 +16,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.aliyun.odps</groupId>
-            <artifactId>tea-util</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-        <dependency>
             <groupId>com.aliyun.odps.catalog</groupId>
             <artifactId>catalog-api</artifactId>
             <version>0.0.1-alpha</version>

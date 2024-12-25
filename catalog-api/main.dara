@@ -72,20 +72,40 @@ model Table {
   lastModifiedTime?: int64(name='lastModifiedTime', description='表的修改时间（毫秒）。仅输出。', example=''),
 }
 
-model GetTableResponse = {
+model CommonResponse = {
   headers?: map[string]string(name='headers'),
   statusCode?: int32(name='statusCode'),
   body?: string(name='body')
 }
 
 async function updateTableWithOptions(table: Table, runtime: Util.RuntimeOptions): Table {
-  var params : map[string]string = {};
-  params['name'] = table.name;
-  return request(table, 'PUT', '/api/catalog/v1alpha', params, runtime);
+  return request(table, 'PUT', getTablePath(table), runtime);
 }
-
 
 async function updateTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
   return updateTableWithOptions(table, runtime);
+}
+
+async function deleteTable(table: Table): CommonResponse {
+  var runtime = new Util.RuntimeOptions{};
+  return request(table, 'DELETE', getTablePath(table), runtime);
+}
+
+async function createTable(table: Table): CommonResponse {
+  var runtime = new Util.RuntimeOptions{};
+  return request(table, 'POST', getTablePath(table), runtime);
+}
+
+async function getTable(table: Table): Table {
+  var runtime = new Util.RuntimeOptions{};
+  return request(table, 'GET', getTablePath(table), runtime);
+}
+
+function getTablePath(table: Table): string {
+  if(Util.isUnset(table.schemaName)) {
+    return `/api/catalog/v1alpha/projects/${table.projectId}/tables/${table.tableName}`;
+  } else {
+    return `/api/catalog/v1alpha/projects/${table.projectId}/schemas/${table.schemaName}/tables/${table.tableName}`;
+  }
 }

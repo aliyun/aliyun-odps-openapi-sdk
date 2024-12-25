@@ -4,7 +4,7 @@
   "version": "v1alpha",
   "main": "./main.dara",
   "libraries": {
-    "OpenApi": "maxcompute:test:*",
+    "OpenApi": "maxcompute:openapi:*",
     "Util": "darabonba:Util:*"
   },
   "java": {

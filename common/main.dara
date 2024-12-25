@@ -114,15 +114,15 @@ model OpenApiRequest {
   endpointOverride?: string,
 }
 
-async function request(model: $Model, method: string, path: string, params: map[string]string, runtime: Util.RuntimeOptions): object {
+async function request(model: $Model, method: string, path: string, runtime: Util.RuntimeOptions): object {
   Util.validateModel(model);
   var req = new OpenApiRequest{
-    query = params,
     body = Util.toMap(model)
   };
   var openapiParams = new Params{
     pathname = path,
     method = method,
+    bodyType = "json",
   };
   return callApi(openapiParams, req, runtime);
 }
@@ -245,7 +245,7 @@ api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOpti
   if (Util.is4xx(__response.statusCode) || Util.is5xx(__response.statusCode)) {
     var _res = Util.readAsJSON(__response.body);
     var err = Util.assertAsMap(_res);
-    var requestId = defaultAny(__response.headers.x_odps_request-id, __response.headers.X_Odps_Request-Id);
+    var requestId = defaultAny(__response.headers.x-odps-request-id, __response.headers.X-Odps-Request-Id);
     err.statusCode = __response.statusCode;
      throw {
       code = `${defaultAny(err.Code, err.code)}`,
