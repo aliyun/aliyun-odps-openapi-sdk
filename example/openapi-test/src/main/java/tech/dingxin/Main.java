@@ -15,21 +15,22 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Config config = new Config();
         config.setEndpoint("11.158.225.37:12370");
-        config.setAccessKeyId("");
-        config.setAccessKeySecret("");
+        config.setAccessKeyId("63wd3dpztlmb5ocdkj94pxmm");
+        config.setAccessKeySecret("oRd30z7sV4hBX9aYtJgii5qnyhg=");
 
         com.aliyun.odps.catalog.Client catalogClient = new com.aliyun.odps.catalog.Client(config);
 
         Table table = new Table();
         table.setName("odps_dailyrunnew.test_table");
 
-        TableFieldSchema column = new TableFieldSchema();
-        column.setFieldName("test_column");
-        column.setTypeCategory("bigint");
-
-        List<TableFieldSchema> tableFieldSchemas = new ArrayList<>();
-        tableFieldSchemas.add(column);
-        table.setTableSchema(tableFieldSchemas);
+        TableFieldSchema schema = new TableFieldSchema();
+        List<TableFieldSchema> columns = new ArrayList<>();
+        TableFieldSchema c1 = new TableFieldSchema();
+        c1.setFieldName("test_column");
+        c1.setTypeCategory("bigint");
+        columns.add(c1);
+        schema.setFields(columns);
+        table.setTableSchema(schema);
 
         GetTableResponse response = catalogClient.updateTable(table);
         System.out.println(response.getBody());

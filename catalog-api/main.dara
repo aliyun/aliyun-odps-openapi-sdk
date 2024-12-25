@@ -64,7 +64,7 @@ model Table {
   tableName?: string(name='tableName', description='表名。', example=''),
   type?: string(name='type', description='表的类型。', example=''),
   description?: string(name='description', description='表的描述。等价于 SQL DDL 中表的 comment。', example=''),
-  tableSchema?: [TableFieldSchema](name='tableSchema', description='表列的 schema 定义。'),
+  tableSchema?: TableFieldSchema(name='tableSchema', description='表列的 schema 定义。'),
   clustering?: Clustering(name='clustering', description='表的 cluster 属性定义，只有 cluster 表才有。'),
   tableConstraints?: TableConstraints(name='tableConstraints', description='表的主键约束定义，只有 delta 表才有。'),
   partitionDefinition?: PartitionDefinition(name='partitionDefinition', description='表的分区列定义，只有分区表才有。'),
@@ -78,14 +78,14 @@ model GetTableResponse = {
   body?: string(name='body')
 }
 
-async function updateTableWithOptions(table: Table, runtime: Util.RuntimeOptions): GetTableResponse {
+async function updateTableWithOptions(table: Table, runtime: Util.RuntimeOptions): Table {
   var params : map[string]string = {};
   params['name'] = table.name;
-  return request(table, 'PUT', '/v1alpha/', params, runtime);
+  return request(table, 'PUT', '/api/catalog/v1alpha', params, runtime);
 }
 
 
-async function updateTable(table: Table): GetTableResponse {
+async function updateTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
   return updateTableWithOptions(table, runtime);
 }
