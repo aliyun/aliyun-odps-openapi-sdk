@@ -72,14 +72,14 @@ model Table {
   lastModifiedTime?: int64(name='lastModifiedTime', description='表的修改时间（毫秒）。仅输出。', example=''),
 }
 
-model CommonResponse = {
+model HttpResponse = {
   headers?: map[string]string(name='headers'),
   statusCode?: int32(name='statusCode'),
   body?: string(name='body')
 }
 
 async function updateTableWithOptions(table: Table, runtime: Util.RuntimeOptions): Table {
-  return request(table, 'PUT', getTablePath(table), runtime);
+  return requestWithModel(table, 'PUT', getTablePath(table), runtime);
 }
 
 async function updateTable(table: Table): Table {
@@ -87,19 +87,19 @@ async function updateTable(table: Table): Table {
   return updateTableWithOptions(table, runtime);
 }
 
-async function deleteTable(table: Table): CommonResponse {
+async function deleteTable(table: Table): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
-  return request(table, 'DELETE', getTablePath(table), runtime);
+  return requestWithoutModel(table, 'DELETE', getTablePath(table), runtime);
 }
 
 async function createTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
-  return request(table, 'POST', getTablesPath(table), runtime);
+  return requestWithModel(table, 'POST', getTablesPath(table), runtime);
 }
 
 async function getTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
-  return request(table, 'GET', getTablePath(table), runtime);
+  return requestWithModel(table, 'GET', getTablePath(table), runtime);
 }
 
 function getTablePath(table: Table): string {

@@ -16,9 +16,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.aliyun.odps.catalog</groupId>
+            <groupId>com.aliyun.odps</groupId>
             <artifactId>catalog-api</artifactId>
-            <version>0.0.1-alpha</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

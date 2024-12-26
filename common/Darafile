@@ -16,7 +16,7 @@
     "package": "com.aliyun.odps",
     "enableMinimizeModelName": false,
     "packageInfo": {
-      "version": "0.0.1-alpha",
+      "version": "0.0.1-SNAPSHOT",
       "groupId": "com.aliyun.odps",
       "artifactId": "openapi",
       "name": "openapi-common",
@@ -33,6 +33,6 @@
     "mapAndSliceWithoutOmitempty": false
   },
   "releases": {
-    "java": "com.aliyun.odps:openapi:0.0.1-alpha"
+    "java": "com.aliyun.odps:openapi:0.0.1-SNAPSHOT"
   }
 }

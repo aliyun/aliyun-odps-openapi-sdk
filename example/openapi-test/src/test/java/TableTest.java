@@ -2,6 +2,7 @@ import com.aliyun.odps.catalog.models.PolicyTag;
 import com.aliyun.odps.catalog.models.Table;
 import com.aliyun.odps.catalog.models.TableFieldSchema;
 import com.aliyun.odps.models.Config;
+import com.google.common.collect.ImmutableList;
 
 import java.util.Collections;
 
@@ -14,16 +15,17 @@ public class TableTest {
         //config.setEndpoint("11.158.225.37:12370");
         config.setEndpoint("11.158.243.229:12330");
         config.setAccessKeyId("");
-        config.setAccessKeySecret("");
+        config.setAccessKeySecret("=");
 
         com.aliyun.odps.catalog.Client catalogClient = new com.aliyun.odps.catalog.Client(config);
         Table table = new Table();
         table.projectId = "odps_test_tunnel_project_orc";
         table.schemaName = "default";
-        table.tableName = "dingxin_test";
-       catalogClient.deleteTable(table);
+        table.tableName = "dingxin_test_2";
 
-        table.description = "For test.";
+       catalogClient.deleteTable(table); // 500 error if table not exist
+
+        table.description = "For test hh.";
         TableFieldSchema c0 = new TableFieldSchema();
         c0.description = "col comments";
         c0.fieldName = "c0";
@@ -33,11 +35,23 @@ public class TableTest {
         c0.policyTags = policyTag;
         c0.typeCategory = "STRING";
         TableFieldSchema tableSchema = new TableFieldSchema();
-        tableSchema.fields = Collections.singletonList(c0);
+        tableSchema.fields = ImmutableList.of(c0);
         table.tableSchema = tableSchema;
         table.type = "TABLE";
+        Table created = catalogClient.createTable(table);
 
-        Table table1 = catalogClient.createTable(table);
-        System.out.println(table1);
+        TableFieldSchema c1 = new TableFieldSchema();
+        c1.description = "col comments";
+        c1.fieldName = "c1";
+        c1.mode = "NULLABLE";
+        c1.typeCategory = "BIGINT";
+        created.getTableSchema().getFields().add(c1);
+
+        Table afterUpdate = catalogClient.updateTable(created);
+        // sometimes throw 	"Message": "ODPS-0110061: Failed to run ddltask - Clustering type cannot be changed"
+
+        afterUpdate.getTableSchema().getFields().forEach(f ->{
+                System.out.println(f.fieldName);
+        });
     }
 }

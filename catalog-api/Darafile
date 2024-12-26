@@ -10,8 +10,8 @@
   "java": {
     "package": "com.aliyun.odps.catalog",
     "packageInfo": {
-      "version": "0.0.1-alpha",
-      "groupId": "com.aliyun.odps.catalog",
+      "version": "0.0.1-SNAPSHOT",
+      "groupId": "com.aliyun.odps",
       "artifactId": "catalog-api",
       "name": "catalog-api",
       "description": "Alibaba Cloud MaxCompute (20220104) SDK for Java",
