@@ -33,6 +33,7 @@
     "mapAndSliceWithoutOmitempty": false
   },
   "releases": {
-    "java": "com.aliyun.odps:openapi:0.0.1-SNAPSHOT"
+    "java": "com.aliyun.odps:openapi:0.0.1-SNAPSHOT",
+    "go": "gitlab.alibaba-inc.com/odps/opensdk/common/go"
   }
 }

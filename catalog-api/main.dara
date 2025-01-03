@@ -68,8 +68,8 @@ model Table {
   clustering?: Clustering(name='clustering', description='表的 cluster 属性定义，只有 cluster 表才有。'),
   tableConstraints?: TableConstraints(name='tableConstraints', description='表的主键约束定义，只有 delta 表才有。'),
   partitionDefinition?: PartitionDefinition(name='partitionDefinition', description='表的分区列定义，只有分区表才有。'),
-  createTime?: int64(name='createTime', description='表的创建时间（毫秒）。仅输出。',example=''),
-  lastModifiedTime?: int64(name='lastModifiedTime', description='表的修改时间（毫秒）。仅输出。', example=''),
+  createTime?: string(name='createTime', description='表的创建时间（毫秒）。仅输出。'),
+  lastModifiedTime?: string(name='lastModifiedTime', description='表的修改时间（毫秒）。仅输出。'),
 }
 
 model HttpResponse = {

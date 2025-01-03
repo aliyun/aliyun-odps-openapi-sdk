@@ -1,4 +1,4 @@
-module client
+module gitlab.alibaba-inc.com/odps/opensdk/common
 
 require (
 	github.com/aliyun/aliyun-odps-go-sdk/tea master

@@ -4,7 +4,7 @@
 	"version": "0.0.6.alpha",
 	"main": "./main.tea",
 	"releases": {
-	    "go": "github.com/aliyun/aliyun-odps-go-sdk/tea/utils:master",
+	    "go": "github.com/aliyun/aliyun-odps-go-sdk/tea/utils:v0.4.1",
 		"java": "com.aliyun.odps:odps-sdk-core:0.52.0-SNAPSHOT"
 	},
 	"java": {
