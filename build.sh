@@ -20,9 +20,19 @@ handle_directory() {
         rm -r java || { echo "Failed to remove java directory in $dir_path."; exit 1; }
     fi
 
+    # 删除旧的 go 目录
+    if [ -d "go" ]; then
+        echo "Removing existing go directory..."
+        rm -r go || { echo "Failed to remove go directory in $dir_path."; exit 1; }
+    fi
+
     # 生成 Java 代码
     echo "Generating Java code..."
     dara codegen java ./java || { echo "Failed to generate Java code in $dir_path."; exit 1; }
+
+    # 生成 Go 代码
+    echo "Generating Go code..."
+    dara codegen go ./go || { echo "Failed to generate Go code in $dir_path."; exit 1; }
 
     # 进入到生成的 java 目录
     cd java || { echo "Failed to change directory to java in $dir_path."; exit 1; }
@@ -31,7 +41,7 @@ handle_directory() {
     echo "Cleaning and installing the Java project..."
     mvn clean install || { echo "Maven build failed in $dir_path."; exit 1; }
 
-    echo "Java project built successfully in $dir_path."
+    echo "Project built successfully in $dir_path."
 
     cd ../..
 }

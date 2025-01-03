@@ -1,10 +1,10 @@
 {
 	"scope": "maxcompute",
 	"name": "Util",
-	"version": "0.0.5.alpha",
+	"version": "0.0.6.alpha",
 	"main": "./main.tea",
 	"releases": {
-	    "go": "github.com/dingxin-tech/aliyun-odps-go-sdk/tea:master",
+	    "go": "github.com/aliyun/aliyun-odps-go-sdk/tea/utils:master",
 		"java": "com.aliyun.odps:odps-sdk-core:0.52.0-SNAPSHOT"
 	},
 	"java": {

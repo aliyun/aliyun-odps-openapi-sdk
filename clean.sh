@@ -19,6 +19,12 @@ handle_directory() {
         rm -r java || { echo "Failed to remove java directory in $dir_path."; exit 1; }
     fi
 
+        # 删除 java 目录
+    if [ -d "go" ]; then
+        echo "Removing existing go directory..."
+        rm -r go || { echo "Failed to remove go directory in $dir_path."; exit 1; }
+    fi
+
     cd ..
 }
 

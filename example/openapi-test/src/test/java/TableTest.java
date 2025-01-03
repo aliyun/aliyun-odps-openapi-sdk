@@ -1,3 +1,4 @@
+import com.aliyun.credentials.Client;
 import com.aliyun.odps.catalog.models.PolicyTag;
 import com.aliyun.odps.catalog.models.Table;
 import com.aliyun.odps.catalog.models.TableFieldSchema;
@@ -16,6 +17,11 @@ public class TableTest {
         config.setEndpoint("11.158.243.229:12330");
         config.setAccessKeyId("");
         config.setAccessKeySecret("=");
+
+        com.aliyun.credentials.models.Config credentialConfig = new com.aliyun.credentials.models.Config();
+        Client client = new Client(credentialConfig);
+        credentialConfig.setRoleArn("xxx");
+        config.setCredential(client);
 
         com.aliyun.odps.catalog.Client catalogClient = new com.aliyun.odps.catalog.Client(config);
         Table table = new Table();
