@@ -39,7 +39,7 @@ handle_directory() {
 
     # 使用 Maven 清理和构建项目
     echo "Cleaning and installing the Java project..."
-    mvn clean install || { echo "Maven build failed in $dir_path."; exit 1; }
+    mvn clean install -Dgpg.skip || { echo "Maven build failed in $dir_path."; exit 1; }
 
     echo "Project built successfully in $dir_path."
 
