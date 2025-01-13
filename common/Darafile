@@ -20,13 +20,10 @@
       "groupId": "com.aliyun.odps",
       "artifactId": "openapi",
       "name": "openapi-common",
-      "description": "Alibaba Cloud MaxCompute SDK for Java",
-      "url": "https://github.com/aliyun/alibabacloud-java-sdk",
+      "description": "Alibaba Cloud MaxCompute Open SDK for Java",
+      "url": "https://github.com/aliyun/aliyun-odps-openapi-sdk",
       "licenseName": "The Apache License, Version 2.0",
-      "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0.txt",
-      "developerId": "aliyunproducts",
-      "developerName": "Aliyun SDK",
-      "developerEmail": "aliyunsdk@aliyun.com"
+      "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0.txt"
     }
   },
   "go": {
@@ -34,6 +31,6 @@
   },
   "releases": {
     "java": "com.aliyun.odps:openapi:0.0.1-SNAPSHOT",
-    "go": "gitlab.alibaba-inc.com/odps/opensdk/common/go"
+    "go": "github.com/aliyun/aliyun-odps-openapi-sdk/common/go"
   }
 }

@@ -24,3 +24,5 @@ cc/*.o
 python/**/__pycache__/
 cache/
 csharp/tests/coverage.xml
+libaraies/
+.libaraies.json
