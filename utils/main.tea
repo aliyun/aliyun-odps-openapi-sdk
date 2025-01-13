@@ -4,3 +4,5 @@ static function getApiTimestamp(): string;
 static function buildCanonicalString(method: string, resource: string, params: map[string]string, headers: map[string]string): string;
 
 static function getSignature(strToSign: string, accessKeyId: string, accessKeySecret: string): string;
+
+static function toString(val: any): string;
