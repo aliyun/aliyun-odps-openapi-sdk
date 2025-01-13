@@ -1,4 +1,4 @@
-module github.com/aliyun/aliyun-odps-openapi-sdk/common
+module github.com/aliyun/aliyun-odps-openapi-sdk/common/go
 
 require (
 	github.com/aliyun/aliyun-odps-go-sdk/tea v0.4.1
