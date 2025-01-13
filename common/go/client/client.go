@@ -588,11 +588,11 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
           return _result, _err
         }
 
-        requestId := DefaultAny(response_.Headers["x-odps-request-id"], response_.Headers["X-Odps-Request-Id"])
+        requestId := mcutil.ToString(DefaultAny(response_.Headers["x-odps-request-id"], response_.Headers["X-Odps-Request-Id"]))
         err["statusCode"] = response_.StatusCode
         _err = tea.NewSDKError(map[string]interface{}{
           "code": tea.ToString(DefaultAny(err["Code"], err["code"])),
-          "message": "code: " + tea.ToString(tea.IntValue(response_.StatusCode)) + ", " + tea.ToString(DefaultAny(err["Message"], err["message"])) + " request id: " + tea.ToString(requestId),
+          "message": "code: " + tea.ToString(tea.IntValue(response_.StatusCode)) + ", " + tea.ToString(DefaultAny(err["Message"], err["message"])) + " request id: " + tea.StringValue(requestId),
           "data": err,
           "description": tea.ToString(DefaultAny(err["Description"], err["description"])),
           "accessDeniedDetail": DefaultAny(err["AccessDeniedDetail"], err["accessDeniedDetail"]),
