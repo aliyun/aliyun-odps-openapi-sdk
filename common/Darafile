@@ -6,7 +6,6 @@
 
   "libraries": {
     "McUtil": "maxcompute:Util:*",
-    "String": "darabonba:String:*",
     "Util": "darabonba:Util:*",
     "Credential": "alibabacloud:Credential:*",
     "XML": "darabonba:XML:*"

@@ -2,7 +2,6 @@
 import McUtil;
 import Util;
 import Credential;
-import String;
 
 type @endpoint = string
 type @project = string

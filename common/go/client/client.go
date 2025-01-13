@@ -6,7 +6,6 @@ import (
   mcutil  "github.com/aliyun/aliyun-odps-go-sdk/tea/utils"
   util  "github.com/alibabacloud-go/tea-utils/v2/service"
   credential  "github.com/aliyun/credentials-go/credentials"
-  string_  "github.com/alibabacloud-go/darabonba-string/client"
   "github.com/alibabacloud-go/tea/tea"
 )
 
