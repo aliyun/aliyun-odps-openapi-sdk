@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.aliyun.odps</groupId>
-    <artifactId>opensdk-example</artifactId>
+    <artifactId>example</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
