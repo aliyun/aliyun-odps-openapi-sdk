@@ -5,7 +5,7 @@ go 1.23.2
 require (
 	github.com/alibabacloud-go/tea v1.2.2
 	github.com/alibabacloud-go/tea-utils/v2 v2.0.6
-	github.com/aliyun/aliyun-odps-go-sdk/tea v0.0.0-20250113090018-b3e45677777c
+	github.com/aliyun/aliyun-odps-go-sdk/tea v0.0.0-20250113093743-81345ae38a07
 	github.com/aliyun/credentials-go v1.3.10
 )
 
