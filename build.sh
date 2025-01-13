@@ -41,6 +41,13 @@ handle_directory() {
     echo "Cleaning and installing the Java project..."
     mvn clean install -Dgpg.skip || { echo "Maven build failed in $dir_path."; exit 1; }
 
+    # 进入到生成的 go 目录
+    cd ../go || { echo "Failed to change directory to go in $dir_path."; exit 1; }
+
+    # go mod tidy
+    echo "Cleaning and installing the Go project..."
+    go mod tidy || { echo "Go build failed in $dir_path."; exit 1; }
+
     echo "Project built successfully in $dir_path."
 
     cd ../..
