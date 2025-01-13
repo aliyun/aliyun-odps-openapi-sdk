@@ -1,7 +1,7 @@
 {
-  "scope": "com.aliyun.odps",
+  "scope": "maxcompute",
   "name": "catalog-api",
-  "version": "v1alpha",
+  "version": "v0.1.0",
   "main": "./main.dara",
   "libraries": {
     "OpenApi": "maxcompute:openapi:*",
@@ -14,16 +14,17 @@
       "groupId": "com.aliyun.odps",
       "artifactId": "catalog-api",
       "name": "catalog-api",
-      "description": "Alibaba Cloud MaxCompute (20220104) SDK for Java",
-      "url": "https://github.com/aliyun/alibabacloud-java-sdk",
+      "description": "Alibaba Cloud MaxCompute Openapi SDK for Java",
+      "url": "https://github.com/aliyun/aliyun-odps-openapi-sdk",
       "licenseName": "The Apache License, Version 2.0",
-      "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0.txt",
-      "developerId": "aliyunproducts",
-      "developerName": "Aliyun SDK",
-      "developerEmail": "aliyunsdk@aliyun.com"
+      "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0.txt"
     }
   },
   "go": {
     "mapAndSliceWithoutOmitempty": false
+  },
+  "releases": {
+    "java": "com.aliyun.odps:catalog-api:0.0.1-SNAPSHOT",
+    "go": "github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go/client"
   }
 }

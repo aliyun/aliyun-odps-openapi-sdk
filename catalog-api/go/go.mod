@@ -1,4 +1,4 @@
-module client
+module github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go
 
 go 1.23.2
 

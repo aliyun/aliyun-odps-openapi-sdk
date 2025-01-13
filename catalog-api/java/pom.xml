@@ -6,9 +6,9 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>catalog-api</name>
-  <description>Alibaba Cloud MaxCompute (20220104) SDK for Java
+  <description>Alibaba Cloud MaxCompute Openapi SDK for Java
     </description>
-  <url>https://github.com/aliyun/alibabacloud-java-sdk</url>
+  <url>https://github.com/aliyun/aliyun-odps-openapi-sdk</url>
   <licenses>
     <license>
       <name>The Apache License, Version 2.0</name>
@@ -17,9 +17,9 @@
   </licenses>
   <developers>
     <developer>
-      <id>aliyunproducts</id>
-      <name>Aliyun SDK</name>
-      <email>aliyunsdk@aliyun.com</email>
+      <id></id>
+      <name></name>
+      <email></email>
     </developer>
   </developers>
   <distributionManagement>
