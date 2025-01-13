@@ -33,6 +33,6 @@
   },
   "releases": {
     "java": "com.aliyun.odps:openapi:0.0.1-SNAPSHOT",
-    "go": "github.com/aliyun/aliyun-odps-openapi-sdk/common/go/"
+    "go": "github.com/aliyun/aliyun-odps-openapi-sdk/common/go/client"
   }
 }
