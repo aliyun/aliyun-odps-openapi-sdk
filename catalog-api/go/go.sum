@@ -5,10 +5,10 @@ github.com/alibabacloud-go/tea v1.2.2 h1:aTsR6Rl3ANWPfqeQugPglfurloyBJY85eFy7Gc1
 github.com/alibabacloud-go/tea v1.2.2/go.mod h1:CF3vOzEMAG+bR4WOql8gc2G9H3EkH3ZLAQdpmpXMgwk=
 github.com/alibabacloud-go/tea-utils/v2 v2.0.6 h1:ZkmUlhlQbaDC+Eba/GARMPy6hKdCLiSke5RsN5LcyQ0=
 github.com/alibabacloud-go/tea-utils/v2 v2.0.6/go.mod h1:qxn986l+q33J5VkialKMqT/TTs3E+U9MJpd001iWQ9I=
-github.com/aliyun/aliyun-odps-go-sdk/tea v0.0.0-20250113110310-9d5dc6909a14 h1:D3qZnAfeJT4ZPp8W0EDevZ8F4UG240TFJBPnltCsJc4=
-github.com/aliyun/aliyun-odps-go-sdk/tea v0.0.0-20250113110310-9d5dc6909a14/go.mod h1:qEXokZsRg29ZI7TnkE0kQFlYsbdTR0/9MHkBwF+C2Ng=
-github.com/aliyun/aliyun-odps-openapi-sdk/common/go v0.0.0-20250113110918-e3896e8d1ec6 h1:LyPFurIUSPaPkEWbtyM15Y3zl6ei6TyunKuvcrij3jU=
-github.com/aliyun/aliyun-odps-openapi-sdk/common/go v0.0.0-20250113110918-e3896e8d1ec6/go.mod h1:ZLWruYiX/v4VaK0xoZaaMn1tNP/H683QxTx7iWiMmuc=
+github.com/aliyun/aliyun-odps-go-sdk/tea v0.0.0-20250113111842-596ea3c7d6ff h1:DBdEKe1Z+gzZ0tQtclDsqfCQWHoTE4KaRQGdAekj7rI=
+github.com/aliyun/aliyun-odps-go-sdk/tea v0.0.0-20250113111842-596ea3c7d6ff/go.mod h1:qEXokZsRg29ZI7TnkE0kQFlYsbdTR0/9MHkBwF+C2Ng=
+github.com/aliyun/aliyun-odps-openapi-sdk/common/go v0.0.0-20250113112023-a8ed835fb470 h1:DXOpe/ocUvrTa0MQXF0TtkX5hJtxcEujiE5F1YjRhu0=
+github.com/aliyun/aliyun-odps-openapi-sdk/common/go v0.0.0-20250113112023-a8ed835fb470/go.mod h1:4RtxUXPegeffJ02ipS05PRnfGVnuzUWxxDkobwbhQfc=
 github.com/aliyun/credentials-go v1.3.10 h1:45Xxrae/evfzQL9V10zL3xX31eqgLWEaIdCoPipOEQA=
 github.com/aliyun/credentials-go v1.3.10/go.mod h1:Jm6d+xIgwJVLVWT561vy67ZRP4lPTQxMbEYRuT2Ti1U=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
