@@ -4,6 +4,6 @@
     <option name="branch" value="master" />
     <option name="gitUrl" value="git@gitlab.alibaba-inc.com:odps/opensdk.git" />
     <option name="localBranch" value="master" />
-    <option name="revision" value="c8e7a06bc1900ea0b2ff4bf34d4a75e560d99d22" />
+    <option name="revision" value="ab52937512b7cdf3daf5313d311acd91933ab714" />
   </component>
 </project>

@@ -11,6 +11,7 @@ import (
 const endpoint = ""
 const accessId = ""
 const accessKey = ""
+const project = ""
 
 func Test_CreateTable(t *testing.T) {
 	var config openapi.Config
@@ -25,7 +26,7 @@ func Test_CreateTable(t *testing.T) {
 
 	var table client.Table
 	table.SetType("TABLE")
-	table.SetProjectId("project")
+	table.SetProjectId(project)
 	table.SetSchemaName("default")
 	table.SetTableName("test")
 
@@ -55,7 +56,7 @@ func Test_GetTable(t *testing.T) {
 	}
 
 	var table client.Table
-	table.SetProjectId("project")
+	table.SetProjectId(project)
 	table.SetSchemaName("default")
 	table.SetTableName("test")
 
