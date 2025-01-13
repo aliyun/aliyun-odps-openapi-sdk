@@ -22,5 +22,8 @@
       "developerName": "Aliyun SDK",
       "developerEmail": "aliyunsdk@aliyun.com"
     }
+  },
+  "go": {
+    "mapAndSliceWithoutOmitempty": false
   }
 }
