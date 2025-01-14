@@ -21,6 +21,16 @@ jobs:
         with:
           java-version: 8
 
+      - name: Apply Patch
+        run: |
+          if [ -f update_maven_repo.patch ]; then
+            git apply update_maven_repo.patch
+            echo "Patch applied successfully"
+          else
+            echo "Patch file not found"
+            exit 1
+          fi
+
       - name: Setup gpg
         run: |
           mkdir ~/.gnupg
