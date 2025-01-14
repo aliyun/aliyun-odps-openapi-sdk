@@ -31,6 +31,7 @@ jobs:
       - name: Publish Common Package
         working-directory: common/java
         run: |
+          export GPG_TTY=$(tty)
           echo "Publishing Common Package..."
           mvn -X -e -DskipTests --batch-mode deploy
         env:
@@ -41,6 +42,7 @@ jobs:
       - name: Publish Catalog API Package
         working-directory: catalog-api/java
         run: |
+          export GPG_TTY=$(tty)
           echo "Publishing Catalog API Package..."
           mvn -X -e -DskipTests --batch-mode deploy
         env:
