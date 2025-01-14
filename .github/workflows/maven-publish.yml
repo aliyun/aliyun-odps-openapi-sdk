@@ -40,7 +40,6 @@ jobs:
           maven_args: -DskipTests -Dmaven.deploy.timeout=600
 
       - name: Publish Catalog API Package
-        working-directory: catalog-api/java
         uses: samuelmeuli/action-maven-publish@v1
         with:
           directory: catalog-api/java
