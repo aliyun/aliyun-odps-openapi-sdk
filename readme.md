@@ -14,7 +14,13 @@ go get github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go
 ```
 
 ### Java
-尚未发布
+```xml
+<dependency>
+    <groupId>com.aliyun.odps</groupId>
+    <artifactId>catalog-api</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
 
 ## 使用示例 (catalog-api)
 
