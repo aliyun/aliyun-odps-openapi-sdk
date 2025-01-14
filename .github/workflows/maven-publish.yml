@@ -28,11 +28,20 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
 
+      - name: Configure GPG
+        run: |
+          export GPG_TTY=$(tty)
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          gpg-connect-agent reloadagent /bye
+          mkdir -p ~/.gnupg/
+          chmod 700 ~/.gnupg/
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          echo "MAVEN_OPTS='-Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}'" >> $GITHUB_ENV
+
       - name: Publish Common Package
         working-directory: common/java
         run: |
-          export GPG_TTY=$(tty)
-          echo "Publishing Common Package..."
           mvn -X -e -DskipTests --batch-mode deploy
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
@@ -42,8 +51,6 @@ jobs:
       - name: Publish Catalog API Package
         working-directory: catalog-api/java
         run: |
-          export GPG_TTY=$(tty)
-          echo "Publishing Catalog API Package..."
           mvn -X -e -DskipTests --batch-mode deploy
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
