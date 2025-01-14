@@ -16,42 +16,36 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - name: Install Java and Maven
+        uses: actions/setup-java@v1
         with:
-          java-version: '8'
-          distribution: 'temurin'
-          cache: 'maven'
-          server-id: sonatype-nexus-snapshots
-          server-username: OSSRH_USERNAME
-          server-password: OSSRH_PASSWORD
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: GPG_PASSPHRASE
+          java-version: 8
 
-      - name: Configure GPG
+      - name: Setup gpg
         run: |
-          export GPG_TTY=$(tty)
-          mkdir -p ~/.gnupg/
-          chmod 700 ~/.gnupg/
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          gpg-connect-agent reloadagent /bye
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          mkdir ~/.gnupg
+          echo use-agent >> ~/.gnupg/gpg.conf
+          echo pinentry-mode loopback >> ~/.gnupg/gpg.conf
+          echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
           
       - name: Publish Common Package
         working-directory: common/java
-        run: |
-          mvn -X -e -Prelease -DskipTests -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} --batch-mode deploy
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          nexus_username: ${{ secrets.OSSRH_USERNAME }}
+          nexus_password: ${{ secrets.OSSRH_TOKEN }}
+          server_id: ossrh
+          maven_args: -DskipTests -Dmaven.deploy.timeout=600
 
       - name: Publish Catalog API Package
         working-directory: catalog-api/java
-        run: |
-          mvn -X -e -Prelease -DskipTests -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} --batch-mode deploy
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          nexus_username: ${{ secrets.OSSRH_USERNAME }}
+          nexus_password: ${{ secrets.OSSRH_TOKEN }}
+          server_id: ossrh
+          maven_args: -DskipTests -Dmaven.deploy.timeout=600
