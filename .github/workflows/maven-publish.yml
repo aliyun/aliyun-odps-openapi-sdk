@@ -29,9 +29,9 @@ jobs:
           echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
           
       - name: Publish Common Package
-        working-directory: common/java
         uses: samuelmeuli/action-maven-publish@v1
         with:
+          directory: common/java
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
           nexus_username: ${{ secrets.OSSRH_USERNAME }}
@@ -43,6 +43,7 @@ jobs:
         working-directory: catalog-api/java
         uses: samuelmeuli/action-maven-publish@v1
         with:
+          directory: catalog-api/java
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
           nexus_username: ${{ secrets.OSSRH_USERNAME }}
