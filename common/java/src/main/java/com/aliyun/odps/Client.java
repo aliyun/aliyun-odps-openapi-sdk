@@ -228,7 +228,7 @@ public class Client {
                 if (com.aliyun.teautil.Common.is4xx(response_.statusCode) || com.aliyun.teautil.Common.is5xx(response_.statusCode)) {
                     Object _res = com.aliyun.teautil.Common.readAsJSON(response_.body);
                     java.util.Map<String, Object> err = com.aliyun.teautil.Common.assertAsMap(_res);
-                    Object requestId = Client.defaultAny(response_.headers.get("x-odps-request-id"), response_.headers.get("X-Odps-Request-Id"));
+                    String requestId = com.aliyun.odps.utils.TeaUtils.toString(Client.defaultAny(response_.headers.get("x-odps-request-id"), response_.headers.get("X-Odps-Request-Id")));
                     err.put("statusCode", response_.statusCode);
                     throw new TeaException(TeaConverter.buildMap(
                         new TeaPair("code", "" + Client.defaultAny(err.get("Code"), err.get("code")) + ""),
