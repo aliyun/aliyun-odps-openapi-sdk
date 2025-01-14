@@ -16,26 +16,29 @@
     </license>
   </licenses>
   <developers>
-    <developer>
-      <id></id>
-      <name></name>
-      <email></email>
-    </developer>
+      <developer>
+          <name>mc-java-sdk</name>
+          <email>mc-java-eco@alibabacloud.com</email>
+          <organization>Alibaba Cloud</organization>
+          <organizationUrl>http://alibabacloud.com</organizationUrl>
+      </developer>
   </developers>
   <distributionManagement>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
+      <repository>
+          <id>ossrh</id>
+          <name>nexus release repository hosting</name>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      </repository>
+      <snapshotRepository>
+          <id>ossrh</id>
+          <name>nexus snapshot repository hosting</name>
+          <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      </snapshotRepository>
   </distributionManagement>
   <scm>
-    <connection></connection>
-    <developerConnection></developerConnection>
-    <url></url>
+      <connection>scm:git:http://github.com/aliyun/aliyun-odps-openapi-sdk.git</connection>
+      <developerConnection>scm:git:git@github.com:aliyun/aliyun-odps-openapi-sdk.git</developerConnection>
+      <url>http://github.com/aliyun/aliyun-odps-openapi-sdk</url>
   </scm>
   <dependencies>
     <dependency>
@@ -85,8 +88,8 @@
         <version>1.6.3</version>
         <extensions>true</extensions>
         <configuration>
-          <serverId>sonatype-nexus-staging</serverId>
-          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
           <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
       </plugin>
