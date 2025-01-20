@@ -58,8 +58,12 @@ func setUp(t *testing.T) {
 
 	// Try to create table
 	_, err = catalogClient.CreateTable(basicTable)
-	if err != nil && !strings.Contains(err.Error(), "Table already exist") {
-		t.Fatal("create table error: ", err)
+	if err != nil {
+		if strings.Contains(err.Error(), "Table already exist") {
+			basicTable, err = catalogClient.GetTable(basicTable)
+		} else {
+			t.Fatal("create table error: ", err)
+		}
 	}
 }
 
@@ -73,7 +77,7 @@ func createBasicTable() *client.Table {
 
 	c1 := &client.TableFieldSchema{}
 	c1.SetFieldName("col1")
-	c1.SetMode("REQUIRED")
+	c1.SetMode("NULLABLE")
 	c1.SetTypeCategory("INT")
 	c1.SetDescription("InitCol1")
 
@@ -101,7 +105,7 @@ func createBasicTable() *client.Table {
 
 	c3 := &client.TableFieldSchema{}
 	c3.SetFieldName("InitNestedCol")
-	c3.SetMode("REQUIRED")
+	c3.SetMode("NULLABLE")
 	c3.SetTypeCategory("STRUCT")
 	c3.SetFields(nestedSubCols)
 
@@ -113,13 +117,17 @@ func createBasicTable() *client.Table {
 	// Create table
 	table := &client.Table{}
 	table.SetProjectId(project)
-	table.SetSchemaName("default")
+	table.SetSchemaName("another_schema")
 	table.SetType("TABLE")
 	table.SetTableName(tableName)
 	table.SetTableSchema(tableSchema)
 	table.SetDescription("InitDescription")
 
 	return table
+}
+
+func TestBasicCreate(t *testing.T) {
+	setUp(t)
 }
 
 func TestBasicUpdate(t *testing.T) {
