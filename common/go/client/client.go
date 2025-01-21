@@ -549,6 +549,7 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
           } else {
             error.Message = tea.String(tryErr.Error())
           }
+          err = map[string]interface{}{}
           err["Code"] = tea.String("Unknown")
           err["Message"] = responseBody
         }

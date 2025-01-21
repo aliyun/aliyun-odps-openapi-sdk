@@ -260,6 +260,7 @@ api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOpti
       var _res = Util.parseJSON(responseBody);
       err = Util.assertAsMap(_res);
     } catch (error) {
+      err = {};
       err['Code'] = 'Unknown';
       err['Message'] = responseBody;
     }

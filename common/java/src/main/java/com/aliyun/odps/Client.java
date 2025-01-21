@@ -232,10 +232,12 @@ public class Client {
                         Object _res = com.aliyun.teautil.Common.parseJSON(responseBody);
                         err = com.aliyun.teautil.Common.assertAsMap(_res);
                     } catch (TeaException error) {
+                        err = new java.util.HashMap<>();
                         err.put("Code", "Unknown");
                         err.put("Message", responseBody);
                     } catch (Exception _error) {
                         TeaException error = new TeaException(_error.getMessage(), _error);
+                        err = new java.util.HashMap<>();
                         err.put("Code", "Unknown");
                         err.put("Message", responseBody);
                     }                    
