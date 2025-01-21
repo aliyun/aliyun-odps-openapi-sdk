@@ -11,13 +11,9 @@ public class Client extends com.aliyun.odps.Client {
     }
 
 
-    public Table updateTableWithOptions(Table table, com.aliyun.teautil.models.RuntimeOptions runtime) throws Exception {
-        return TeaModel.toModel(this.requestWithModel(table, "PUT", this.getTablePath(table), runtime), new Table());
-    }
-
     public Table updateTable(Table table) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        return this.updateTableWithOptions(table, runtime);
+        return TeaModel.toModel(this.requestWithModel(table, "PUT", this.getTablePath(table), runtime), new Table());
     }
 
     public HttpResponse deleteTable(Table table) throws Exception {

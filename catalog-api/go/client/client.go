@@ -134,10 +134,6 @@ type SortingField struct {
   // 列名（如果是顶层列），或者 struct 字段名。
   FieldName *string `json:"fieldName,omitempty" xml:"fieldName,omitempty"`
   // 排序顺序
-  // 
-  // example:
-  // 
-  // DESC
   Order *string `json:"order,omitempty" xml:"order,omitempty"`
 }
 
@@ -472,24 +468,14 @@ func (client *Client)Init(config *openapi.Config)(_err error) {
 
 
 
-func (client *Client) UpdateTableWithOptions (table *Table, runtime *util.RuntimeOptions) (_result *Table, _err error) {
+func (client *Client) UpdateTable (table *Table) (_result *Table, _err error) {
+  runtime := &util.RuntimeOptions{}
   _result = &Table{}
   _body, _err := client.RequestWithModel(table, tea.String("PUT"), client.GetTablePath(table), runtime)
   if _err != nil {
     return _result, _err
   }
   _err = tea.Convert(_body, &_result)
-  return _result, _err
-}
-
-func (client *Client) UpdateTable (table *Table) (_result *Table, _err error) {
-  runtime := &util.RuntimeOptions{}
-  _result = &Table{}
-  _body, _err := client.UpdateTableWithOptions(table, runtime)
-  if _err != nil {
-    return _result, _err
-  }
-  _result = _body
   return _result, _err
 }
 

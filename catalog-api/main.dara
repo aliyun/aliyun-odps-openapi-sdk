@@ -90,13 +90,9 @@ model HttpResponse = {
   body?: string(name='body')
 }
 
-async function updateTableWithOptions(table: Table, runtime: Util.RuntimeOptions): Table {
-  return requestWithModel(table, 'PUT', getTablePath(table), runtime);
-}
-
 async function updateTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
-  return updateTableWithOptions(table, runtime);
+  return requestWithModel(table, 'PUT', getTablePath(table), runtime);
 }
 
 async function deleteTable(table: Table): HttpResponse {
