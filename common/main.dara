@@ -254,8 +254,14 @@ api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOpti
   }
 
   if (Util.is4xx(__response.statusCode) || Util.is5xx(__response.statusCode)) {
-    var _res = Util.readAsJSON(__response.body);
-    var err = Util.assertAsMap(_res);
+    var err : map[string]any = {};
+    try {
+      var _res = Util.readAsJSON(__response.body);
+      err = Util.assertAsMap(_res);
+    } catch (error) {
+      err['Code'] = 'Unknown';
+      err['Message'] = Util.readAsString(__response.body);
+    }
     var requestId = McUtil.toString(defaultAny(__response.headers.x-odps-request-id, __response.headers.X-Odps-Request-Id));
     err.statusCode = __response.statusCode;
      throw {

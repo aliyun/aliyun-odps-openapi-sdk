@@ -32,9 +32,9 @@ func (s *GlobalParameters) SetQueries(v map[string]*string) *GlobalParameters {
   return s
 }
 
-// Description:
-// 
-// Model for initing client
+/**
+ * Model for initing client
+ */
 type Config struct {
   // project
   Project *string `json:"project,omitempty" xml:"project,omitempty"`
@@ -43,78 +43,30 @@ type Config struct {
   // accesskey secret
   AccessKeySecret *string `json:"accessKeySecret,omitempty" xml:"accessKeySecret,omitempty"`
   // security token
-  // 
-  // example:
-  // 
-  // a.txt
   SecurityToken *string `json:"securityToken,omitempty" xml:"securityToken,omitempty"`
   // bearer token
-  // 
-  // example:
-  // 
-  // the-bearer-token
   BearerToken *string `json:"bearerToken,omitempty" xml:"bearerToken,omitempty"`
   // http protocol
-  // 
-  // example:
-  // 
-  // http
   Protocol *string `json:"protocol,omitempty" xml:"protocol,omitempty"`
   // http method
-  // 
-  // example:
-  // 
-  // GET
   Method *string `json:"method,omitempty" xml:"method,omitempty"`
   // region id
-  // 
-  // example:
-  // 
-  // cn-hangzhou
   RegionId *string `json:"regionId,omitempty" xml:"regionId,omitempty"`
   // read timeout
-  // 
-  // example:
-  // 
-  // 60
   ReadTimeout *int `json:"readTimeout,omitempty" xml:"readTimeout,omitempty"`
   // connect timeout
-  // 
-  // example:
-  // 
-  // 60
   ConnectTimeout *int `json:"connectTimeout,omitempty" xml:"connectTimeout,omitempty"`
   // credential
   Credential credential.Credential `json:"credential,omitempty" xml:"credential,omitempty"`
   // endpoint
-  // 
-  // example:
-  // 
-  // cs.aliyuncs.com
   Endpoint *string `json:"endpoint,omitempty" xml:"endpoint,omitempty"`
   // credential type
-  // 
-  // example:
-  // 
-  // access_key
   Type *string `json:"type,omitempty" xml:"type,omitempty"`
   // user agent
-  // 
-  // example:
-  // 
-  // maxcompute-openapi
   UserAgent *string `json:"userAgent,omitempty" xml:"userAgent,omitempty"`
   // suffix for endpoint
-  // 
-  // example:
-  // 
-  // aliyun
   Suffix *string `json:"suffix,omitempty" xml:"suffix,omitempty"`
   // Signature Version
-  // 
-  // example:
-  // 
-  // v2
   SignatureVersion *string `json:"signatureVersion,omitempty" xml:"signatureVersion,omitempty"`
   // Global Parameters
   GlobalParameters *GlobalParameters `json:"globalParameters,omitempty" xml:"globalParameters,omitempty"`
@@ -341,11 +293,10 @@ type Client struct {
   GlobalParameters  *GlobalParameters
 }
 
-// Description:
-// 
-// Init client with Config
-// 
-// @param config - config contains the necessary information to create a client
+/**
+ * Init client with Config
+ * @param config config contains the necessary information to create a client
+ */
 func NewClient(config *Config)(*Client, error) {
   client := new(Client)
   err := client.Init(config)
@@ -353,7 +304,7 @@ func NewClient(config *Config)(*Client, error) {
 }
 
 func (client *Client)Init(config *Config)(_err error) {
-  if tea.BoolValue(util.IsUnset(config)) {
+  if tea.BoolValue(util.IsUnset(tea.ToMap(config))) {
     _err = tea.NewSDKError(map[string]interface{}{
       "code": "ParameterMissing",
       "message": "'config' can not be unset",
@@ -408,27 +359,18 @@ func (client *Client)Init(config *Config)(_err error) {
 }
 
 
-// Description:
-// 
-// Encapsulate the request and invoke the network
-// 
-// @param action - api name
-// 
-// @param version - product version
-// 
-// @param protocol - http or https
-// 
-// @param method - e.g. GET
-// 
-// @param authType - authorization type e.g. AK
-// 
-// @param bodyType - response body type e.g. String
-// 
-// @param request - object of OpenApiRequest
-// 
-// @param runtime - which controls some details of call api, such as retry times
-// 
-// @return the response
+/**
+ * Encapsulate the request and invoke the network
+ * @param action api name
+ * @param version product version
+ * @param protocol http or https
+ * @param method e.g. GET
+ * @param authType authorization type e.g. AK
+ * @param bodyType response body type e.g. String
+ * @param request object of OpenApiRequest
+ * @param runtime which controls some details of call api, such as retry times
+ * @return the response
+ */
 func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
   _err = tea.Validate(params)
   if _err != nil {
@@ -478,7 +420,7 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
 
       globalQueries := make(map[string]*string)
       globalHeaders := make(map[string]*string)
-      if !tea.BoolValue(util.IsUnset(client.GlobalParameters)) {
+      if !tea.BoolValue(util.IsUnset(tea.ToMap(client.GlobalParameters))) {
         globalParams := client.GlobalParameters
         if !tea.BoolValue(util.IsUnset(globalParams.Queries)) {
           globalQueries = globalParams.Queries
@@ -492,7 +434,7 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
 
       extendsHeaders := make(map[string]*string)
       extendsQueries := make(map[string]*string)
-      if !tea.BoolValue(util.IsUnset(runtime.ExtendsParameters)) {
+      if !tea.BoolValue(util.IsUnset(tea.ToMap(runtime.ExtendsParameters))) {
         extendsParameters := runtime.ExtendsParameters
         if !tea.BoolValue(util.IsUnset(extendsParameters.Headers)) {
           extendsHeaders = extendsParameters.Headers
@@ -578,16 +520,41 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
       }
 
       if tea.BoolValue(util.Is4xx(response_.StatusCode)) || tea.BoolValue(util.Is5xx(response_.StatusCode)) {
-        _res, _err := util.ReadAsJSON(response_.Body)
-        if _err != nil {
-          return _result, _err
-        }
+        err := map[string]interface{}{}
+        _, tryErr := func()(_r map[string]interface{}, _e error) {
+          defer func() {
+            if r := tea.Recover(recover()); r != nil {
+              _e = r
+            }
+          }()
+          _res, _err := util.ReadAsJSON(response_.Body)
+          if _err != nil {
+            return _result, _err
+          }
 
-        err, _err := util.AssertAsMap(_res)
-        if _err != nil {
-          return _result, _err
-        }
+          err, _err = util.AssertAsMap(_res)
+          if _err != nil {
+            return _result, _err
+          }
 
+
+          return nil, nil
+        }()
+
+        if tryErr != nil {
+          var error = &tea.SDKError{}
+          if _t, ok := tryErr.(*tea.SDKError); ok {
+            error = _t
+          } else {
+            error.Message = tea.String(tryErr.Error())
+          }
+          err["Code"] = tea.String("Unknown")
+          err["Message"], _err = util.ReadAsString(response_.Body)
+          if _err != nil {
+            return _result, _err
+          }
+
+        }
         requestId := mcutil.ToString(DefaultAny(response_.Headers["x-odps-request-id"], response_.Headers["X-Odps-Request-Id"]))
         err["statusCode"] = response_.StatusCode
         _err = tea.NewSDKError(map[string]interface{}{
@@ -730,7 +697,7 @@ func (client *Client) RequestWithoutModel (model interface{}, method *string, pa
 }
 
 func (client *Client) CallApi (params *Params, request *OpenApiRequest, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
-  if tea.BoolValue(util.IsUnset(params)) {
+  if tea.BoolValue(util.IsUnset(tea.ToMap(params))) {
     _err = tea.NewSDKError(map[string]interface{}{
       "code": "ParameterMissing",
       "message": "'params' can not be unset",
@@ -747,22 +714,20 @@ func (client *Client) CallApi (params *Params, request *OpenApiRequest, runtime 
   return _result, _err
 }
 
-// Description:
-// 
-// Get user agent
-// 
-// @return user agent
+/**
+ * Get user agent
+ * @return user agent
+ */
 func (client *Client) GetUserAgent () (_result *string) {
   userAgent := util.GetUserAgent(client.UserAgent)
   _result = userAgent
   return _result
 }
 
-// Description:
-// 
-// Get accesskey id by using credential
-// 
-// @return accesskey id
+/**
+ * Get accesskey id by using credential
+ * @return accesskey id
+ */
 func (client *Client) GetAccessKeyId () (_result *string, _err error) {
   if tea.BoolValue(util.IsUnset(client.Credential)) {
     _result = tea.String("")
@@ -778,11 +743,10 @@ func (client *Client) GetAccessKeyId () (_result *string, _err error) {
   return _result , _err
 }
 
-// Description:
-// 
-// Get accesskey secret by using credential
-// 
-// @return accesskey secret
+/**
+ * Get accesskey secret by using credential
+ * @return accesskey secret
+ */
 func (client *Client) GetAccessKeySecret () (_result *string, _err error) {
   if tea.BoolValue(util.IsUnset(client.Credential)) {
     _result = tea.String("")
@@ -798,11 +762,10 @@ func (client *Client) GetAccessKeySecret () (_result *string, _err error) {
   return _result , _err
 }
 
-// Description:
-// 
-// Get security token by using credential
-// 
-// @return security token
+/**
+ * Get security token by using credential
+ * @return security token
+ */
 func (client *Client) GetSecurityToken () (_result *string, _err error) {
   if tea.BoolValue(util.IsUnset(client.Credential)) {
     _result = tea.String("")
@@ -818,11 +781,10 @@ func (client *Client) GetSecurityToken () (_result *string, _err error) {
   return _result , _err
 }
 
-// Description:
-// 
-// Get bearer token by credential
-// 
-// @return bearer token
+/**
+ * Get bearer token by credential
+ * @return bearer token
+ */
 func (client *Client) GetBearerToken () (_result *string, _err error) {
   if tea.BoolValue(util.IsUnset(client.Credential)) {
     _result = tea.String("")
@@ -834,15 +796,12 @@ func (client *Client) GetBearerToken () (_result *string, _err error) {
   return _result , _err
 }
 
-// Description:
-// 
-// If inputValue is not null, return it or return defaultValue
-// 
-// @param inputValue - users input value
-// 
-// @param defaultValue - default value
-// 
-// @return the final result
+/**
+ * If inputValue is not null, return it or return defaultValue
+ * @param inputValue  users input value
+ * @param defaultValue default value
+ * @return the final result
+ */
 func DefaultAny (inputValue interface{}, defaultValue interface{}) (_result interface{}) {
   if tea.BoolValue(util.IsUnset(inputValue)) {
     _result = defaultValue
