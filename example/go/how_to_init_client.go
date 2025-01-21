@@ -7,7 +7,10 @@ import (
 	openapi "github.com/aliyun/aliyun-odps-openapi-sdk/common/go/client"
 )
 
-func right_way_1() {
+// error 'invalid character '<' looking for beginning of value' may because of wrong endpoint or wrong proxy configured
+// endpoint should be like 'catalogapi.ap-southeast-5.maxcompute.aliyun.com'
+
+func way_1() {
 	var endpoint = ""
 	var accessId = ""
 	var accessKey = ""
@@ -23,10 +26,10 @@ func right_way_1() {
 	}
 
 	// do something
-	println(catalogClient.Project)
+	println(catalogClient.Endpoint)
 }
 
-func right_way_2() {
+func way_2() {
 	var endpoint = ""
 	var accessId = ""
 	var accessKey = ""
@@ -41,25 +44,23 @@ func right_way_2() {
 		log.Fatal("get client error: ", err)
 	}
 	// do something
-	println(catalogClient.Project)
+	println(catalogClient.Endpoint)
 }
 
-func wrong_way() {
+func way_3() {
 	var endpoint = ""
 	var accessId = ""
 	var accessKey = ""
 
-	// this may cause error 'invalid character '<' looking for beginning of value'
-
 	catalogClient, err := client.NewClient(&openapi.Config{
-		AccessKeyId:     &endpoint,
-		AccessKeySecret: &accessId,
-		Endpoint:        &accessKey,
+		AccessKeyId:     &accessId,
+		AccessKeySecret: &accessKey,
+		Endpoint:        &endpoint,
 	})
 
 	if err != nil {
 		log.Fatal("get client error: ", err)
 	}
 	// do something
-	println(catalogClient.Project)
+	println(catalogClient.Endpoint)
 }
