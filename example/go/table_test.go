@@ -55,9 +55,10 @@ func setUp(t *testing.T) {
 
 	// Create basic table schema
 	basicTable = createBasicTable()
+	fmt.Printf("Create table: %+v\n", basicTable)
 
 	// Try to create table
-	_, err = catalogClient.CreateTable(basicTable)
+	basicTable, err = catalogClient.CreateTable(basicTable)
 	if err != nil {
 		if strings.Contains(err.Error(), "Table already exist") {
 			basicTable, err = catalogClient.GetTable(basicTable)
