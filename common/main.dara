@@ -255,12 +255,13 @@ api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOpti
 
   if (Util.is4xx(__response.statusCode) || Util.is5xx(__response.statusCode)) {
     var err : map[string]any = {};
+    var responseBody = Util.readAsString(__response.body);
     try {
-      var _res = Util.readAsJSON(__response.body);
+      var _res = Util.parseJSON(responseBody);
       err = Util.assertAsMap(_res);
     } catch (error) {
       err['Code'] = 'Unknown';
-      err['Message'] = Util.readAsString(__response.body);
+      err['Message'] = responseBody;
     }
     var requestId = McUtil.toString(defaultAny(__response.headers.x-odps-request-id, __response.headers.X-Odps-Request-Id));
     err.statusCode = __response.statusCode;

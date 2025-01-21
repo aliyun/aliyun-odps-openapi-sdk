@@ -521,17 +521,18 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
 
       if tea.BoolValue(util.Is4xx(response_.StatusCode)) || tea.BoolValue(util.Is5xx(response_.StatusCode)) {
         err := map[string]interface{}{}
+        responseBody, _err := util.ReadAsString(response_.Body)
+        if _err != nil {
+          return _result, _err
+        }
+
         _, tryErr := func()(_r map[string]interface{}, _e error) {
           defer func() {
             if r := tea.Recover(recover()); r != nil {
               _e = r
             }
           }()
-          _res, _err := util.ReadAsJSON(response_.Body)
-          if _err != nil {
-            return _result, _err
-          }
-
+          _res := util.ParseJSON(responseBody)
           err, _err = util.AssertAsMap(_res)
           if _err != nil {
             return _result, _err
@@ -549,11 +550,7 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
             error.Message = tea.String(tryErr.Error())
           }
           err["Code"] = tea.String("Unknown")
-          err["Message"], _err = util.ReadAsString(response_.Body)
-          if _err != nil {
-            return _result, _err
-          }
-
+          err["Message"] = responseBody
         }
         requestId := mcutil.ToString(DefaultAny(response_.Headers["x-odps-request-id"], response_.Headers["X-Odps-Request-Id"]))
         err["statusCode"] = response_.StatusCode
