@@ -10,7 +10,7 @@
   "java": {
     "package": "com.aliyun.odps.catalog",
     "packageInfo": {
-      "version": "0.1.1",
+      "version": "0.1.1-SNAPSHOT",
       "groupId": "com.aliyun.odps",
       "artifactId": "catalog-api",
       "name": "catalog-api",
@@ -41,7 +41,7 @@
     }
   },
   "releases": {
-    "java": "com.aliyun.odps:catalog-api:0.0.1-SNAPSHOT",
+    "java": "com.aliyun.odps:catalog-api:0.1.1-SNAPSHOT",
     "go": "github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go/client",
     "python": "pyodps_catalog:1.0.0"
   }

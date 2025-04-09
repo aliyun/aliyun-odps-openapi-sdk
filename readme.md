@@ -18,7 +18,7 @@ go get github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go
 <dependency>
     <groupId>com.aliyun.odps</groupId>
     <artifactId>catalog-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
 </dependency>
 ```
 
