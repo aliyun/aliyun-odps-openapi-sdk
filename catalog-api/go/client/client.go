@@ -134,6 +134,10 @@ type SortingField struct {
   // 列名（如果是顶层列），或者 struct 字段名。
   FieldName *string `json:"fieldName,omitempty" xml:"fieldName,omitempty"`
   // 排序顺序
+  // 
+  // example:
+  // 
+  // DESC
   Order *string `json:"order,omitempty" xml:"order,omitempty"`
 }
 

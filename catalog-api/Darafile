@@ -29,8 +29,20 @@
   "go": {
     "mapAndSliceWithoutOmitempty": false
   },
+  "python": {
+    "package": "pyodps_catalog",
+    "clientName": "client",
+    "packageInfo": {
+      "name": "pyodps_catalog",
+      "desc": "Alibaba Cloud MaxCompute openapi SDK Library for Python",
+      "github": "https://github.com/aliyun/darabonba-openapi",
+      "author": "Alibaba Cloud SDK",
+      "email": "sdk-team@alibabacloud.com"
+    }
+  },
   "releases": {
     "java": "com.aliyun.odps:catalog-api:0.0.1-SNAPSHOT",
-    "go": "github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go/client"
+    "go": "github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go/client",
+    "python": "pyodps_catalog:1.0.0"
   }
 }
