@@ -5,7 +5,7 @@
 	"main": "./main.tea",
 	"releases": {
 	    "go": "github.com/aliyun/aliyun-odps-go-sdk/tea/utils:master",
-		"java": "com.aliyun.odps:odps-sdk-core:0.51.4-public",
+		"java": "com.aliyun.odps:odps-sdk-core:0.51.11-public",
 		"python": "maxcompute_tea_util:0.0.1"
 	},
 	"java": {
