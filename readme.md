@@ -22,6 +22,11 @@ go get github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go
 </dependency>
 ```
 
+### Python
+```bash
+pip install pyodps_catalog
+```
+
 ## 使用示例 (catalog-api)
 
 ### Golang
@@ -29,6 +34,9 @@ go get github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go
 
 ### Java
 * 表操作示例：[TableTest.java](https://github.com/aliyun/aliyun-odps-openapi-sdk/blob/master/example/java/src/test/java/TableTest.java)
+
+### Python
+* 表操作示例：[test_table.py](https://github.com/aliyun/aliyun-odps-openapi-sdk/blob/master/example/python/test_table.py)
 
 ## 编译指南
 
@@ -46,7 +54,8 @@ npm install @darabonba/cli -g
 构建选项：
 * `--go`: 仅构建 Go SDK
 * `--java`: 仅构建 Java SDK
-* 不带参数则同时构建 Go 和 Java SDK
+* `--python`: 仅构建 Python SDK
+* 不带参数则同时构建以上语言 SDK
 
 ## 注意事项
 
