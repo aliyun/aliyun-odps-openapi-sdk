@@ -449,6 +449,7 @@ class Table(TeaModel):
         create_time: str = None,
         last_modified_time: str = None,
         expiration_options: ExpirationOptions = None,
+        labels: Dict[str, str] = None,
     ):
         # 用于 read-modify-write 一致性校验。
         self.etag = etag
@@ -480,6 +481,8 @@ class Table(TeaModel):
         self.last_modified_time = last_modified_time
         # 可选。表的过期时间配置。
         self.expiration_options = expiration_options
+        # 可选。表上的标签。
+        self.labels = labels
 
     def validate(self):
         self.validate_required(self.project_id, 'project_id')
@@ -533,6 +536,8 @@ class Table(TeaModel):
             result['lastModifiedTime'] = self.last_modified_time
         if self.expiration_options is not None:
             result['expirationOptions'] = self.expiration_options.to_map()
+        if self.labels is not None:
+            result['labels'] = self.labels
         return result
 
     def from_map(self, m: dict = None):
@@ -573,6 +578,8 @@ class Table(TeaModel):
         if m.get('expirationOptions') is not None:
             temp_model = ExpirationOptions()
             self.expiration_options = temp_model.from_map(m['expirationOptions'])
+        if m.get('labels') is not None:
+            self.labels = m.get('labels')
         return self
 
 

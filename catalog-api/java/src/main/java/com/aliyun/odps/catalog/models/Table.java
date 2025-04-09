@@ -96,6 +96,12 @@ public class Table extends TeaModel {
     @NameInMap("expirationOptions")
     public ExpirationOptions expirationOptions;
 
+    /**
+     * <p>可选。表上的标签。</p>
+     */
+    @NameInMap("labels")
+    public java.util.Map<String, String> labels;
+
     public static Table build(java.util.Map<String, ?> map) throws Exception {
         Table self = new Table();
         return TeaModel.build(map, self);
@@ -219,6 +225,14 @@ public class Table extends TeaModel {
     }
     public ExpirationOptions getExpirationOptions() {
         return this.expirationOptions;
+    }
+
+    public Table setLabels(java.util.Map<String, String> labels) {
+        this.labels = labels;
+        return this;
+    }
+    public java.util.Map<String, String> getLabels() {
+        return this.labels;
     }
 
 }

@@ -338,6 +338,8 @@ type Table struct {
   LastModifiedTime *string `json:"lastModifiedTime,omitempty" xml:"lastModifiedTime,omitempty"`
   // 可选。表的过期时间配置。
   ExpirationOptions *ExpirationOptions `json:"expirationOptions,omitempty" xml:"expirationOptions,omitempty"`
+  // 可选。表上的标签。
+  Labels map[string]*string `json:"labels,omitempty" xml:"labels,omitempty"`
 }
 
 func (s Table) String() string {
@@ -420,6 +422,11 @@ func (s *Table) SetLastModifiedTime(v string) *Table {
 
 func (s *Table) SetExpirationOptions(v *ExpirationOptions) *Table {
   s.ExpirationOptions = v
+  return s
+}
+
+func (s *Table) SetLabels(v map[string]*string) *Table {
+  s.Labels = v
   return s
 }
 

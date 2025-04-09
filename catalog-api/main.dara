@@ -81,7 +81,8 @@ model Table {
   tableFormatDefinition?: TableFormatDefinition(name='tableFormatDefinition', description='可选。仅内表有此字段。默认为普通表格式。'),
   createTime?: string(name='createTime', description='表的创建时间（毫秒）。仅输出。'),
   lastModifiedTime?: string(name='lastModifiedTime', description='表的修改时间（毫秒）。仅输出。'),
-  expirationOptions?: ExpirationOptions(name='expirationOptions', description='可选。表的过期时间配置。')
+  expirationOptions?: ExpirationOptions(name='expirationOptions', description='可选。表的过期时间配置。'),
+  labels?: map[string]string(name='labels', description='可选。表上的标签。')
 }
 
 model HttpResponse = {

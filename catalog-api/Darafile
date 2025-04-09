@@ -1,7 +1,7 @@
 {
   "scope": "maxcompute",
   "name": "catalog-api",
-  "version": "v0.1.0",
+  "version": "v0.1.1",
   "main": "./main.dara",
   "libraries": {
     "OpenApi": "maxcompute:openapi:*",
@@ -10,7 +10,7 @@
   "java": {
     "package": "com.aliyun.odps.catalog",
     "packageInfo": {
-      "version": "0.0.1-SNAPSHOT",
+      "version": "0.1.1",
       "groupId": "com.aliyun.odps",
       "artifactId": "catalog-api",
       "name": "catalog-api",
