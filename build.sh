@@ -3,6 +3,7 @@
 # 默认值：都编译
 build_go=true
 build_java=true
+build_python=true
 
 # 解析命令行参数
 while [[ $# -gt 0 ]]; do
@@ -10,16 +11,24 @@ while [[ $# -gt 0 ]]; do
         --go)
             build_go=true
             build_java=false
+            build_python=false
             shift
             ;;
         --java)
             build_go=false
             build_java=true
+            build_python=false
+            shift
+            ;;
+        --python)
+            build_go=false
+            build_java=false
+            build_python=true
             shift
             ;;
         *)
             echo "Unknown parameter: $1"
-            echo "Usage: $0 [--go] [--java]"
+            echo "Usage: $0 [--go] [--java] [--python]"
             exit 1
             ;;
     esac
@@ -83,6 +92,28 @@ handle_directory() {
         cd .. || exit 1
     fi
 
+    # 如果构建 Python
+    if [ "$build_python" = true ]; then
+        # 删除旧的 python 目录
+        if [ -d "python" ]; then
+            echo "Removing existing python directory..."
+            rm -r python || { echo "Failed to remove python directory in $dir_path."; exit 1; }
+        fi
+
+        # 生成 python 代码
+        echo "Generating python code..."
+        dara codegen python ./python || { echo "Failed to generate python code in $dir_path."; exit 1; }
+
+        # 进入到生成的 python 目录
+        cd python || { echo "Failed to change directory to python in $dir_path."; exit 1; }
+
+        # pip install .
+        echo "Cleaning and installing the Go project..."
+        pip install . || { echo "Python build failed in $dir_path."; exit 1; }
+
+        cd .. || exit 1
+    fi
+
     echo "Project built successfully in $dir_path."
 
     cd ..
@@ -92,6 +123,7 @@ handle_directory() {
 echo "Build configuration:"
 echo "Building Go: $build_go"
 echo "Building Java: $build_java"
+echo "Building Python: $build_python"
 
 # 处理每个目录
 handle_directory "common"
