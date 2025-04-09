@@ -192,7 +192,6 @@ api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOpti
     }
   }
   __request.query = {
-    curr_project=@project,
     ...globalQueries,
     ...extendsQueries,
     ...request.query,

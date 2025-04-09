@@ -1,7 +1,7 @@
 {
   "scope": "maxcompute",
   "name": "openapi",
-  "version": "v0.0.1",
+  "version": "v0.0.2",
   "main": "main.dara",
 
   "libraries": {
@@ -35,8 +35,20 @@
       "io"
     ]
   },
+  "python": {
+    "package": "maxcompute_tea_openapi",
+    "clientName": "client",
+    "packageInfo": {
+      "name": "maxcompute_tea_openapi",
+      "desc": "Alibaba Cloud MaxCompute openapi SDK Library for Python",
+      "github": "https://github.com/aliyun/aliyun-odps-openapi-sdk",
+      "author": "Alibaba Cloud MaxCompute Team",
+      "email": "zhangdingxin.zdx@alibaba-inc.com"
+    }
+  },
   "releases": {
     "java": "com.aliyun.odps:openapi:0.0.1-SNAPSHOT",
-    "go": "github.com/aliyun/aliyun-odps-openapi-sdk/common/go/client"
+    "go": "github.com/aliyun/aliyun-odps-openapi-sdk/common/go/client",
+    "python": "maxcompute_tea_openapi:1.0.0"
   }
 }
