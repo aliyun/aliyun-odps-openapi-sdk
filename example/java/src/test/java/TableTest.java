@@ -49,7 +49,7 @@ public class TableTest {
     @BeforeClass
     public static void SetUp() throws Exception {
         Config config = new Config();
-        config.setEndpoint("");
+        config.setEndpoint("catalogapi.ap-southeast-5.maxcompute.aliyun.com");
         config.setAccessKeyId("");
         config.setAccessKeySecret("");
         catalogClient = new com.aliyun.odps.catalog.Client(config);

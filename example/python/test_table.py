@@ -8,7 +8,7 @@ if __name__ == '__main__':
     config = open_api_models.Config(
         access_key_id='',
         access_key_secret='=',
-        endpoint=''
+        endpoint='' # endpoint should be like 'catalogapi.ap-southeast-5.maxcompute.aliyun.com'
     )
     client = Client(config)
 
