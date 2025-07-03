@@ -1,0 +1,57 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
+
+name: Maven Package
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Extract Version from Tag
+        id: extract_version
+        run: |
+          # 提取tag名称并去除前缀'v'
+          tag_name="${GITHUB_REF##*/}"
+          version="${tag_name#v}"
+          echo "Extracted version: $version"
+          echo "NEW_VERSION=$version" >> $GITHUB_ENV
+
+      - name: Install Java and Maven
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+
+      - name: Apply Patch
+        run: |
+          if [ -f update_maven_repo.patch ]; then
+            git apply update_maven_repo.patch
+            echo "Patch applied successfully"
+          else
+            echo "Patch file not found"
+            exit 1
+          fi
+
+      - name: Setup gpg
+        run: |
+          mkdir ~/.gnupg
+          echo use-agent >> ~/.gnupg/gpg.conf
+          echo pinentry-mode loopback >> ~/.gnupg/gpg.conf
+          echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
+          
+      - name: Publish Common Package
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          directory: common/java
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          nexus_username: ${{ secrets.OSSRH_USERNAME }}
+          nexus_password: ${{ secrets.OSSRH_TOKEN }}
+          server_id: ossrh
+          maven_args: -DskipTests -Dmaven.deploy.timeout=600
