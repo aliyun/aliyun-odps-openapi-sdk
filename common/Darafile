@@ -5,7 +5,7 @@
   "main": "main.dara",
 
   "libraries": {
-    "McUtil": "maxcompute:Util:*",
+    "McUtil": "maxcompute:Util:v0.1.1",
     "Util": "darabonba:Util:*",
     "Credential": "alibabacloud:Credential:*",
     "XML": "darabonba:XML:*"

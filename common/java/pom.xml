@@ -40,8 +40,8 @@
   <dependencies>
     <dependency>
       <groupId>com.aliyun.odps</groupId>
-      <artifactId>tea-util</artifactId>
-      <version>0.2.0</version>
+      <artifactId>odps-sdk-core</artifactId>
+      <version>0.51.4-public</version>
     </dependency>
     <dependency>
       <groupId>com.aliyun</groupId>
