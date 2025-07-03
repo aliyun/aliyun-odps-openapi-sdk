@@ -65,4 +65,4 @@ jobs:
           nexus_username: ${{ secrets.OSSRH_USERNAME }}
           nexus_password: ${{ secrets.OSSRH_TOKEN }}
           server_id: ossrh
-          maven_args: -DskipTests -Dmaven.deploy.timeout=600
+          maven_args: -DskipTests -Dmaven.deploy.timeout=600 -Dmaven.repo.remote=https://oss.sonatype.org/content/repositories/snapshots
