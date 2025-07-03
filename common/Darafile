@@ -15,7 +15,7 @@
     "package": "com.aliyun.odps",
     "enableMinimizeModelName": false,
     "packageInfo": {
-      "version": "0.0.1-SNAPSHOT",
+      "version": "0.0.2",
       "groupId": "com.aliyun.odps",
       "artifactId": "openapi",
       "name": "openapi-common",

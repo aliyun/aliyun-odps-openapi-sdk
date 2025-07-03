@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.aliyun.odps</groupId>
   <artifactId>openapi</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2</version>
   <packaging>jar</packaging>
   <name>openapi</name>
   <description>Alibaba Cloud MaxCompute Open SDK for Java
@@ -40,8 +40,8 @@
   <dependencies>
     <dependency>
       <groupId>com.aliyun.odps</groupId>
-      <artifactId>odps-sdk-core</artifactId>
-      <version>0.51.4-public</version>
+      <artifactId>tea-util</artifactId>
+      <version>0.2.0</version>
     </dependency>
     <dependency>
       <groupId>com.aliyun</groupId>
@@ -51,7 +51,7 @@
     <dependency>
       <groupId>com.aliyun</groupId>
       <artifactId>credentials-java</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
     </dependency>
     <dependency>
       <groupId>com.aliyun</groupId>
