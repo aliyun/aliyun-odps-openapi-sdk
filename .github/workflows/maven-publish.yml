@@ -49,25 +49,14 @@ jobs:
           echo use-agent >> ~/.gnupg/gpg.conf
           echo pinentry-mode loopback >> ~/.gnupg/gpg.conf
           echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
-          
-      - name: Publish Common Package
-        uses: samuelmeuli/action-maven-publish@v1
-        with:
-          directory: common/java
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          nexus_username: ${{ secrets.OSSRH_USERNAME }}
-          nexus_password: ${{ secrets.OSSRH_TOKEN }}
-          server_id: ossrh
-          maven_args: -DskipTests -Dmaven.deploy.timeout=600
       
-      - name: Set Version for Common Package
+      - name: Set Version for Catalog API
         run: |
-          cd common/java
+          cd catalog-api/java
           mvn versions:set -DnewVersion=${{ env.NEW_VERSION }} -DallowSnapshots=true
         shell: bash
 
-      - name: Publish Catalog API Package
+      - name: Publish Catalog API
         uses: samuelmeuli/action-maven-publish@v1
         with:
           directory: catalog-api/java
