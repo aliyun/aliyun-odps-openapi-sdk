@@ -126,3 +126,92 @@ function getTablesPath(table: Table): string {
     return `/api/catalog/v1alpha/projects/${table.projectId}/schemas/${table.schemaName}/tables`;
   }
 }
+
+
+model DataScanSource {
+  location?: string(name='location'),
+  connection?: string(name='connection'),
+  ignores?: [string](name='ignores')
+}
+
+model DataScanTarget {
+  project?: string(name='project'),
+  schema?: string(name='schema'),
+  namePrefix?: string(name='namePrefix'),
+  properties?: string(name='properties')
+}
+
+model DataScanProperties {
+  formatFilter?: string(name='formatFilter'),
+  scanMode?: string(name='scanMode'),
+  enableStats?: boolean(name='enableStats'),
+  options?: string(name='options'),
+  updatePolicy?: string(name='updatePolicy'),
+  syncRemove?: boolean(name='syncRemove'),
+  autoCommit?: boolean(name='autoCommit')
+}
+
+model DataScan {
+  scanName?: string(name='scanName'),
+  type?: string(name='type'),
+  creator?: string(name='creator'),
+  innerCreator: string(name='innerCreator'),
+  customerId?: string(name='customerId'),
+  namespaceId?: string(name='namespaceId'),
+  description?: string(name='description'),
+  scanId?: string(name='scanId'),
+  creationTime?: int64(name='creationTime'),
+  lastModifiedTime?: int64(name='lastModifiedTime'),
+  lastTriggeredTime?: int64(name='lastTriggeredTime'),
+  lastTriggeredBy?: string(name='lastTriggeredBy'),
+  schedulingStatus?: string(name='schedulingStatus'),
+  source?: DataScanSource(name='source'),
+  target?: DataScanTarget(name='target'),
+  properties?: DataScanProperties(name='properties'),
+  schedulerMode?: string(name='schedulerMode'),
+  schedulerInterval?: string(name='schedulerInterval'),
+  priority?: int32(name='priority'),
+  schedulerIntervalMinutes?: int32(name='schedulerIntervalMinutes')
+}
+
+model ScanJob {
+  jobId?: string(name='jobId'),
+  namespaceId?: string(name='namespaceId'),
+  dataScanId?: string(name='dataScanId'),
+  dataScanName?: string(name='dataScanName'),
+  triggeredBy?: string(name='triggeredBy'),
+  startTime?: int64(name='startTime'),
+  endTime?: int64(name='endTime'),
+  status?: string(name='status'),
+  statusDetail?: string(name='statusDetail'),
+  ddl?: string(name='ddl'),
+  stats?: string(name='stats')
+}
+
+function getDataScanPath(dataScan: DataScan): string {
+  return `/api/catalog/v1alpha/namespaces/${dataScan.namespaceId}/dataScans/${dataScan.scanName}`;
+}
+
+function getDataScansPath(dataScan: DataScan): string {
+  return `/api/catalog/v1alpha/namespaces/${dataScan.namespaceId}/dataScans`;
+}
+
+async function updateDataScan(dataScan: DataScan): DataScan {
+  var runtime = new Util.RuntimeOptions{};
+  return requestWithModel(dataScan, 'PUT', getDataScanPath(dataScan), runtime);
+}
+
+async function deleteDataScan(dataScan: DataScan): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  return requestWithoutModel(dataScan, 'DELETE', getDataScanPath(dataScan), runtime);
+}
+
+async function createDataScan(dataScan: DataScan): DataScan {
+  var runtime = new Util.RuntimeOptions{};
+  return requestWithModel(dataScan, 'POST', getDataScansPath(dataScan), runtime);
+}
+
+async function getDataScan(dataScan: DataScan): DataScan {
+  var runtime = new Util.RuntimeOptions{};
+  return requestWithModel(dataScan, 'GET', getDataScansPath(dataScan), runtime);
+}
