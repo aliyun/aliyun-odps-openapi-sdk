@@ -4,6 +4,9 @@
 name: Maven Package
 
 on:
+  push:
+    tags:
+      - "v*"
   release:
     types: [ created ]
   workflow_dispatch:
@@ -15,6 +18,15 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4
+
+      - name: Extract Version from Tag
+        id: extract_version
+        run: |
+          # 提取tag名称并去除前缀'v'
+          tag_name="${GITHUB_REF##*/}"
+          version="${tag_name#v}"
+          echo "Extracted version: $version"
+          echo "NEW_VERSION=$version" >> $GITHUB_ENV
 
       - name: Install Java and Maven
         uses: actions/setup-java@v1
@@ -48,6 +60,12 @@ jobs:
           nexus_password: ${{ secrets.OSSRH_TOKEN }}
           server_id: ossrh
           maven_args: -DskipTests -Dmaven.deploy.timeout=600
+      
+      - name: Set Version for Common Package
+        run: |
+          cd common/java
+          mvn versions:set -DnewVersion=${{ env.NEW_VERSION }} -DallowSnapshots=true
+        shell: bash
 
       - name: Publish Catalog API Package
         uses: samuelmeuli/action-maven-publish@v1
