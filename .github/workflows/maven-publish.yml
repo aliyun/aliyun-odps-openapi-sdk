@@ -35,7 +35,7 @@ jobs:
 
       - name: Apply Patch 2
         run: |
-          if [ -f update_maven_repo.patch ]; then
+          if [ -f update_maven_repo2.patch ]; then
             git apply update_maven_repo2.patch
             echo "Patch applied successfully"
           else
