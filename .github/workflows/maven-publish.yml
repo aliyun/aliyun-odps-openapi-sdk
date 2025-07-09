@@ -33,7 +33,7 @@ jobs:
         with:
           java-version: 8
 
-      - name: Apply Patch
+      - name: Apply Patch 2
         run: |
           if [ -f update_maven_repo.patch ]; then
             git apply update_maven_repo2.patch
