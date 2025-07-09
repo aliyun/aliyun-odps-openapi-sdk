@@ -36,7 +36,7 @@ jobs:
       - name: Apply Patch
         run: |
           if [ -f update_maven_repo.patch ]; then
-            git apply update_maven_repo.patch
+            git apply update_maven_repo2.patch
             echo "Patch applied successfully"
           else
             echo "Patch file not found"
@@ -56,8 +56,8 @@ jobs:
           directory: common/java
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          nexus_username: ${{ secrets.OSSRH_USERNAME }}
-          nexus_password: ${{ secrets.OSSRH_TOKEN }}
+          nexus_username: ${{ secrets.NEXUS_TOKEN_USERNAME }}
+          nexus_password: ${{ secrets.NEXUS_TOKEN_PASSWORD }}
           server_id: ossrh
           maven_args: -DskipTests -Dmaven.deploy.timeout=600
       
@@ -73,7 +73,7 @@ jobs:
           directory: catalog-api/java
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          nexus_username: ${{ secrets.OSSRH_USERNAME }}
-          nexus_password: ${{ secrets.OSSRH_TOKEN }}
+          nexus_username: ${{ secrets.NEXUS_TOKEN_USERNAME }}
+          nexus_password: ${{ secrets.NEXUS_TOKEN_PASSWORD }}
           server_id: ossrh
           maven_args: -DskipTests -Dmaven.deploy.timeout=600
