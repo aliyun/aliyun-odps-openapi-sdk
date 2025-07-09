@@ -113,10 +113,11 @@ model OpenApiRequest {
   endpointOverride?: string,
 }
 
-async function requestWithModel(model: $Model, method: string, path: string, runtime: Util.RuntimeOptions): object {
+async function requestWithModel(model: $Model, method: string, path: string, params: map[string]string, runtime: Util.RuntimeOptions): object {
   Util.validateModel(model);
   var req = new OpenApiRequest{
-    body = Util.toMap(model)
+    body = Util.toMap(model),
+    query = params,
   };
   var openapiParams = new Params{
     pathname = path,
@@ -126,10 +127,11 @@ async function requestWithModel(model: $Model, method: string, path: string, run
   return callApi(openapiParams, req, runtime);
 }
 
-async function requestWithoutModel(model: $Model, method: string, path: string, runtime: Util.RuntimeOptions): object {
+async function requestWithoutModel(model: $Model, method: string, path: string, params: map[string]string, runtime: Util.RuntimeOptions): object {
   Util.validateModel(model);
   var req = new OpenApiRequest{
-    body = Util.toMap(model)
+    body = Util.toMap(model),
+    query = params,
   };
   var openapiParams = new Params{
     pathname = path,

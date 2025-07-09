@@ -160,3 +160,8 @@ dmypy.json
 
 # Idea
 .idea
+
+
+catalog-api/libraries/
+common/libraries/
+.libraries.json

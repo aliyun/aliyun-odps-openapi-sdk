@@ -3,6 +3,10 @@ package com.aliyun.odps.catalog.models;
 
 import com.aliyun.tea.*;
 
+/**
+ * <b>description</b> :
+ * <p>==================================== Table ====================================</p>
+ */
 public class TableFieldSchema extends TeaModel {
     /**
      * <p>列名（如果是顶层列），或者 struct 字段名。</p>
@@ -44,7 +48,7 @@ public class TableFieldSchema extends TeaModel {
      * <p>可选。列绑定的 policy tag。</p>
      */
     @NameInMap("policyTags")
-    public PolicyTag policyTags;
+    public PolicyTags policyTags;
 
     /**
      * <p>如果是 CHAR/VARCHAR 类型，表示字段的最大长度。</p>
@@ -123,11 +127,11 @@ public class TableFieldSchema extends TeaModel {
         return this.description;
     }
 
-    public TableFieldSchema setPolicyTags(PolicyTag policyTags) {
+    public TableFieldSchema setPolicyTags(PolicyTags policyTags) {
         this.policyTags = policyTags;
         return this;
     }
-    public PolicyTag getPolicyTags() {
+    public PolicyTags getPolicyTags() {
         return this.policyTags;
     }
 

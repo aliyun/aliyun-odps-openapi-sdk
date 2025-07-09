@@ -3,6 +3,10 @@ package com.aliyun.odps.catalog.models;
 
 import com.aliyun.tea.*;
 
+/**
+ * <b>description</b> :
+ * <p>==================================== Common ====================================</p>
+ */
 public class HttpResponse extends TeaModel {
     @NameInMap("headers")
     public java.util.Map<String, String> headers;

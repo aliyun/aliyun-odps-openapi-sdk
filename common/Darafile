@@ -1,7 +1,7 @@
 {
   "scope": "maxcompute",
   "name": "openapi",
-  "version": "v0.0.2",
+  "version": "v0.0.3",
   "main": "main.dara",
 
   "libraries": {
@@ -15,7 +15,7 @@
     "package": "com.aliyun.odps",
     "enableMinimizeModelName": false,
     "packageInfo": {
-      "version": "0.0.2",
+      "version": "0.0.3",
       "groupId": "com.aliyun.odps",
       "artifactId": "openapi",
       "name": "openapi-common",
@@ -47,7 +47,7 @@
     }
   },
   "releases": {
-    "java": "com.aliyun.odps:openapi:0.0.2",
+    "java": "com.aliyun.odps:openapi:0.0.3",
     "go": "github.com/aliyun/aliyun-odps-openapi-sdk/common/go/client",
     "python": "maxcompute_tea_openapi:1.0.0"
   }

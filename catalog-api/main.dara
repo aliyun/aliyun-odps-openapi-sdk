@@ -1,11 +1,40 @@
 import OpenApi;
 import Util;
+import McUtil;
 extends OpenApi;
 
 init(config: OpenApi.Config){
   super(config);
 }
 
+/**
+ * ==================================== Common ====================================
+ */
+
+
+model HttpResponse = {
+  headers?: map[string]string(name='headers'),
+  statusCode?: int32(name='statusCode'),
+  body?: string(name='body')
+}
+
+model Policy {
+  etag ?: string(name='etag'),
+  bindings?: [Binding](name='bindings')
+}
+
+model Binding {
+  role?: string(name='role'),
+  members?: [string](name='members')
+}
+
+model SetPolicyRequest {
+  policy: Policy(name='policy', description='设置的 Policy。')
+}
+
+/**
+ * ==================================== Table ====================================
+ */
 
 model TableFieldSchema {
   fieldName?: string(name='fieldName', description='列名（如果是顶层列），或者 struct 字段名。', example=''),
@@ -14,14 +43,14 @@ model TableFieldSchema {
   mode?: string(name='mode', description='REQUIRED 或 NULLABLE。'),
   fields?: [TableFieldSchema](name='fields', description='如果是 STRUCT 类型，表示 STRUCT 的子字段。'),
   description?: string(name='description', description='列的评论。', example=''),
-  policyTags?: PolicyTag(name='policyTags', description='可选。列绑定的 policy tag。'),
+  policyTags?: PolicyTags(name='policyTags', description='可选。列绑定的 policy tag。'),
   maxLength?: string(name='maxLength', description='如果是 CHAR/VARCHAR 类型，表示字段的最大长度。', example=''),
   precision?: string(name='precision', description='如果 DECIMAL 类型，表示精度。', example=''),
   scale?: string(name='scale', description='如果 DECIMAL 类型，表示 scale。', example=''),
   defaultValueExpression?: string(name='defaultValueExpression', description='可选。默认值的表达式字符串。', example='')
 }
 
-model PolicyTag {
+model PolicyTags {
   names ?: [string]
 }
 
@@ -66,6 +95,13 @@ model ExpirationOptions{
   partitionExpirationDays?: int32(name='partitionExpirationDays')
 }
 
+model ExternalDataConfiguration {
+  sourceUris?: [string](name='sourceUris', description='表数据所在的 URI'),
+  sourceFormat?: string(name='sourceFormat', description='支持格式：PAIMON/ICEBERG/ORC/PARQUET/CSV 等'),
+  connection?: string(name='connection', description='关联的 Connection ID')
+}
+
+
 model Table {
   etag?: string(name='etag', description='用于 read-modify-write 一致性校验。', example=''),
   name?: string(name='name', description='表的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/tables/{tableName}', example=''),
@@ -82,33 +118,63 @@ model Table {
   createTime?: string(name='createTime', description='表的创建时间（毫秒）。仅输出。'),
   lastModifiedTime?: string(name='lastModifiedTime', description='表的修改时间（毫秒）。仅输出。'),
   expirationOptions?: ExpirationOptions(name='expirationOptions', description='可选。表的过期时间配置。'),
-  labels?: map[string]string(name='labels', description='可选。表上的标签。')
+  labels?: map[string]string(name='labels', description='可选。表上的标签。'),
+  externalDataConfiguration?: ExternalDataConfiguration(name='externalDataConfiguration', description='外部表配置') // 新增字段
 }
 
-model HttpResponse = {
-  headers?: map[string]string(name='headers'),
-  statusCode?: int32(name='statusCode'),
-  body?: string(name='body')
-}
 
 async function updateTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithModel(table, 'PUT', getTablePath(table), runtime);
+  return requestWithModel(table, 'PUT', getTablePath(table), null, runtime);
 }
 
 async function deleteTable(table: Table): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithoutModel(table, 'DELETE', getTablePath(table), runtime);
+  return requestWithoutModel(table, 'DELETE', getTablePath(table), null, runtime);
 }
 
 async function createTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithModel(table, 'POST', getTablesPath(table), runtime);
+  return requestWithModel(table, 'POST', getTablesPath(table), null, runtime);
 }
 
 async function getTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithModel(table, 'GET', getTablePath(table), runtime);
+  return requestWithModel(table, 'GET', getTablePath(table), null, runtime);
+}
+
+model ListTablesResponse = {
+  tables?: [Table],
+  nextPageToken?: string
+}
+
+async function listTables(projectId: string, schemaName: string, pageSize: int32, pageToken: string): ListTablesResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/tables`;
+  var query : map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  return requestWithModel(new ListTablesResponse{}, 'GET', path, query, runtime);
+}
+
+async function setTablePolicy(table: Table, policy: Policy): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getTablePath(table);
+  var query : map[string]string = {};
+  query["method"] = "getPolicy";
+  return requestWithModel(policy, 'POST', path, query, runtime);
+}
+
+async function getTablePolicy(table: Table): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getTablePath(table);
+  var query : map[string]string = {};
+  query["method"] = "getPolicy";
+  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
 }
 
 function getTablePath(table: Table): string {
@@ -125,4 +191,596 @@ function getTablesPath(table: Table): string {
   } else {
     return `/api/catalog/v1alpha/projects/${table.projectId}/schemas/${table.schemaName}/tables`;
   }
+}
+
+
+/**
+ * ==================================== Connection ====================================
+ */
+
+model Connection {
+  name?: string(name='name', description='资源全局唯一名：namespaces/{namespace_ID}/connections/{connectionName}'),
+  connectionName: string(name='connectionName', description='namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 32]。'),
+  description?: string(name='description', description='可选。最多 1KB。'),
+  creationTime?: string(name='creationTime', description='Connection 的创建时间（毫秒）'),
+  lastModifiedTime?: string(name='lastModifiedTime', description='最后修改时间（毫秒）'),
+  connectionType: string(name='connectionType', description='Connection 的类型。必需项。'),
+  cloudResource?: CloudResourceOptions(name='cloudResource', description='云上资源类型的 connection 对应的选项配置。仅当 connectionType 为 CLOUD_RESOURCE 时才设置。'),
+  region?: string(name='region', description='此 connection 所属的 region。')
+}
+
+model CloudResourceOptions {
+  delegatedAccount?: string(name='delegatedAccount', description='被委托的账号名。在创建 connection 时自动保存为创建者的账号。'),
+  ramRoleArn: string(name='ramRoleArn', description='授权给 MaxCompute 服务扮演的 RAM 角色 ARN。')
+}
+
+async function createConnection(namespace: string, connection: Connection): Connection {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/namespaces/${namespace}/connections`;
+  return requestWithModel(connection, 'POST', path, null, runtime);
+}
+
+async function listConnections(namespace: string, pageSize: integer, pageToken: string): ListConnectionsResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/namespaces/${namespace}/connections`;
+  var query: map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  return requestWithModel(new ListConnectionsResponse{}, 'GET', path, query, runtime);
+}
+
+async function getConnection(namespace: string, connectionName: string): Connection {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getConnectionPath(namespace, connectionName);
+  return requestWithModel(new Connection{}, 'GET', path, null, runtime);
+}
+
+async function updateConnection(namespace: string, connectionName: string, connection: Connection, updateMask: string): Connection {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getConnectionPath(namespace, connectionName);
+  var query: map[string]string = {};
+  query["updateMask"] = updateMask;
+  return requestWithModel(connection, 'PATCH', path, query, runtime);
+}
+
+async function deleteConnection(namespace: string, connectionName: string): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getConnectionPath(namespace, connectionName);
+  return requestWithoutModel(new Connection{}, 'DELETE', path, null, runtime);
+}
+
+async function setConnectionPolicy(namespace: string, connectionName: string, request: SetPolicyRequest): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getConnectionPath(namespace, connectionName);
+  var query: map[string]string = {};
+  query["method"] = "setPolicy";
+  return requestWithModel(request, 'POST', path, query, runtime);
+}
+
+async function getConnectionPolicy(namespace: string, connectionName: string): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getConnectionPath(namespace, connectionName);
+  var query: map[string]string = {};
+  query["method"] = "getPolicy";
+  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+}
+
+function getConnectionPath(namespace: string, connectionName: string): string {
+  return `/api/catalog/v1alpha/namespaces/${namespace}/connections/${connectionName}`;
+}
+
+model ListConnectionsResponse {
+  connections: [Connection],
+  nextPageToken?: string
+}
+
+/**
+ * ==================================== Role ====================================
+ */
+
+// Role model
+model Role {
+  name?: string(name='name', description='资源全局唯一名。e.g., namespaces/{namespace_ID}/roles/{roleName}', example=''),
+  roleName: string(name='roleName', description='namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。', example=''),
+  description?: string(name='description', description='可选。最多 1KB。', example=''),
+  includedPermissions?: [string](name='includedPermissions', description='Role 包含的权限。'),
+  etag?: string(name='etag', description='用于一致性校验。', example=''),
+  deleted?: boolean(name='deleted', description='表示是否被删除。', example=false)
+}
+
+// ListRolesResponse model
+model ListRolesResponse {
+  roles?: [Role](name='roles', description='角色列表。'),
+  nextPageToken?: string(name='nextPageToken', description='下一页的token。')
+}
+
+// Path generation helper
+function getRolePath(namespace: string, roleName: string): string {
+  return `/api/catalog/v1alpha/namespaces/${namespace}/roles/${roleName}`;
+}
+
+// Create role
+async function createRole(namespace: string, role: Role): Role {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/namespaces/${namespace}/roles`;
+  return requestWithModel(role, 'POST', path, null, runtime);
+}
+
+// Delete role
+async function deleteRole(namespace: string, roleName: string): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getRolePath(namespace, roleName);
+  return requestWithoutModel(new Role{}, 'DELETE', path, null, runtime);
+}
+
+// Get role
+async function getRole(namespace: string, roleName: string, view: string): Role {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getRolePath(namespace, roleName);
+  var query: map[string]string = {};
+  if (!Util.isUnset(view)) {
+    query["view"] = view;
+  }
+  return requestWithModel(new Role{}, 'GET', path, query, runtime);
+}
+
+// List roles
+async function listRoles(namespace: string, pageSize: integer, pageToken: string, view: string, showDeleted: boolean): ListRolesResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/namespaces/${namespace}/roles`;
+  var query: map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  if (!Util.isUnset(view)) {
+    query["view"] = view;
+  }
+  if (!Util.isUnset(showDeleted)) {
+    query["showDeleted"] = McUtil.toString(showDeleted);
+  }
+  return requestWithModel(new ListRolesResponse{}, 'GET', path, query, runtime);
+}
+
+// Update role
+async function patchRole(namespace: string, roleName: string, role: Role, updateMask: string): Role {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getRolePath(namespace, roleName);
+  var query: map[string]string = {};
+  if (!Util.isUnset(updateMask)) {
+    query["updateMask"] = updateMask;
+  }
+  return requestWithModel(role, 'PATCH', path, query, runtime);
+}
+
+// Set role policy
+async function setRolePolicy(namespace: string, roleName: string, policy: Policy): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getRolePath(namespace, roleName);
+  var query: map[string]string = {};
+  query["method"] = "setPolicy";
+  return requestWithModel(policy, 'POST', path, query, runtime);
+}
+
+// Get role policy
+async function getRolePolicy(namespace: string, roleName: string): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getRolePath(namespace, roleName);
+  var query: map[string]string = {};
+  query["method"] = "getPolicy";
+  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+}
+
+/**
+ * ==================================== Taxonomy ====================================
+ */
+
+
+// Taxonomy model
+model Taxonomy {
+  name?: string(name='name', description='资源全局唯一名。e.g., namespaces/{namespace_ID}/taxonomies/{ID}', example=''),
+  taxonomyName: string(name='taxonomyName', description='namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。', example=''),
+  description?: string(name='description', description='可选。最多 1KB。', example=''),
+  activatedPolicyTypes?: [string](name='activatedPolicyTypes', description='Taxonomy 下开启的 policy 类型列表，默认为 POLICY_TYPE_UNSPECIFIED'),
+  policyTagCount?: integer(name='policyTagCount', description='此 Taxonomy 内 policy tag 的个数。', example=0),
+  createTime?: string(name='createTime', description='Taxonomy 的创建时间戳（毫秒）。仅输出。', example=''),
+  lastModifiedTime?: string(name='lastModifiedTime', description='Taxonomy 的最后修改时间戳（毫秒）。仅输出。', example='')
+}
+
+// PolicyTag model
+model PolicyTag {
+  name?: string(name='name', description='PolicyTag的完整路径。e.g., namespaces/{namespace_ID}/taxonomies/{TID}/policyTags/{ID}', example=''),
+  policyTagName: string(name='policyTagName', description='父 Taxonomy 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。', example=''),
+  description?: string(name='description', description='可选。最多 1KB。', example=''),
+  parentPolicyTag?: string(name='parentPolicyTag', description='父节点的name。空代表根节点。', example=''),
+  childPolicyTags?: [string](name='childPolicyTags', description='子节点的name列表。仅输出。')
+}
+
+// List responses
+model ListTaxonomiesResponse {
+  taxonomies?: [Taxonomy](name='taxonomies', description='Taxonomy列表。'),
+  nextPageToken?: string(name='nextPageToken', description='下一页的token。')
+}
+
+model ListPolicyTagsResponse {
+  policyTags?: [PolicyTag](name='policyTags', description='PolicyTag列表。'),
+  nextPageToken?: string(name='nextPageToken', description='下一页的token。')
+}
+
+// Path generation helpers
+function getTaxonomyPath(namespace: string, taxonomyId: string): string {
+  return `/api/catalog/v1alpha/namespaces/${namespace}/taxonomies/${taxonomyId}`;
+}
+
+function getPolicyTagPath(namespace: string, taxonomyId: string, policyTagId: string): string {
+  return `${getTaxonomyPath(namespace, taxonomyId)}/policyTags/${policyTagId}`;
+}
+
+// Taxonomy operations
+async function createTaxonomy(namespace: string, taxonomy: Taxonomy): Taxonomy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/namespaces/${namespace}/taxonomies`;
+  return requestWithModel(taxonomy, 'POST', path, null, runtime);
+}
+
+async function deleteTaxonomy(namespace: string, taxonomyId: string): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getTaxonomyPath(namespace, taxonomyId);
+  return requestWithoutModel(new Taxonomy{}, 'DELETE', path, null, runtime);
+}
+
+async function getTaxonomy(namespace: string, taxonomyId: string): Taxonomy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getTaxonomyPath(namespace, taxonomyId);
+  return requestWithModel(new Taxonomy{}, 'GET', path, null, runtime);
+}
+
+async function listTaxonomies(namespace: string, pageSize: integer, pageToken: string): ListTaxonomiesResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/namespaces/${namespace}/taxonomies`;
+  var query: map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  return requestWithModel(new ListTaxonomiesResponse{}, 'GET', path, query, runtime);
+}
+
+async function patchTaxonomy(namespace: string, taxonomyId: string, taxonomy: Taxonomy, updateMask: string): Taxonomy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getTaxonomyPath(namespace, taxonomyId);
+  var query: map[string]string = {};
+  if (!Util.isUnset(updateMask)) {
+    query["updateMask"] = updateMask;
+  }
+  return requestWithModel(taxonomy, 'PATCH', path, query, runtime);
+}
+
+async function setTaxonomyPolicy(namespace: string, taxonomyId: string, policy: Policy): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getTaxonomyPath(namespace, taxonomyId);
+  var query: map[string]string = {};
+  query["method"] = "setPolicy";
+  return requestWithModel(policy, 'POST', path, query, runtime);
+}
+
+async function getTaxonomyPolicy(namespace: string, taxonomyId: string): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getTaxonomyPath(namespace, taxonomyId);
+  var query: map[string]string = {};
+  query["method"] = "getPolicy";
+  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+}
+
+// PolicyTag operations
+async function createPolicyTag(namespace: string, taxonomyId: string, policyTag: PolicyTag): PolicyTag {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `${getTaxonomyPath(namespace, taxonomyId)}/policyTags`;
+  return requestWithModel(policyTag, 'POST', path, null, runtime);
+}
+
+async function deletePolicyTag(namespace: string, taxonomyId: string, policyTagId: string): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
+  return requestWithoutModel(new PolicyTag{}, 'DELETE', path, null, runtime);
+}
+
+async function getPolicyTag(namespace: string, taxonomyId: string, policyTagId: string): PolicyTag {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
+  return requestWithModel(new PolicyTag{}, 'GET', path, null, runtime);
+}
+
+async function listPolicyTags(namespace: string, taxonomyId: string, pageSize: integer, pageToken: string): ListPolicyTagsResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `${getTaxonomyPath(namespace, taxonomyId)}/policyTags`;
+  var query: map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  return requestWithModel(new ListPolicyTagsResponse{}, 'GET', path, query, runtime);
+}
+
+async function patchPolicyTag(namespace: string, taxonomyId: string, policyTagId: string, policyTag: PolicyTag, updateMask: string): PolicyTag {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
+  var query: map[string]string = {};
+  if (!Util.isUnset(updateMask)) {
+    query["updateMask"] = updateMask;
+  }
+  return requestWithModel(policyTag, 'PATCH', path, query, runtime);
+}
+
+async function setPolicyTagPolicy(namespace: string, taxonomyId: string, policyTagId: string, policy: Policy): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
+  var query: map[string]string = {};
+  query["method"] = "setPolicy";
+  return requestWithModel(policy, 'POST', path, query, runtime);
+}
+
+async function getPolicyTagPolicy(namespace: string, taxonomyId: string, policyTagId: string): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
+  var query: map[string]string = {};
+  query["method"] = "getPolicy";
+  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+}
+
+
+/**
+ * ==================================== DataPolicy ====================================
+ */
+model DataPolicy {
+  name?: string(name='name', description='namespaces/{namespace_ID}/dataPolicies/{dataPolicyName}。仅输出。', example=''),
+  dataPolicyName: string(name='dataPolicyName', description='用户指定的 data policy 名，在账号级唯一。', example=''),
+  policyTag: string(name='policyTag', description='Data policy 绑定的 policy tag 资源全名。', example=''),
+  dataPolicyType: string(name='dataPolicyType', description='data policy 的类型，目前仅支持 DATA_MASKING_POLICY 类型。', example=''),
+  dataMaskingPolicy?: DataMaskingPolicy(name='dataMaskingPolicy', description='Data policy 上定义的脱敏规则。')
+}
+
+model DataMaskingPolicy {
+  predefinedExpression: string(name='predefinedExpression', description='预定义脱敏策略的类型。', example=''),
+  parameters?: [string](name='parameters', description='预定义脱敏策略的参数。')
+}
+
+model ListDataPoliciesResponse {
+  dataPolicies: [DataPolicy],
+  nextPageToken?: string(name='nextPageToken', description='分页标记。', example='')
+}
+
+async function createDataPolicy(namespace: string, dataPolicy: DataPolicy): DataPolicy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getParentPath(namespace);
+  return requestWithModel(dataPolicy, 'POST', path, null, runtime);
+}
+
+async function deleteDataPolicy(namespace: string, dataPolicyName: string): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getDataPolicyPath(namespace, dataPolicyName);
+  return requestWithoutModel(new DataPolicy{}, 'DELETE', path, null, runtime);
+}
+
+async function getDataPolicy(namespace: string, dataPolicyName: string): DataPolicy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getDataPolicyPath(namespace, dataPolicyName);
+  return requestWithModel(new DataPolicy{}, 'GET', path, null, runtime);
+}
+
+async function listDataPolicies(namespace: string, pageSize: integer, pageToken: string): ListDataPoliciesResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getParentPath(namespace);
+  var query: map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  return requestWithModel(new ListDataPoliciesResponse{}, 'GET', path, query, runtime);
+}
+
+async function setDataPolicyPolicy(namespace: string, dataPolicyName: string, request: SetPolicyRequest): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getDataPolicyPath(namespace, dataPolicyName);
+  var query: map[string]string = {};
+  query["method"] = "setPolicy";
+  return requestWithModel(request, 'POST', path, query, runtime);
+}
+
+async function getDataPolicyPolicy(namespace: string, dataPolicyName: string): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getDataPolicyPath(namespace, dataPolicyName);
+  var query: map[string]string = {};
+  query["method"] = "getPolicy";
+  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+}
+
+function getDataPolicyPath(namespace: string, dataPolicyName: string): string {
+  return `/api/catalog/v1alpha/namespaces/${namespace}/dataPolicies/${dataPolicyName}`;
+}
+
+function getParentPath(namespace: string): string {
+  return `/api/catalog/v1alpha/namespaces/${namespace}/dataPolicies`;
+}
+
+
+/**
+ * ==================================== Project/Schema ====================================
+ */
+
+ // Models
+model Project {
+  name?: string(name='name', description='Project的资源全名：projects/{projectId}。仅输出。'),
+  projectId: string(name='projectId', description='Project唯一ID'),
+  owner: string(name='owner', description='Project的拥有者'),
+  description: string(name='description', description='Project描述'),
+  createTime: string(name='createTime', description='创建时间戳（UTC毫秒）', format='int64'),
+  lastModifiedTime: string(name='lastModifiedTime', description='最后修改时间戳（UTC毫秒）', format='int64'),
+  schemaEnabled: boolean(name='schemaEnabled', description='是否开启三层模型'),
+  region: string(name='region', description='所属region')
+}
+
+model Schema {
+  name?: string(name='name', description='Schema的资源全名：projects/{projectId}/schemas/{schemaName}。仅输出。'),
+  schemaName: string(name='schemaName', description='Project下唯一名称', maxLength=128),
+  description?: string(name='description', description='可选描述，不超过xxKB'),
+  type?: string(name='type', description='Schema类型：DEFAULT/EXTERNAL'),
+  owner: string(name='owner', description='Schema拥有者'),
+  externalSchemaConfiguration?: ExternalSchemaConfiguration(name='externalSchemaConfiguration', description='外部schema配置')
+}
+
+model ExternalSchemaConfiguration {
+  connection?: string(name='connection', description='关联的connection ID'),
+  externalCatalogSchemaOptions?: ExternalCatalogSchemaOptions(name='externalCatalogSchemaOptions', description='外部catalog schema配置')
+}
+
+model ExternalCatalogSchemaOptions {
+  parameters?: map[string]string(name='parameters', description='外部schema属性配置')
+}
+
+model ListProjectsResponse {
+  projects: [Project],
+  nextPageToken?: string
+}
+
+model ListSchemasResponse {
+  schemas: [Schema],
+  nextPageToken?: string
+}
+
+// Paths
+function getProjectPath(projectId: string): string {
+  return `/api/catalog/v1alpha/projects/${projectId}`;
+}
+
+function getSchemaPath(projectId: string, schemaName: string): string {
+  return `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}`;
+}
+
+// Methods
+async function listProjects(pageSize: integer, pageToken: string): ListProjectsResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var query: map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  return requestWithModel(new ListProjectsResponse{}, 'GET', '/api/catalog/v1alpha/projects', query, runtime);
+}
+
+async function getProject(projectId: string): Project {
+  var runtime = new Util.RuntimeOptions{};
+  return requestWithModel(new Project{}, 'GET', getProjectPath(projectId), null, runtime);
+}
+
+async function createSchema(projectId: string, schema: Schema): Schema {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/projects/${projectId}/schemas`;
+  return requestWithModel(schema, 'POST', path, null, runtime);
+}
+
+async function listSchemas(projectId: string, pageSize: integer, pageToken: string): ListSchemasResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/projects/${projectId}/schemas`;
+  var query: map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  return requestWithModel(new ListSchemasResponse{}, 'GET', path, query, runtime);
+}
+
+async function getSchema(projectId: string, schemaName: string): Schema {
+  var runtime = new Util.RuntimeOptions{};
+  return requestWithModel(new Schema{}, 'GET', getSchemaPath(projectId, schemaName), null, runtime);
+}
+
+async function updateSchema(projectId: string, schemaName: string, updateMask: string, schema: Schema): Schema {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getSchemaPath(projectId, schemaName);
+  var query: map[string]string = {};
+  query["updateMask"] = updateMask;
+  return requestWithModel(schema, 'PATCH', path, query, runtime);
+}
+
+async function deleteSchema(projectId: string, schemaName: string): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getSchemaPath(projectId, schemaName);
+  return requestWithoutModel(new Schema{}, 'DELETE', path, null, runtime);
+}
+
+async function setSchemaPolicy(projectId: string, schemaName: string, policy: Policy): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getSchemaPath(projectId, schemaName);
+  var query: map[string]string = {};
+  query["method"] = "setPolicy";
+  return requestWithModel(policy, 'POST', path, query, runtime);
+}
+
+async function getSchemaPolicy(projectId: string, schemaName: string): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getSchemaPath(projectId, schemaName);
+  var query: map[string]string = {};
+  query["method"] = "getPolicy";
+  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+}
+
+
+/**
+ * ==================================== Partition ====================================
+ */
+
+ // Models
+model Partition {
+  spec: string(name='spec', description='分区spec，格式样例为 bu=tt/ds=20250515')
+}
+
+model ListPartitionsResponse {
+  partitions: [Partition],
+  nextPageToken?: string
+}
+
+
+// Path Functions
+function getTablePartitionsPath(projectId: string, schemaName: string, tableName: string): string {
+  return `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/tables/${tableName}/partitions`;
+}
+
+// Methods
+async function listPartitions(
+  projectId: string,
+  schemaName: string,
+  tableName: string,
+  pageSize: integer,
+  pageToken: string
+): ListPartitionsResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getTablePartitionsPath(projectId, schemaName, tableName);
+  var query: map[string]string = {};
+  
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  
+  return requestWithModel(new ListPartitionsResponse{}, 'GET', path, query, runtime);
 }

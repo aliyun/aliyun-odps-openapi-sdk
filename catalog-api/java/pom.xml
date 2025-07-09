@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.aliyun.odps</groupId>
   <artifactId>catalog-api</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>catalog-api</name>
   <description>Alibaba Cloud MaxCompute Openapi SDK for Java
@@ -41,12 +41,17 @@
     <dependency>
       <groupId>com.aliyun.odps</groupId>
       <artifactId>openapi</artifactId>
-      <version>0.0.2</version>
+      <version>0.0.3</version>
     </dependency>
     <dependency>
       <groupId>com.aliyun</groupId>
       <artifactId>tea-util</artifactId>
       <version>0.2.23</version>
+    </dependency>
+    <dependency>
+      <groupId>com.aliyun.odps</groupId>
+      <artifactId>odps-sdk-core</artifactId>
+      <version>0.51.4-public</version>
     </dependency>
     <dependency>
       <groupId>com.aliyun</groupId>

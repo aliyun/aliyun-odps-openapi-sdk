@@ -102,6 +102,13 @@ public class Table extends TeaModel {
     @NameInMap("labels")
     public java.util.Map<String, String> labels;
 
+    /**
+     * <p>外部表配置</p>
+     */
+    @NameInMap("externalDataConfiguration")
+    public ExternalDataConfiguration externalDataConfiguration;
+
+    // 新增字段
     public static Table build(java.util.Map<String, ?> map) throws Exception {
         Table self = new Table();
         return TeaModel.build(map, self);
@@ -233,6 +240,14 @@ public class Table extends TeaModel {
     }
     public java.util.Map<String, String> getLabels() {
         return this.labels;
+    }
+
+    public Table setExternalDataConfiguration(ExternalDataConfiguration externalDataConfiguration) {
+        this.externalDataConfiguration = externalDataConfiguration;
+        return this;
+    }
+    public ExternalDataConfiguration getExternalDataConfiguration() {
+        return this.externalDataConfiguration;
     }
 
 }
