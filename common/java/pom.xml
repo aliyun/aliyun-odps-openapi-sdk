@@ -7,7 +7,7 @@
   <packaging>jar</packaging>
   <name>openapi</name>
   <description>Alibaba Cloud MaxCompute Open SDK for Java
-    </description>
+  </description>
   <url>https://github.com/aliyun/aliyun-odps-openapi-sdk</url>
   <licenses>
     <license>
@@ -24,12 +24,12 @@
   </developers>
   <distributionManagement>
     <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+      <id>ossrh</id>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
     </snapshotRepository>
     <repository>
-      <id>sonatype-nexus-staging</id>
-      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <id>ossrh</id>
+      <url>https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
   <scm>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>com.aliyun.odps</groupId>
       <artifactId>odps-sdk-core</artifactId>
-      <version>0.51.4-public</version>
+      <version>0.52.3-public</version>
     </dependency>
     <dependency>
       <groupId>com.aliyun</groupId>
@@ -90,8 +90,8 @@
         <version>1.6.3</version>
         <extensions>true</extensions>
         <configuration>
-          <serverId>sonatype-nexus-staging</serverId>
-          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://ossrh-staging-api.central.sonatype.com</nexusUrl>
           <autoReleaseAfterClose>true</autoReleaseAfterClose>
         </configuration>
       </plugin>
