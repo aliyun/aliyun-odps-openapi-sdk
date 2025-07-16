@@ -6,8 +6,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/catalog-api/java/pom.xml b/catalog-api/java/pom.xml
---- a/catalog-api/java/pom.xml	(revision 81dc586d720d0f420e94e5e41342839cbd92719f)
-+++ b/catalog-api/java/pom.xml	(revision 0cb068d1e404425346fa283943673731d76b5b23)
+--- a/catalog-api/java/pom.xml	(revision 148b99aa60417ba2fa017c35ea6bf9802fbae2ed)
++++ b/catalog-api/java/pom.xml	(revision 9f55a9fed063bfccf7a4490abb83528d6f649704)
 @@ -24,13 +24,12 @@
    </developers>
    <distributionManagement>
