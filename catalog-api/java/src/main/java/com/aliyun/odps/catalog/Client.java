@@ -519,4 +519,68 @@ public class Client extends com.aliyun.odps.Client {
 
         return TeaModel.toModel(this.requestWithModel(new ListPartitionsResponse(), "GET", path, query, runtime), new ListPartitionsResponse());
     }
+
+    public String getDataScanPath(String namespace, String dataScanName) throws Exception {
+        return "/api/catalog/v1alpha/namespaces/" + namespace + "/dataScans/" + dataScanName + "";
+    }
+
+    public String getDataScansPath(String namespace) throws Exception {
+        return "/api/catalog/v1alpha/namespaces/" + namespace + "/dataScans";
+    }
+
+    public DataScan updateDataScan(String namespace, DataScan dataScan, String updateMask) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        java.util.Map<String, String> query = new java.util.HashMap<>();
+        query.put("updateMask", updateMask);
+        return TeaModel.toModel(this.requestWithModel(dataScan, "PATCH", this.getDataScanPath(namespace, dataScan.scanName), query, runtime), new DataScan());
+    }
+
+    public HttpResponse deleteDataScan(String namespace, String dataScanName) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        return TeaModel.toModel(this.requestWithoutModel(new DataScan(), "DELETE", this.getDataScanPath(namespace, dataScanName), null, runtime), new HttpResponse());
+    }
+
+    public DataScan createDataScan(String namespace, DataScan dataScan) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        return TeaModel.toModel(this.requestWithModel(dataScan, "POST", this.getDataScansPath(namespace), null, runtime), new DataScan());
+    }
+
+    public DataScan getDataScan(String namespace, String dataScanName) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        return TeaModel.toModel(this.requestWithModel(new DataScan(), "GET", this.getDataScanPath(namespace, dataScanName), null, runtime), new DataScan());
+    }
+
+    public ListDataScansResponse listDataScans(String namespace, Integer pageSize, String pageToken) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = this.getDataScansPath(namespace);
+        java.util.Map<String, String> query = new java.util.HashMap<>();
+        if (!com.aliyun.teautil.Common.isUnset(pageSize)) {
+            query.put("pageSize", com.aliyun.odps.utils.TeaUtils.toString(pageSize));
+        }
+
+        if (!com.aliyun.teautil.Common.isUnset(pageToken)) {
+            query.put("pageToken", pageToken);
+        }
+
+        return TeaModel.toModel(this.requestWithModel(new ListDataScansResponse(), "GET", path, query, runtime), new ListDataScansResponse());
+    }
+
+    public String getDataScanJobsPath(String namespace, String dataScanName) throws Exception {
+        return "/api/catalog/v1alpha/namespaces/" + namespace + "/dataScans/" + dataScanName + "/jobs";
+    }
+
+    public ListDataScanJobsResponse listDataScanJobs(String namespace, String dataScanName, Integer pageSize, String pageToken) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = this.getDataScanJobsPath(namespace, dataScanName);
+        java.util.Map<String, String> query = new java.util.HashMap<>();
+        if (!com.aliyun.teautil.Common.isUnset(pageSize)) {
+            query.put("pageSize", com.aliyun.odps.utils.TeaUtils.toString(pageSize));
+        }
+
+        if (!com.aliyun.teautil.Common.isUnset(pageToken)) {
+            query.put("pageToken", pageToken);
+        }
+
+        return TeaModel.toModel(this.requestWithModel(new ListDataScanJobsResponse(), "GET", path, query, runtime), new ListDataScanJobsResponse());
+    }
 }

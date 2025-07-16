@@ -167,8 +167,8 @@ public class Client {
                 request_.headers = TeaConverter.merge(String.class,
                     TeaConverter.buildMap(
                         new TeaPair("host", _endpoint),
-                        new TeaPair("user-agent", this.getUserAgent()),
-                        new TeaPair("x-odps-user-agent", this.getUserAgent()),
+                        new TeaPair("'user-agent'", this.getUserAgent()),
+                        new TeaPair("'x-odps-user-agent'", this.getUserAgent()),
                         new TeaPair("Date", com.aliyun.odps.utils.TeaUtils.getApiTimestamp())
                     ),
                     globalHeaders,

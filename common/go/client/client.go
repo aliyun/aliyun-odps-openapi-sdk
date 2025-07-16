@@ -706,13 +706,14 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
 }
 
 
-func (client *Client) RequestWithModel (model interface{}, method *string, path *string, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
+func (client *Client) RequestWithModel (model interface{}, method *string, path *string, params map[string]*string, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
   _err = util.ValidateModel(model)
   if _err != nil {
     return _result, _err
   }
   req := &OpenApiRequest{
     Body: util.ToMap(model),
+    Query: params,
   }
   openapiParams := &Params{
     Pathname: path,
@@ -728,13 +729,14 @@ func (client *Client) RequestWithModel (model interface{}, method *string, path 
   return _result, _err
 }
 
-func (client *Client) RequestWithoutModel (model interface{}, method *string, path *string, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
+func (client *Client) RequestWithoutModel (model interface{}, method *string, path *string, params map[string]*string, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
   _err = util.ValidateModel(model)
   if _err != nil {
     return _result, _err
   }
   req := &OpenApiRequest{
     Body: util.ToMap(model),
+    Query: params,
   }
   openapiParams := &Params{
     Pathname: path,
