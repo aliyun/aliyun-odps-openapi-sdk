@@ -784,3 +784,144 @@ async function listPartitions(
   
   return requestWithModel(new ListPartitionsResponse{}, 'GET', path, query, runtime);
 }
+
+
+/**
+ * ==================================== DataScans ====================================
+ */
+
+// Models
+model DataScanSource {
+  location?: string(name='location', description='location地址。支持oss、dlf 和 holo'),
+  connection?: string(name='connection', description='connection name。提供访问source需要的身份与网络信息。需要鉴权'),
+  ignores?: [string](name='ignores', description='忽略访问的路径。支持正则表达式')
+}
+
+model DataScanTarget {
+  project?: string(name='project', description='结果写入的project name。'),
+  schema?: string(name='schema', description='当dataScan.type为table时，table写入的schema'),
+  namePrefix?: string(name='namePrefix', description='爬取任务自动生成的table/schema名称的前缀，防止命名冲突。'),
+  properties?: string(name='properties', description='用户可指定的最终表 / schema 的属性')
+}
+
+model DataScanProperties {
+  formatFilter?: string(name='formatFilter', description='AUTO/PARQUET/ORC/JSON/CSV。只爬取对应属性的数据。若指定，则忽略其他类型的文件。auto为不指定属性自动探测。'),
+  scanMode?: string(name='scanMode', description='enum	SAMPLE/TOTAL。 默认为SAMPLE。扫描时抽样扫描或者完整扫描'),
+  enableStats?: boolean(name='enableStats', description='是否统计信息用于查询优化'),
+  options?: string(name='options', description='其余的配置可选项，如csv格式下的一些额外选项'),
+  pattern?: string(name='options', description='分区路径识别的pattern, 例如{table}/{part1}={value1}/{part2}={value2}')
+  updatePolicy?: string(name='updatePolicy', description='发现表元数据发生变化时的处理策略。APPEND_ONLY/OVERWRITE/IGNORE'),
+  syncRemove?: boolean(name='syncRemove', description='发现表删除时是否自动删除'),
+  autoCommit?: boolean(name='autoCommit', description='false代表爬取任务只输出结果，不提交ddl')
+}
+
+model DataScan {
+  scanName?: string(name='scanName', description='用户指定的爬取任务名称。namespace 下唯一。展示时展示 namespace/$nsId/dataScan/$dataScanName'),
+  type?: string(name='type', description='取值范围为：TABLE_DISCOVERY, SCHEMA_DISCOVERY'),
+  creator?: string(name='creator', description='dataScan 的创建者'),
+  customerId?: string(name='customerId', description='客户 ID'),
+  namespaceId?: string(name='namespaceId', description='dataScan 所属的 namespace'),
+  comments?: string(name='description', description='用户自定义的描述'),
+  scanId?: string(name='scanId', description='系统自动生成的 scan ID，只读字段。展示项'),
+  creationTime?: int64(name='creationTime', description='创建的时间，UTC timestamp'),
+  lastModifiedTime?: int64(name='lastModifiedTime', description='上次修改的时间，UTC timestamp'),
+  lastTriggeredTime?: int64(name='lastTriggeredTime', description='爬取任务上次触发的时间（开始调度时间），UTC timestamp。未触发过默认值为 0'),
+  lastTriggeredBy?: string(name='lastTriggeredBy', description='触发当前调度的来源；具体用户或调度器'),
+  schedulingStatus?: string(name='schedulingStatus', description='dataScan 对象的调度状态。包含 IDLE/IMMEDIATE/PENDING/SCHEDULING 四种状态。dataScan 初始化状态为 IDLE，如果创建后立刻执行，设置为 IMMEDIATE'),
+  source?: DataScanSource(name='source', description='元数据爬取和发现来源，包括 location、connection 等信息'),
+  target?: DataScanTarget(name='target', description='控制 dataScan 发现结果写入的参数，包含 project、namePrefix、以及透传的 Tbl Properties 等'),
+  properties?: DataScanProperties(name='properties', description='爬取任务的可选参数，包含更新策略、分类器等'),
+  schedulerMode?: string(name='schedulerMode', description='manual/periodic，手动触发或者周期性自动触发'),
+  schedulerInterval?: string(name='schedulerInterval', description='当 schedulerMode 为 periodic 时，两次爬取任务之间间隔的最大间隔，取值为 [1h-7d]'),
+  priority?: int32(name='priority', description='调度优先级，数值越大优先级越高。内部字段，暂不对客透出，取值范围 [0-9]'),
+  schedulerIntervalMinutes?: int32(name='schedulerIntervalMinutes', description='调度间隔时间（以分钟为单位）')
+}
+
+model ScanJob {
+  jobId?: string(name='jobId', description='Job ID'),
+  namespaceId?: string(name='namespaceId', description='作业所属的 namespace'),
+  dataScanId?: string(name='dataScanId', description='系统自动生成的 dataScan ID'),
+  dataScanName?: string(name='dataScanName', description='所属爬取任务名称。此处为全称 namespace/$nsId/dataScan/$scanName'),
+  triggeredBy?: string(name='triggeredBy', description='触发此次爬取作业的人，定时触发则为 scheduler'),
+  startTime?: int64(name='startTime', description='爬取作业开始时间，UTC timestamp'),
+  endTime?: int64(name='endTime', description='爬取作业结束时间，UTC timestamp'),
+  status?: string(name='status', description='爬取作业状态，取值范围：Created/Running/Terminated/Failed'),
+  statusDetail?: string(name='statusDetail', description='爬取作业状态详细信息，如报错信息'),
+  ddl?: string(name='ddl', description='爬取作业返回的需要提交的 DDL 信息'),
+  stats?: string(name='stats', description='爬取作业返回的 stats 信息，JSON 格式')
+}
+
+function getDataScanPath(namespace: string, dataScanName: string): string{
+  return `/api/catalog/v1alpha/namespaces/${namespace}/dataScans/${dataScanName}`;
+}
+
+function getDataScansPath(namespace: string): string {
+  return `/api/catalog/v1alpha/namespaces/${namespace}/dataScans`;
+}
+
+async function updateDataScan(namespace: string, dataScan: DataScan, updateMask: string): DataScan {
+  var runtime = new Util.RuntimeOptions{};
+  var query: map[string]string = {};
+  query["updateMask"] = updateMask;
+  return requestWithModel(dataScan, 'PATCH', getDataScanPath(namespace, dataScan), query, runtime);
+}
+
+async function deleteDataScan(namespace: string, dataScanName: DataScanName): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  return requestWithoutModel(dataScan, 'DELETE', getDataScanPath(namespace, dataScanName), null, runtime);
+}
+
+async function createDataScan(namespace:string, dataScan: DataScan): DataScan {
+  var runtime = new Util.RuntimeOptions{};
+  return requestWithModel(dataScan, 'POST', getDataScansPath(namespace), null, runtime);
+}
+
+async function getDataScan(namespace:string, dataScanName: string): DataScan {
+  var runtime = new Util.RuntimeOptions{};
+  return requestWithModel(new DataScan(), 'GET', getDataScanPath(namespace, dataScanName), null, runtime);
+}
+
+model ListDataScansResponse {
+  nextToken?: string(name='nextToken', description='分页 token'),
+  totalCount?: int32(name='totalCount', description='数据总量'),
+  maxResults?: int32(name='maxResults', description='分页参数，每页最大结果数'),
+  dataScans?: [DataScan](name='dataScans', description='返回所有的 dataScans 列表')
+}
+
+async function listDataScans(namespace: string, pageSize: int32, pageToken: string): ListDataScansResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getDataScansPath(namespace);
+  var query: map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  return requestWithModel(new ListDataScansResponse{}, 'GET', path, query, runtime);
+}
+
+// DataScanJob
+model ListDataScanJobsResponse {
+  data?: [ScanJob](name='data', description='返回所有的 dataScan jobs 列表'),
+  nextToken?: string(name='nextToken', description='分页 token'),
+  totalCount?: int32(name='totalCount', description='数据总量'),
+  maxResults?: int32(name='maxResults', description='每页最大结果数')
+}
+
+function getDataScanJobsPath(namespace: string, dataScanName: string): string {
+  return `/api/catalog/v1alpha/namespaces/${namespace}/dataScans/${dataScanName}/jobs`;
+}
+
+async function listDataScanJobs(namespace: string, dataScanName: string, pageSize: int32, pageToken: string): ListDataScanJobsResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getDataScanJobsPath(namespace, dataScanName);
+  var query: map[string]string = {};
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  return requestWithModel(new ListDataScanJobsResponse{}, 'GET', path, query, runtime);
+}
