@@ -809,7 +809,7 @@ model DataScanProperties {
   scanMode?: string(name='scanMode', description='enum	SAMPLE/TOTAL。 默认为SAMPLE。扫描时抽样扫描或者完整扫描'),
   enableStats?: boolean(name='enableStats', description='是否统计信息用于查询优化'),
   options?: string(name='options', description='其余的配置可选项，如csv格式下的一些额外选项'),
-  pattern?: string(name='options', description='分区路径识别的pattern, 例如{table}/{part1}={value1}/{part2}={value2}')
+  pattern?: string(name='options', description='分区路径识别的pattern, 例如{table}/{part1}={value1}/{part2}={value2}'),
   updatePolicy?: string(name='updatePolicy', description='发现表元数据发生变化时的处理策略。APPEND_ONLY/OVERWRITE/IGNORE'),
   syncRemove?: boolean(name='syncRemove', description='发现表删除时是否自动删除'),
   autoCommit?: boolean(name='autoCommit', description='false代表爬取任务只输出结果，不提交ddl')
@@ -863,12 +863,12 @@ async function updateDataScan(namespace: string, dataScan: DataScan, updateMask:
   var runtime = new Util.RuntimeOptions{};
   var query: map[string]string = {};
   query["updateMask"] = updateMask;
-  return requestWithModel(dataScan, 'PATCH', getDataScanPath(namespace, dataScan), query, runtime);
+  return requestWithModel(dataScan, 'PATCH', getDataScanPath(namespace, dataScan.scanName), query, runtime);
 }
 
-async function deleteDataScan(namespace: string, dataScanName: DataScanName): HttpResponse {
+async function deleteDataScan(namespace: string, dataScanName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithoutModel(dataScan, 'DELETE', getDataScanPath(namespace, dataScanName), null, runtime);
+  return requestWithoutModel(new DataScan{}, 'DELETE', getDataScanPath(namespace, dataScanName), null, runtime);
 }
 
 async function createDataScan(namespace:string, dataScan: DataScan): DataScan {
@@ -878,14 +878,14 @@ async function createDataScan(namespace:string, dataScan: DataScan): DataScan {
 
 async function getDataScan(namespace:string, dataScanName: string): DataScan {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithModel(new DataScan(), 'GET', getDataScanPath(namespace, dataScanName), null, runtime);
+  return requestWithModel(new DataScan{}, 'GET', getDataScanPath(namespace, dataScanName), null, runtime);
 }
 
 model ListDataScansResponse {
   nextToken?: string(name='nextToken', description='分页 token'),
   totalCount?: int32(name='totalCount', description='数据总量'),
   maxResults?: int32(name='maxResults', description='分页参数，每页最大结果数'),
-  dataScans?: [DataScan](name='dataScans', description='返回所有的 dataScans 列表')
+  dataScans?: [DataScan](name='dataScans', description='返回所有的 dataScans 列表。')
 }
 
 async function listDataScans(namespace: string, pageSize: int32, pageToken: string): ListDataScansResponse {
