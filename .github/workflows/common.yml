@@ -1,14 +1,9 @@
 # This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
 # For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
 
-name: Maven Package
+name: Publish Common
 
 on:
-  push:
-    tags:
-      - "v*"
-  release:
-    types: [ created ]
   workflow_dispatch:
 
 jobs:
@@ -49,17 +44,11 @@ jobs:
           echo use-agent >> ~/.gnupg/gpg.conf
           echo pinentry-mode loopback >> ~/.gnupg/gpg.conf
           echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
-      
-      - name: Set Version for Catalog Api Package
-        run: |
-          cd catalog-api/java
-          mvn versions:set -DnewVersion=${{ env.NEW_VERSION }} -DallowSnapshots=true
-        shell: bash
-
-      - name: Publish Catalog API Package
+          
+      - name: Publish Common Package
         uses: samuelmeuli/action-maven-publish@v1
         with:
-          directory: catalog-api/java
+          directory: common/java
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
           nexus_username: ${{ secrets.NEXUS_TOKEN_USERNAME }}
