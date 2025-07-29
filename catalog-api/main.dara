@@ -859,6 +859,14 @@ function getDataScansPath(namespace: string): string {
   return `/api/catalog/v1alpha/namespaces/${namespace}/dataScans`;
 }
 
+function getTriggerDataScanPath(namespace: string, dataScanName: string): string{
+   return `/api/catalog/v1alpha/namespaces/${namespace}/dataScans/${dataScanName}:trigger`;
+}
+
+async function triggerDataScan(namespace: string, dataScanName: string): HttpResponse{
+    return requestWithoutModel(new ScanJob{}, 'POST', getTriggerDataScanPath(namespace, dataScanName), null, new Util.RuntimeOptions{});
+}
+
 async function updateDataScan(namespace: string, dataScan: DataScan, updateMask: string): DataScan {
   var runtime = new Util.RuntimeOptions{};
   var query: map[string]string = {};

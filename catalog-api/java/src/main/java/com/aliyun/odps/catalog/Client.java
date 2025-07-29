@@ -528,6 +528,14 @@ public class Client extends com.aliyun.odps.Client {
         return "/api/catalog/v1alpha/namespaces/" + namespace + "/dataScans";
     }
 
+    public String getTriggerDataScanPath(String namespace, String dataScanName) throws Exception {
+        return "/api/catalog/v1alpha/namespaces/" + namespace + "/dataScans/" + dataScanName + ":trigger";
+    }
+
+    public HttpResponse triggerDataScan(String namespace, String dataScanName) throws Exception {
+        return TeaModel.toModel(this.requestWithoutModel(new ScanJob(), "POST", this.getTriggerDataScanPath(namespace, dataScanName), null, new com.aliyun.teautil.models.RuntimeOptions()), new HttpResponse());
+    }
+
     public DataScan updateDataScan(String namespace, DataScan dataScan, String updateMask) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         java.util.Map<String, String> query = new java.util.HashMap<>();
