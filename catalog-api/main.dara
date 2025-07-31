@@ -890,7 +890,7 @@ async function getDataScan(namespace:string, dataScanName: string): DataScan {
 }
 
 model ListDataScansResponse {
-  nextPageToken?: string(name='nextToken', description='分页 token'),
+  nextPageToken?: string(name='nextPageToken', description='分页 token'),
   dataScans?: [DataScan](name='dataScans', description='返回所有的 dataScans 列表。')
 }
 
@@ -910,7 +910,7 @@ async function listDataScans(namespace: string, pageSize: int32, pageToken: stri
 // DataScanJob
 model ListDataScanJobsResponse {
   data?: [ScanJob](name='data', description='返回所有的 dataScan jobs 列表'),
-  nextPageToken?: string(name='nextToken', description='分页 token')
+  nextPageToken?: string(name='nextPageToken', description='分页 token')
 }
 
 function getDataScanJobsPath(namespace: string, dataScanName: string): string {

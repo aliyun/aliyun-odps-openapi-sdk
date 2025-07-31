@@ -13,7 +13,7 @@ public class ListDataScanJobsResponse extends TeaModel {
     /**
      * <p>分页 token</p>
      */
-    @NameInMap("nextToken")
+    @NameInMap("nextPageToken")
     public String nextPageToken;
 
     public static ListDataScanJobsResponse build(java.util.Map<String, ?> map) throws Exception {

@@ -7,7 +7,7 @@ public class ListDataScansResponse extends TeaModel {
     /**
      * <p>分页 token</p>
      */
-    @NameInMap("nextToken")
+    @NameInMap("nextPageToken")
     public String nextPageToken;
 
     /**

@@ -1692,7 +1692,7 @@ func (s *ScanJob) SetStats(v string) *ScanJob {
 
 type ListDataScansResponse struct {
   // 分页 token
-  NextPageToken *string `json:"nextToken,omitempty" xml:"nextToken,omitempty"`
+  NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
   // 返回所有的 dataScans 列表。
   DataScans []*DataScan `json:"dataScans,omitempty" xml:"dataScans,omitempty" type:"Repeated"`
 }
@@ -1720,7 +1720,7 @@ type ListDataScanJobsResponse struct {
   // 返回所有的 dataScan jobs 列表
   Data []*ScanJob `json:"data,omitempty" xml:"data,omitempty" type:"Repeated"`
   // 分页 token
-  NextPageToken *string `json:"nextToken,omitempty" xml:"nextToken,omitempty"`
+  NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
 }
 
 func (s ListDataScanJobsResponse) String() string {
