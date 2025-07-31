@@ -14,19 +14,7 @@ public class ListDataScanJobsResponse extends TeaModel {
      * <p>分页 token</p>
      */
     @NameInMap("nextToken")
-    public String nextToken;
-
-    /**
-     * <p>数据总量</p>
-     */
-    @NameInMap("totalCount")
-    public Integer totalCount;
-
-    /**
-     * <p>每页最大结果数</p>
-     */
-    @NameInMap("maxResults")
-    public Integer maxResults;
+    public String nextPageToken;
 
     public static ListDataScanJobsResponse build(java.util.Map<String, ?> map) throws Exception {
         ListDataScanJobsResponse self = new ListDataScanJobsResponse();
@@ -41,28 +29,12 @@ public class ListDataScanJobsResponse extends TeaModel {
         return this.data;
     }
 
-    public ListDataScanJobsResponse setNextToken(String nextToken) {
-        this.nextToken = nextToken;
+    public ListDataScanJobsResponse setNextPageToken(String nextPageToken) {
+        this.nextPageToken = nextPageToken;
         return this;
     }
-    public String getNextToken() {
-        return this.nextToken;
-    }
-
-    public ListDataScanJobsResponse setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-        return this;
-    }
-    public Integer getTotalCount() {
-        return this.totalCount;
-    }
-
-    public ListDataScanJobsResponse setMaxResults(Integer maxResults) {
-        this.maxResults = maxResults;
-        return this;
-    }
-    public Integer getMaxResults() {
-        return this.maxResults;
+    public String getNextPageToken() {
+        return this.nextPageToken;
     }
 
 }

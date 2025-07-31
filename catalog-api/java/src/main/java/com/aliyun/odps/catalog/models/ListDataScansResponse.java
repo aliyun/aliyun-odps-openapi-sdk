@@ -8,19 +8,7 @@ public class ListDataScansResponse extends TeaModel {
      * <p>分页 token</p>
      */
     @NameInMap("nextToken")
-    public String nextToken;
-
-    /**
-     * <p>数据总量</p>
-     */
-    @NameInMap("totalCount")
-    public Integer totalCount;
-
-    /**
-     * <p>分页参数，每页最大结果数</p>
-     */
-    @NameInMap("maxResults")
-    public Integer maxResults;
+    public String nextPageToken;
 
     /**
      * <p>返回所有的 dataScans 列表。</p>
@@ -33,28 +21,12 @@ public class ListDataScansResponse extends TeaModel {
         return TeaModel.build(map, self);
     }
 
-    public ListDataScansResponse setNextToken(String nextToken) {
-        this.nextToken = nextToken;
+    public ListDataScansResponse setNextPageToken(String nextPageToken) {
+        this.nextPageToken = nextPageToken;
         return this;
     }
-    public String getNextToken() {
-        return this.nextToken;
-    }
-
-    public ListDataScansResponse setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-        return this;
-    }
-    public Integer getTotalCount() {
-        return this.totalCount;
-    }
-
-    public ListDataScansResponse setMaxResults(Integer maxResults) {
-        this.maxResults = maxResults;
-        return this;
-    }
-    public Integer getMaxResults() {
-        return this.maxResults;
+    public String getNextPageToken() {
+        return this.nextPageToken;
     }
 
     public ListDataScansResponse setDataScans(java.util.List<DataScan> dataScans) {
