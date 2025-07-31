@@ -274,7 +274,7 @@ function getConnectionPath(namespace: string, connectionName: string): string {
 }
 
 model ListConnectionsResponse {
-  connections: [Connection],
+  connections?: [Connection],
   nextPageToken?: string
 }
 
@@ -556,7 +556,7 @@ model DataMaskingPolicy {
 }
 
 model ListDataPoliciesResponse {
-  dataPolicies: [DataPolicy],
+  dataPolicies?: [DataPolicy],
   nextPageToken?: string(name='nextPageToken', description='分页标记。', example='')
 }
 
@@ -651,12 +651,12 @@ model ExternalCatalogSchemaOptions {
 }
 
 model ListProjectsResponse {
-  projects: [Project],
+  projects?: [Project],
   nextPageToken?: string
 }
 
 model ListSchemasResponse {
-  schemas: [Schema],
+  schemas?: [Schema],
   nextPageToken?: string
 }
 
@@ -752,7 +752,7 @@ model Partition {
 }
 
 model ListPartitionsResponse {
-  partitions: [Partition],
+  partitions?: [Partition],
   nextPageToken?: string
 }
 

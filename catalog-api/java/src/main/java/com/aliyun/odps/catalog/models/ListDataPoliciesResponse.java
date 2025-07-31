@@ -5,7 +5,6 @@ import com.aliyun.tea.*;
 
 public class ListDataPoliciesResponse extends TeaModel {
     @NameInMap("dataPolicies")
-    @Validation(required = true)
     public java.util.List<DataPolicy> dataPolicies;
 
     /**

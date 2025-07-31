@@ -5,7 +5,6 @@ import com.aliyun.tea.*;
 
 public class ListPartitionsResponse extends TeaModel {
     @NameInMap("partitions")
-    @Validation(required = true)
     public java.util.List<Partition> partitions;
 
     @NameInMap("nextPageToken")

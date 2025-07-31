@@ -689,7 +689,7 @@ func (s *CloudResourceOptions) SetRamRoleArn(v string) *CloudResourceOptions {
 }
 
 type ListConnectionsResponse struct {
-  Connections []*Connection `json:"connections,omitempty" xml:"connections,omitempty" require:"true" type:"Repeated"`
+  Connections []*Connection `json:"connections,omitempty" xml:"connections,omitempty" type:"Repeated"`
   NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
 }
 
@@ -1035,7 +1035,7 @@ func (s *DataMaskingPolicy) SetParameters(v []*string) *DataMaskingPolicy {
 }
 
 type ListDataPoliciesResponse struct {
-  DataPolicies []*DataPolicy `json:"dataPolicies,omitempty" xml:"dataPolicies,omitempty" require:"true" type:"Repeated"`
+  DataPolicies []*DataPolicy `json:"dataPolicies,omitempty" xml:"dataPolicies,omitempty" type:"Repeated"`
   // 分页标记。
   NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
 }
@@ -1226,7 +1226,7 @@ func (s *ExternalCatalogSchemaOptions) SetParameters(v map[string]*string) *Exte
 }
 
 type ListProjectsResponse struct {
-  Projects []*Project `json:"projects,omitempty" xml:"projects,omitempty" require:"true" type:"Repeated"`
+  Projects []*Project `json:"projects,omitempty" xml:"projects,omitempty" type:"Repeated"`
   NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
 }
 
@@ -1249,7 +1249,7 @@ func (s *ListProjectsResponse) SetNextPageToken(v string) *ListProjectsResponse 
 }
 
 type ListSchemasResponse struct {
-  Schemas []*Schema `json:"schemas,omitempty" xml:"schemas,omitempty" require:"true" type:"Repeated"`
+  Schemas []*Schema `json:"schemas,omitempty" xml:"schemas,omitempty" type:"Repeated"`
   NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
 }
 
@@ -1294,7 +1294,7 @@ func (s *Partition) SetSpec(v string) *Partition {
 }
 
 type ListPartitionsResponse struct {
-  Partitions []*Partition `json:"partitions,omitempty" xml:"partitions,omitempty" require:"true" type:"Repeated"`
+  Partitions []*Partition `json:"partitions,omitempty" xml:"partitions,omitempty" type:"Repeated"`
   NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
 }
 

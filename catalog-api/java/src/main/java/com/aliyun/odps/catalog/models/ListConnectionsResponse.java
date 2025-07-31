@@ -5,7 +5,6 @@ import com.aliyun.tea.*;
 
 public class ListConnectionsResponse extends TeaModel {
     @NameInMap("connections")
-    @Validation(required = true)
     public java.util.List<Connection> connections;
 
     @NameInMap("nextPageToken")

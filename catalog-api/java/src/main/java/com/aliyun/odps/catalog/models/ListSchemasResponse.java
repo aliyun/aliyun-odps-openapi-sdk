@@ -5,7 +5,6 @@ import com.aliyun.tea.*;
 
 public class ListSchemasResponse extends TeaModel {
     @NameInMap("schemas")
-    @Validation(required = true)
     public java.util.List<Schema> schemas;
 
     @NameInMap("nextPageToken")
