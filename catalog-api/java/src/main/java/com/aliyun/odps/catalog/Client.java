@@ -591,4 +591,111 @@ public class Client extends com.aliyun.odps.Client {
 
         return TeaModel.toModel(this.requestWithModel(new ListDataScanJobsResponse(), "GET", path, query, runtime), new ListDataScanJobsResponse());
     }
+
+    // 路径生成函数
+    public String getModelPath(String projectId, String schemaName, String modelName, String versionName) throws Exception {
+        if (com.aliyun.teautil.Common.isUnset(versionName)) {
+            return "/api/catalog/v1alpha/projects/" + projectId + "/schemas/" + schemaName + "/models/" + modelName + "";
+        } else {
+            return "/api/catalog/v1alpha/projects/" + projectId + "/schemas/" + schemaName + "/models/" + modelName + "@" + versionName + "";
+        }
+
+    }
+
+    // 创建模型
+    public Model createModel(String projectId, String schemaName, Model model) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = "/api/catalog/v1alpha/projects/" + projectId + "/schemas/" + schemaName + "/models";
+        return TeaModel.toModel(this.requestWithModel(model, "POST", path, null, runtime), new Model());
+    }
+
+    // 列出模型
+    public ListModelsResponse listModels(String projectId, String schemaName, Integer pageSize, String pageToken) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = "/api/catalog/v1alpha/projects/" + projectId + "/schemas/" + schemaName + "/models";
+        java.util.Map<String, String> query = new java.util.HashMap<>();
+        if (!com.aliyun.teautil.Common.isUnset(pageSize)) {
+            query.put("pageSize", com.aliyun.odps.utils.TeaUtils.toString(pageSize));
+        }
+
+        if (!com.aliyun.teautil.Common.isUnset(pageToken)) {
+            query.put("pageToken", pageToken);
+        }
+
+        return TeaModel.toModel(this.requestWithModel(new ListModelsResponse(), "GET", path, query, runtime), new ListModelsResponse());
+    }
+
+    // 获取模型
+    public Model getModel(String projectId, String schemaName, String modelName, String versionName) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = this.getModelPath(projectId, schemaName, modelName, versionName);
+        return TeaModel.toModel(this.requestWithModel(new Model(), "GET", path, null, runtime), new Model());
+    }
+
+    // 更新模型
+    public Model updateModel(String projectId, String schemaName, String modelName, Model model, String updateMask, String versionName) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = this.getModelPath(projectId, schemaName, modelName, versionName);
+        java.util.Map<String, String> query = new java.util.HashMap<>();
+        if (!com.aliyun.teautil.Common.isUnset(updateMask)) {
+            query.put("updateMask", updateMask);
+        }
+
+        return TeaModel.toModel(this.requestWithModel(model, "PATCH", path, query, runtime), new Model());
+    }
+
+    // 删除模型
+    public HttpResponse deleteModel(String projectId, String schemaName, String modelName) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = this.getModelPath(projectId, schemaName, modelName, null);
+        return TeaModel.toModel(this.requestWithoutModel(null, "DELETE", path, null, runtime), new HttpResponse());
+    }
+
+    // 创建模型版本
+    public Model createModelVersion(String projectId, String schemaName, String modelName, Model model) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = "/api/catalog/v1alpha/projects/" + projectId + "/schemas/" + schemaName + "/models/" + modelName + ":createVersion";
+        return TeaModel.toModel(this.requestWithModel(model, "POST", path, null, runtime), new Model());
+    }
+
+    // 删除模型版本
+    public HttpResponse deleteModelVersion(String projectId, String schemaName, String modelName, String versionName) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = this.getModelPath(projectId, schemaName, modelName, versionName);
+        return TeaModel.toModel(this.requestWithoutModel(null, "DELETE", path, null, runtime), new HttpResponse());
+    }
+
+    // 列出模型版本
+    public ListModelVersionsResponse listModelVersions(String projectId, String schemaName, String modelName, Integer pageSize, String pageToken) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = "/api/catalog/v1alpha/projects/" + projectId + "/schemas/" + schemaName + "/models/" + modelName + ":listVersions";
+        java.util.Map<String, String> query = new java.util.HashMap<>();
+        if (!com.aliyun.teautil.Common.isUnset(pageSize)) {
+            query.put("pageSize", com.aliyun.odps.utils.TeaUtils.toString(pageSize));
+        }
+
+        if (!com.aliyun.teautil.Common.isUnset(pageToken)) {
+            query.put("pageToken", pageToken);
+        }
+
+        return TeaModel.toModel(this.requestWithModel(new ListModelVersionsResponse(), "GET", path, query, runtime), new ListModelVersionsResponse());
+    }
+
+    // 获取模型策略
+    public Policy getModelPolicy(String projectId, String schemaName, String modelName) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = this.getModelPath(projectId, schemaName, modelName, null);
+        java.util.Map<String, String> query = new java.util.HashMap<>();
+        query.put("method", "getPolicy");
+        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
+    }
+
+    // 设置模型策略
+    public Policy setModelPolicy(String projectId, String schemaName, String modelName, Policy policy) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = this.getModelPath(projectId, schemaName, modelName, null);
+        java.util.Map<String, String> query = new java.util.HashMap<>();
+        query.put("method", "setPolicy");
+        return TeaModel.toModel(this.requestWithModel(policy, "POST", path, query, runtime), new Policy());
+    }
 }

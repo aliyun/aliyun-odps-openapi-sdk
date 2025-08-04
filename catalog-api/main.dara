@@ -929,3 +929,168 @@ async function listDataScanJobs(namespace: string, dataScanName: string, pageSiz
   }
   return requestWithModel(new ListDataScanJobsResponse{}, 'GET', path, query, runtime);
 }
+
+/**
+ * ==================================== Models ====================================
+ */
+// Model 实体定义
+model Model {
+  name?: string(name='name', description='模型的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/models/{modelName}'),
+  modelName: string(name='modelName', description='模型名。上级 Schema 内唯一。大小写不敏感。包含字符：[a-z][A-Z][0-9]_，字节个数范围 [3, 255]'),
+  versionName?: string(name='versionName', description='版本名。同一 model 范围内唯一。大小写不敏感。包含字符：[a-z][A-Z][0-9]_，字节个数范围 [3, 255]'),
+  defaultVersion?: string(name='defaultVersion', description='模型的默认版本名'),
+  createTime?: string(name='createTime', description='模型的创建时间（毫秒）'),
+  updateTime?: string(name='updateTime', description='模型的修改时间（毫秒）'),
+  versionCreateTime?: string(name='versionCreateTime', description='版本的创建时间（毫秒）'),
+  versionUpdateTime?: string(name='versionUpdateTime', description='版本的修改时间（毫秒）'),
+  description?: string(name='description', description='模型的描述，最长 1KB'),
+  versionDescription?: string(name='versionDescription', description='版本的描述，最长 1KB'),
+  expirationDays?: integer(name='expirationDays', description='模型基于最近更新时间的生命周期（天）'),
+  versionExpirationDays?: integer(name='versionExpirationDays', description='版本基于最近更新时间的生命周期（天）'),
+  sourceType: string(name='sourceType', description='模型的来源类型，创建后不支持修改'),
+  modelType: string(name='modelType', description='模型的类型，创建后不支持修改'),
+  labels?: map[string]string(name='labels', description='模型的标签'),
+  transform?: map[string]string(name='transform', description='版本的预处理信息'),
+  path?: string(name='path', description='版本对应模型文件的路径'),
+  options?: map[string]string(name='options', description='版本的参数'),
+  extraInfo?: map[string]string(name='extraInfo', description='模型的额外信息'),
+  versionExtraInfo?: map[string]string(name='versionExtraInfo', description='版本的额外信息'),
+  trainingInfo?: map[string]string(name='trainingInfo', description='版本的训练信息'),
+  inferenceParameters?: map[string]string(name='inferenceParameters', description='版本的推理参数'),
+  featureColumns?: ModelFieldSchema(name='featureColumns', description='版本的列 schema 定义')
+}
+
+// ModelFieldSchema 定义
+model ModelFieldSchema {
+  fieldName?: string(name='fieldName', description='列名或 struct 字段名'),
+  sqlTypeDefinition?: string(name='sqlTypeDefinition', description='SQL DDL 中的列类型定义'),
+  typeCategory: string(name='typeCategory', description='字段类型'),
+  mode: string(name='mode', description='字段模式：REQUIRED 或 NULLABLE'),
+  fields?: [ModelFieldSchema](name='fields', description='STRUCT 类型的子字段'),
+  description?: string(name='description', description='列的 comment'),
+  maxLength?: string(name='maxLength', description='CHAR/VARCHAR 类型的最大长度'),
+  precision?: string(name='precision', description='DECIMAL 类型的精度'),
+  scale?: string(name='scale', description='DECIMAL 类型的 scale'),
+  defaultValueExpression?: string(name='defaultValueExpression', description='默认值的表达式字符串')
+}
+
+model ListModelsResponse = {
+  models?: [Model],
+  nextPageToken?: string
+}
+
+model ListModelVersionsResponse = {
+  models?: [Model],
+  nextPageToken?: string
+}
+
+// 路径生成函数
+function getModelPath(projectId: string, schemaName: string, modelName: string, versionName: string): string {
+  if (Util.isUnset(versionName)) {
+    return `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models/${modelName}`;
+  } else {
+    return `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models/${modelName}@${versionName}`;
+  }
+}
+
+// 创建模型
+async function createModel(projectId: string, schemaName: string, model: Model): Model {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models`;
+  return requestWithModel(model, 'POST', path, null, runtime);
+}
+
+// 列出模型
+async function listModels(projectId: string, schemaName: string, pageSize: integer, pageToken: string): ListModelsResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models`;
+  var query: map[string]string = {};
+  
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  
+  return requestWithModel(new ListModelsResponse{}, 'GET', path, query, runtime);
+}
+
+// 获取模型
+async function getModel(projectId: string, schemaName: string, modelName: string, versionName: string): Model {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getModelPath(projectId, schemaName, modelName, versionName);
+  return requestWithModel(new Model{}, 'GET', path, null, runtime);
+}
+
+// 更新模型
+async function updateModel(projectId: string, schemaName: string, modelName: string, 
+                          model: Model, updateMask: string, versionName: string): Model {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getModelPath(projectId, schemaName, modelName, versionName);
+  var query: map[string]string = {};
+  
+  if (!Util.isUnset(updateMask)) {
+    query["updateMask"] = updateMask;
+  }
+  
+  return requestWithModel(model, 'PATCH', path, query, runtime);
+}
+
+// 删除模型
+async function deleteModel(projectId: string, schemaName: string, modelName: string): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getModelPath(projectId, schemaName, modelName, null);
+  return requestWithoutModel(null, 'DELETE', path, null, runtime);
+}
+
+// 创建模型版本
+async function createModelVersion(projectId: string, schemaName: string, modelName: string, model: Model): Model {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models/${modelName}:createVersion`;
+  return requestWithModel(model, 'POST', path, null, runtime);
+}
+
+// 删除模型版本
+async function deleteModelVersion(projectId: string, schemaName: string, modelName: string, versionName: string): HttpResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getModelPath(projectId, schemaName, modelName, versionName);
+  return requestWithoutModel(null, 'DELETE', path, null, runtime);
+}
+
+
+
+// 列出模型版本
+async function listModelVersions(projectId: string, schemaName: string, modelName: string, 
+                                pageSize: integer, pageToken: string): ListModelVersionsResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models/${modelName}:listVersions`;
+  var query: map[string]string = {};
+  
+  if (!Util.isUnset(pageSize)) {
+    query["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    query["pageToken"] = pageToken;
+  }
+  
+  return requestWithModel(new ListModelVersionsResponse{}, 'GET', path, query, runtime);
+}
+
+// 获取模型策略
+async function getModelPolicy(projectId: string, schemaName: string, modelName: string): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getModelPath(projectId, schemaName, modelName, null);
+  var query: map[string]string = {};
+  query["method"] = "getPolicy";
+  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+}
+
+// 设置模型策略
+async function setModelPolicy(projectId: string, schemaName: string, modelName: string, policy: Policy): Policy {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getModelPath(projectId, schemaName, modelName, null);
+  var query: map[string]string = {};
+  query["method"] = "setPolicy";
+  return requestWithModel(policy, 'POST', path, query, runtime);
+}
