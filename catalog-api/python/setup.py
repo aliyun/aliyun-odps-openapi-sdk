@@ -24,7 +24,7 @@ from setuptools import setup, find_packages
 """
 setup module for pyodps_catalog.
 
-Created on 09/04/2025
+Created on 04/08/2025
 
 @author: Alibaba Cloud SDK
 """
@@ -38,7 +38,8 @@ URL = "https://github.com/aliyun/darabonba-openapi"
 VERSION = __import__(PACKAGE).__version__
 REQUIRES = [
     "maxcompute_tea_openapi>=1.0.0, <2.0.0",
-    "alibabacloud_tea_util>=0.3.13, <1.0.0"
+    "alibabacloud_tea_util>=0.3.13, <1.0.0",
+    "maxcompute_tea_util>=0.0.1, <1.0.0"
 ]
 
 LONG_DESCRIPTION = ''
