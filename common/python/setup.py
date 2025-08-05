@@ -24,7 +24,7 @@ from setuptools import setup, find_packages
 """
 setup module for maxcompute_tea_openapi.
 
-Created on 09/04/2025
+Created on 05/08/2025
 
 @author: Alibaba Cloud MaxCompute Team
 """
@@ -39,7 +39,7 @@ VERSION = __import__(PACKAGE).__version__
 REQUIRES = [
     "maxcompute_tea_util>=0.0.1, <1.0.0",
     "alibabacloud_tea_util>=0.3.13, <1.0.0",
-    "alibabacloud_credentials>=0.3.6, <1.0.0"
+    "alibabacloud_credentials>=1.0.2, <2.0.0"
 ]
 
 LONG_DESCRIPTION = ''

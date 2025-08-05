@@ -2385,8 +2385,6 @@ class ModelFieldSchema(TeaModel):
         self.default_value_expression = default_value_expression
 
     def validate(self):
-        self.validate_required(self.type_category, 'type_category')
-        self.validate_required(self.mode, 'mode')
         if self.fields:
             for k in self.fields:
                 if k:
@@ -2529,9 +2527,6 @@ class Model(TeaModel):
         # ModelFieldSchema 定义
 
     def validate(self):
-        self.validate_required(self.model_name, 'model_name')
-        self.validate_required(self.source_type, 'source_type')
-        self.validate_required(self.model_type, 'model_type')
         if self.feature_columns:
             self.feature_columns.validate()
 

@@ -437,11 +437,13 @@ class Client:
         model: TeaModel,
         method: str,
         path: str,
+        params: Dict[str, str],
         runtime: util_models.RuntimeOptions,
     ) -> dict:
         UtilClient.validate_model(model)
         req = openapi_models.OpenApiRequest(
-            body=UtilClient.to_map(model)
+            body=UtilClient.to_map(model),
+            query=params
         )
         openapi_params = openapi_models.Params(
             pathname=path,
@@ -455,11 +457,13 @@ class Client:
         model: TeaModel,
         method: str,
         path: str,
+        params: Dict[str, str],
         runtime: util_models.RuntimeOptions,
     ) -> dict:
         UtilClient.validate_model(model)
         req = openapi_models.OpenApiRequest(
-            body=UtilClient.to_map(model)
+            body=UtilClient.to_map(model),
+            query=params
         )
         openapi_params = openapi_models.Params(
             pathname=path,
@@ -473,11 +477,13 @@ class Client:
         model: TeaModel,
         method: str,
         path: str,
+        params: Dict[str, str],
         runtime: util_models.RuntimeOptions,
     ) -> dict:
         UtilClient.validate_model(model)
         req = openapi_models.OpenApiRequest(
-            body=UtilClient.to_map(model)
+            body=UtilClient.to_map(model),
+            query=params
         )
         openapi_params = openapi_models.Params(
             pathname=path,
@@ -491,11 +497,13 @@ class Client:
         model: TeaModel,
         method: str,
         path: str,
+        params: Dict[str, str],
         runtime: util_models.RuntimeOptions,
     ) -> dict:
         UtilClient.validate_model(model)
         req = openapi_models.OpenApiRequest(
-            body=UtilClient.to_map(model)
+            body=UtilClient.to_map(model),
+            query=params
         )
         openapi_params = openapi_models.Params(
             pathname=path,

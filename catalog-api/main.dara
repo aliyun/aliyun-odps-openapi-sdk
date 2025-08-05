@@ -936,7 +936,7 @@ async function listDataScanJobs(namespace: string, dataScanName: string, pageSiz
 // Model 实体定义
 model Model {
   name?: string(name='name', description='模型的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/models/{modelName}'),
-  modelName: string(name='modelName', description='模型名。上级 Schema 内唯一。大小写不敏感。包含字符：[a-z][A-Z][0-9]_，字节个数范围 [3, 255]'),
+  modelName?: string(name='modelName', description='模型名。上级 Schema 内唯一。大小写不敏感。包含字符：[a-z][A-Z][0-9]_，字节个数范围 [3, 255]'),
   versionName?: string(name='versionName', description='版本名。同一 model 范围内唯一。大小写不敏感。包含字符：[a-z][A-Z][0-9]_，字节个数范围 [3, 255]'),
   defaultVersion?: string(name='defaultVersion', description='模型的默认版本名'),
   createTime?: string(name='createTime', description='模型的创建时间（毫秒）'),
@@ -947,8 +947,8 @@ model Model {
   versionDescription?: string(name='versionDescription', description='版本的描述，最长 1KB'),
   expirationDays?: integer(name='expirationDays', description='模型基于最近更新时间的生命周期（天）'),
   versionExpirationDays?: integer(name='versionExpirationDays', description='版本基于最近更新时间的生命周期（天）'),
-  sourceType: string(name='sourceType', description='模型的来源类型，创建后不支持修改'),
-  modelType: string(name='modelType', description='模型的类型，创建后不支持修改'),
+  sourceType?: string(name='sourceType', description='模型的来源类型，创建后不支持修改'),
+  modelType?: string(name='modelType', description='模型的类型，创建后不支持修改'),
   labels?: map[string]string(name='labels', description='模型的标签'),
   transform?: map[string]string(name='transform', description='版本的预处理信息'),
   path?: string(name='path', description='版本对应模型文件的路径'),
@@ -964,8 +964,8 @@ model Model {
 model ModelFieldSchema {
   fieldName?: string(name='fieldName', description='列名或 struct 字段名'),
   sqlTypeDefinition?: string(name='sqlTypeDefinition', description='SQL DDL 中的列类型定义'),
-  typeCategory: string(name='typeCategory', description='字段类型'),
-  mode: string(name='mode', description='字段模式：REQUIRED 或 NULLABLE'),
+  typeCategory?: string(name='typeCategory', description='字段类型'),
+  mode?: string(name='mode', description='字段模式：REQUIRED 或 NULLABLE'),
   fields?: [ModelFieldSchema](name='fields', description='STRUCT 类型的子字段'),
   description?: string(name='description', description='列的 comment'),
   maxLength?: string(name='maxLength', description='CHAR/VARCHAR 类型的最大长度'),
