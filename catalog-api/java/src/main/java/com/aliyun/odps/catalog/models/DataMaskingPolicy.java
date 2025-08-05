@@ -8,7 +8,6 @@ public class DataMaskingPolicy extends TeaModel {
      * <p>预定义脱敏策略的类型。</p>
      */
     @NameInMap("predefinedExpression")
-    @Validation(required = true)
     public String predefinedExpression;
 
     /**

@@ -18,21 +18,18 @@ public class DataPolicy extends TeaModel {
      * <p>用户指定的 data policy 名，在账号级唯一。</p>
      */
     @NameInMap("dataPolicyName")
-    @Validation(required = true)
     public String dataPolicyName;
 
     /**
      * <p>Data policy 绑定的 policy tag 资源全名。</p>
      */
     @NameInMap("policyTag")
-    @Validation(required = true)
     public String policyTag;
 
     /**
      * <p>data policy 的类型，目前仅支持 DATA_MASKING_POLICY 类型。</p>
      */
     @NameInMap("dataPolicyType")
-    @Validation(required = true)
     public String dataPolicyType;
 
     /**

@@ -49,6 +49,6 @@
   "releases": {
     "java": "com.aliyun.odps:openapi:0.0.3",
     "go": "github.com/aliyun/aliyun-odps-openapi-sdk/common/go/client",
-    "python": "maxcompute_tea_openapi:1.0.0"
+    "python": "maxcompute_tea_openapi:2.0.0"
   }
 }

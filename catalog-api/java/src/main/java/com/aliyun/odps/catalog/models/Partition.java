@@ -12,7 +12,6 @@ public class Partition extends TeaModel {
      * <p>分区spec，格式样例为 bu=tt/ds=20250515</p>
      */
     @NameInMap("spec")
-    @Validation(required = true)
     public String spec;
 
     public static Partition build(java.util.Map<String, ?> map) throws Exception {

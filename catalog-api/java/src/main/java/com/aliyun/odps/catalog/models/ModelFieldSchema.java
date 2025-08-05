@@ -20,14 +20,12 @@ public class ModelFieldSchema extends TeaModel {
      * <p>字段类型</p>
      */
     @NameInMap("typeCategory")
-    @Validation(required = true)
     public String typeCategory;
 
     /**
      * <p>字段模式：REQUIRED 或 NULLABLE</p>
      */
     @NameInMap("mode")
-    @Validation(required = true)
     public String mode;
 
     /**

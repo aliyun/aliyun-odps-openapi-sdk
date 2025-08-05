@@ -20,7 +20,6 @@ public class Table extends TeaModel {
      * <p>表所属的 project ID。</p>
      */
     @NameInMap("projectId")
-    @Validation(required = true)
     public String projectId;
 
     /**
@@ -33,7 +32,6 @@ public class Table extends TeaModel {
      * <p>表名。</p>
      */
     @NameInMap("tableName")
-    @Validation(required = true)
     public String tableName;
 
     /**

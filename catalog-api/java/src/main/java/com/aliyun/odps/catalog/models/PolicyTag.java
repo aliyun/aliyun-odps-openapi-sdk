@@ -14,7 +14,6 @@ public class PolicyTag extends TeaModel {
      * <p>父 Taxonomy 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。</p>
      */
     @NameInMap("policyTagName")
-    @Validation(required = true)
     public String policyTagName;
 
     /**

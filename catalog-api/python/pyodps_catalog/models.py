@@ -129,7 +129,6 @@ class SetPolicyRequest(TeaModel):
         self.policy = policy
 
     def validate(self):
-        self.validate_required(self.policy, 'policy')
         if self.policy:
             self.policy.validate()
 
@@ -680,8 +679,6 @@ class Table(TeaModel):
         self.external_data_configuration = external_data_configuration
 
     def validate(self):
-        self.validate_required(self.project_id, 'project_id')
-        self.validate_required(self.table_name, 'table_name')
         if self.table_schema:
             self.table_schema.validate()
         if self.clustering:
@@ -838,7 +835,7 @@ class CloudResourceOptions(TeaModel):
         self.ram_role_arn = ram_role_arn
 
     def validate(self):
-        self.validate_required(self.ram_role_arn, 'ram_role_arn')
+        pass
 
     def to_map(self):
         _map = super().to_map()
@@ -894,8 +891,6 @@ class Connection(TeaModel):
         self.region = region
 
     def validate(self):
-        self.validate_required(self.connection_name, 'connection_name')
-        self.validate_required(self.connection_type, 'connection_type')
         if self.cloud_resource:
             self.cloud_resource.validate()
 
@@ -1014,7 +1009,7 @@ class Role(TeaModel):
         # ListRolesResponse model
 
     def validate(self):
-        self.validate_required(self.role_name, 'role_name')
+        pass
 
     def to_map(self):
         _map = super().to_map()
@@ -1128,7 +1123,7 @@ class Taxonomy(TeaModel):
         # PolicyTag model
 
     def validate(self):
-        self.validate_required(self.taxonomy_name, 'taxonomy_name')
+        pass
 
     def to_map(self):
         _map = super().to_map()
@@ -1193,7 +1188,7 @@ class PolicyTag(TeaModel):
         # List responses
 
     def validate(self):
-        self.validate_required(self.policy_tag_name, 'policy_tag_name')
+        pass
 
     def to_map(self):
         _map = super().to_map()
@@ -1327,7 +1322,7 @@ class DataMaskingPolicy(TeaModel):
         self.parameters = parameters
 
     def validate(self):
-        self.validate_required(self.predefined_expression, 'predefined_expression')
+        pass
 
     def to_map(self):
         _map = super().to_map()
@@ -1374,9 +1369,6 @@ class DataPolicy(TeaModel):
         self.data_masking_policy = data_masking_policy
 
     def validate(self):
-        self.validate_required(self.data_policy_name, 'data_policy_name')
-        self.validate_required(self.policy_tag, 'policy_tag')
-        self.validate_required(self.data_policy_type, 'data_policy_type')
         if self.data_masking_policy:
             self.data_masking_policy.validate()
 
@@ -1489,13 +1481,7 @@ class Project(TeaModel):
         self.region = region
 
     def validate(self):
-        self.validate_required(self.project_id, 'project_id')
-        self.validate_required(self.owner, 'owner')
-        self.validate_required(self.description, 'description')
-        self.validate_required(self.create_time, 'create_time')
-        self.validate_required(self.last_modified_time, 'last_modified_time')
-        self.validate_required(self.schema_enabled, 'schema_enabled')
-        self.validate_required(self.region, 'region')
+        pass
 
     def to_map(self):
         _map = super().to_map()
@@ -1631,10 +1617,8 @@ class Schema(TeaModel):
         self.external_schema_configuration = external_schema_configuration
 
     def validate(self):
-        self.validate_required(self.schema_name, 'schema_name')
         if self.schema_name is not None:
             self.validate_max_length(self.schema_name, 'schema_name', 128)
-        self.validate_required(self.owner, 'owner')
         if self.external_schema_configuration:
             self.external_schema_configuration.validate()
 
@@ -1771,7 +1755,7 @@ class Partition(TeaModel):
         self.spec = spec
 
     def validate(self):
-        self.validate_required(self.spec, 'spec')
+        pass
 
     def to_map(self):
         _map = super().to_map()

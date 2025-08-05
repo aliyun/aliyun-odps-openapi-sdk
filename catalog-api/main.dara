@@ -29,7 +29,7 @@ model Binding {
 }
 
 model SetPolicyRequest {
-  policy: Policy(name='policy', description='设置的 Policy。')
+  policy?: Policy(name='policy', description='设置的 Policy。')
 }
 
 /**
@@ -105,9 +105,9 @@ model ExternalDataConfiguration {
 model Table {
   etag?: string(name='etag', description='用于 read-modify-write 一致性校验。', example=''),
   name?: string(name='name', description='表的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/tables/{tableName}', example=''),
-  projectId: string(name='projectId', description='表所属的 project ID。', example=''),
+  projectId?: string(name='projectId', description='表所属的 project ID。', example=''),
   schemaName?: string(name='schemaName', description='表所属的 schema 名。', example=''),
-  tableName: string(name='tableName', description='表名。', example=''),
+  tableName?: string(name='tableName', description='表名。', example=''),
   type?: string(name='type', description='表的类型。', example=''),
   description?: string(name='description', description='表的描述。等价于 SQL DDL 中表的 comment。', example=''),
   tableSchema?: TableFieldSchema(name='tableSchema', description='表列的 schema 定义。'),
@@ -200,18 +200,18 @@ function getTablesPath(table: Table): string {
 
 model Connection {
   name?: string(name='name', description='资源全局唯一名：namespaces/{namespace_ID}/connections/{connectionName}'),
-  connectionName: string(name='connectionName', description='namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 32]。'),
+  connectionName?: string(name='connectionName', description='namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 32]。'),
   description?: string(name='description', description='可选。最多 1KB。'),
   creationTime?: string(name='creationTime', description='Connection 的创建时间（毫秒）'),
   lastModifiedTime?: string(name='lastModifiedTime', description='最后修改时间（毫秒）'),
-  connectionType: string(name='connectionType', description='Connection 的类型。必需项。'),
+  connectionType?: string(name='connectionType', description='Connection 的类型。必需项。'),
   cloudResource?: CloudResourceOptions(name='cloudResource', description='云上资源类型的 connection 对应的选项配置。仅当 connectionType 为 CLOUD_RESOURCE 时才设置。'),
   region?: string(name='region', description='此 connection 所属的 region。')
 }
 
 model CloudResourceOptions {
   delegatedAccount?: string(name='delegatedAccount', description='被委托的账号名。在创建 connection 时自动保存为创建者的账号。'),
-  ramRoleArn: string(name='ramRoleArn', description='授权给 MaxCompute 服务扮演的 RAM 角色 ARN。')
+  ramRoleArn?: string(name='ramRoleArn', description='授权给 MaxCompute 服务扮演的 RAM 角色 ARN。')
 }
 
 async function createConnection(namespace: string, connection: Connection): Connection {
@@ -285,7 +285,7 @@ model ListConnectionsResponse {
 // Role model
 model Role {
   name?: string(name='name', description='资源全局唯一名。e.g., namespaces/{namespace_ID}/roles/{roleName}', example=''),
-  roleName: string(name='roleName', description='namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。', example=''),
+  roleName?: string(name='roleName', description='namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。', example=''),
   description?: string(name='description', description='可选。最多 1KB。', example=''),
   includedPermissions?: [string](name='includedPermissions', description='Role 包含的权限。'),
   etag?: string(name='etag', description='用于一致性校验。', example=''),
@@ -385,7 +385,7 @@ async function getRolePolicy(namespace: string, roleName: string): Policy {
 // Taxonomy model
 model Taxonomy {
   name?: string(name='name', description='资源全局唯一名。e.g., namespaces/{namespace_ID}/taxonomies/{ID}', example=''),
-  taxonomyName: string(name='taxonomyName', description='namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。', example=''),
+  taxonomyName?: string(name='taxonomyName', description='namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。', example=''),
   description?: string(name='description', description='可选。最多 1KB。', example=''),
   activatedPolicyTypes?: [string](name='activatedPolicyTypes', description='Taxonomy 下开启的 policy 类型列表，默认为 POLICY_TYPE_UNSPECIFIED'),
   policyTagCount?: integer(name='policyTagCount', description='此 Taxonomy 内 policy tag 的个数。', example=0),
@@ -396,7 +396,7 @@ model Taxonomy {
 // PolicyTag model
 model PolicyTag {
   name?: string(name='name', description='PolicyTag的完整路径。e.g., namespaces/{namespace_ID}/taxonomies/{TID}/policyTags/{ID}', example=''),
-  policyTagName: string(name='policyTagName', description='父 Taxonomy 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。', example=''),
+  policyTagName?: string(name='policyTagName', description='父 Taxonomy 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。', example=''),
   description?: string(name='description', description='可选。最多 1KB。', example=''),
   parentPolicyTag?: string(name='parentPolicyTag', description='父节点的name。空代表根节点。', example=''),
   childPolicyTags?: [string](name='childPolicyTags', description='子节点的name列表。仅输出。')
@@ -544,14 +544,14 @@ async function getPolicyTagPolicy(namespace: string, taxonomyId: string, policyT
  */
 model DataPolicy {
   name?: string(name='name', description='namespaces/{namespace_ID}/dataPolicies/{dataPolicyName}。仅输出。', example=''),
-  dataPolicyName: string(name='dataPolicyName', description='用户指定的 data policy 名，在账号级唯一。', example=''),
-  policyTag: string(name='policyTag', description='Data policy 绑定的 policy tag 资源全名。', example=''),
-  dataPolicyType: string(name='dataPolicyType', description='data policy 的类型，目前仅支持 DATA_MASKING_POLICY 类型。', example=''),
+  dataPolicyName?: string(name='dataPolicyName', description='用户指定的 data policy 名，在账号级唯一。', example=''),
+  policyTag?: string(name='policyTag', description='Data policy 绑定的 policy tag 资源全名。', example=''),
+  dataPolicyType?: string(name='dataPolicyType', description='data policy 的类型，目前仅支持 DATA_MASKING_POLICY 类型。', example=''),
   dataMaskingPolicy?: DataMaskingPolicy(name='dataMaskingPolicy', description='Data policy 上定义的脱敏规则。')
 }
 
 model DataMaskingPolicy {
-  predefinedExpression: string(name='predefinedExpression', description='预定义脱敏策略的类型。', example=''),
+  predefinedExpression?: string(name='predefinedExpression', description='预定义脱敏策略的类型。', example=''),
   parameters?: [string](name='parameters', description='预定义脱敏策略的参数。')
 }
 
@@ -623,21 +623,21 @@ function getParentPath(namespace: string): string {
  // Models
 model Project {
   name?: string(name='name', description='Project的资源全名：projects/{projectId}。仅输出。'),
-  projectId: string(name='projectId', description='Project唯一ID'),
-  owner: string(name='owner', description='Project的拥有者'),
-  description: string(name='description', description='Project描述'),
-  createTime: string(name='createTime', description='创建时间戳（UTC毫秒）', format='int64'),
-  lastModifiedTime: string(name='lastModifiedTime', description='最后修改时间戳（UTC毫秒）', format='int64'),
-  schemaEnabled: boolean(name='schemaEnabled', description='是否开启三层模型'),
-  region: string(name='region', description='所属region')
+  projectId?: string(name='projectId', description='Project唯一ID'),
+  owner?: string(name='owner', description='Project的拥有者'),
+  description?: string(name='description', description='Project描述'),
+  createTime?: string(name='createTime', description='创建时间戳（UTC毫秒）', format='int64'),
+  lastModifiedTime?: string(name='lastModifiedTime', description='最后修改时间戳（UTC毫秒）', format='int64'),
+  schemaEnabled?: boolean(name='schemaEnabled', description='是否开启三层模型'),
+  region?: string(name='region', description='所属region')
 }
 
 model Schema {
   name?: string(name='name', description='Schema的资源全名：projects/{projectId}/schemas/{schemaName}。仅输出。'),
-  schemaName: string(name='schemaName', description='Project下唯一名称', maxLength=128),
+  schemaName?: string(name='schemaName', description='Project下唯一名称', maxLength=128),
   description?: string(name='description', description='可选描述，不超过xxKB'),
   type?: string(name='type', description='Schema类型：DEFAULT/EXTERNAL'),
-  owner: string(name='owner', description='Schema拥有者'),
+  owner?: string(name='owner', description='Schema拥有者'),
   externalSchemaConfiguration?: ExternalSchemaConfiguration(name='externalSchemaConfiguration', description='外部schema配置')
 }
 
@@ -748,7 +748,7 @@ async function getSchemaPolicy(projectId: string, schemaName: string): Policy {
 
  // Models
 model Partition {
-  spec: string(name='spec', description='分区spec，格式样例为 bu=tt/ds=20250515')
+  spec?: string(name='spec', description='分区spec，格式样例为 bu=tt/ds=20250515')
 }
 
 model ListPartitionsResponse {

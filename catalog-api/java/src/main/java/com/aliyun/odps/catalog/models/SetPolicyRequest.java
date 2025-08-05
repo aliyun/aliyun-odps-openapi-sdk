@@ -8,7 +8,6 @@ public class SetPolicyRequest extends TeaModel {
      * <p>设置的 Policy。</p>
      */
     @NameInMap("policy")
-    @Validation(required = true)
     public Policy policy;
 
     public static SetPolicyRequest build(java.util.Map<String, ?> map) throws Exception {

@@ -18,7 +18,6 @@ public class Role extends TeaModel {
      * <p>namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。</p>
      */
     @NameInMap("roleName")
-    @Validation(required = true)
     public String roleName;
 
     /**

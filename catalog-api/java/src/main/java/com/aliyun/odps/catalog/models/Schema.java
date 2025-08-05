@@ -14,7 +14,7 @@ public class Schema extends TeaModel {
      * <p>Project下唯一名称</p>
      */
     @NameInMap("schemaName")
-    @Validation(required = true, maxLength = 128)
+    @Validation(maxLength = 128)
     public String schemaName;
 
     /**
@@ -33,7 +33,6 @@ public class Schema extends TeaModel {
      * <p>Schema拥有者</p>
      */
     @NameInMap("owner")
-    @Validation(required = true)
     public String owner;
 
     /**

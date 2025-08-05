@@ -14,7 +14,6 @@ public class CloudResourceOptions extends TeaModel {
      * <p>授权给 MaxCompute 服务扮演的 RAM 角色 ARN。</p>
      */
     @NameInMap("ramRoleArn")
-    @Validation(required = true)
     public String ramRoleArn;
 
     public static CloudResourceOptions build(java.util.Map<String, ?> map) throws Exception {

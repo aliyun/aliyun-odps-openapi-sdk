@@ -18,7 +18,6 @@ public class Model extends TeaModel {
      * <p>模型名。上级 Schema 内唯一。大小写不敏感。包含字符：[a-z][A-Z][0-9]_，字节个数范围 [3, 255]</p>
      */
     @NameInMap("modelName")
-    @Validation(required = true)
     public String modelName;
 
     /**
@@ -85,14 +84,12 @@ public class Model extends TeaModel {
      * <p>模型的来源类型，创建后不支持修改</p>
      */
     @NameInMap("sourceType")
-    @Validation(required = true)
     public String sourceType;
 
     /**
      * <p>模型的类型，创建后不支持修改</p>
      */
     @NameInMap("modelType")
-    @Validation(required = true)
     public String modelType;
 
     /**

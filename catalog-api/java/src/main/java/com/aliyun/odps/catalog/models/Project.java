@@ -18,49 +18,42 @@ public class Project extends TeaModel {
      * <p>Project唯一ID</p>
      */
     @NameInMap("projectId")
-    @Validation(required = true)
     public String projectId;
 
     /**
      * <p>Project的拥有者</p>
      */
     @NameInMap("owner")
-    @Validation(required = true)
     public String owner;
 
     /**
      * <p>Project描述</p>
      */
     @NameInMap("description")
-    @Validation(required = true)
     public String description;
 
     /**
      * <p>创建时间戳（UTC毫秒）</p>
      */
     @NameInMap("createTime")
-    @Validation(required = true)
     public String createTime;
 
     /**
      * <p>最后修改时间戳（UTC毫秒）</p>
      */
     @NameInMap("lastModifiedTime")
-    @Validation(required = true)
     public String lastModifiedTime;
 
     /**
      * <p>是否开启三层模型</p>
      */
     @NameInMap("schemaEnabled")
-    @Validation(required = true)
     public Boolean schemaEnabled;
 
     /**
      * <p>所属region</p>
      */
     @NameInMap("region")
-    @Validation(required = true)
     public String region;
 
     public static Project build(java.util.Map<String, ?> map) throws Exception {

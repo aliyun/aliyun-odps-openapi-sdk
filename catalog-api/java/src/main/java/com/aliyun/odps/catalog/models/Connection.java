@@ -18,7 +18,6 @@ public class Connection extends TeaModel {
      * <p>namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 32]。</p>
      */
     @NameInMap("connectionName")
-    @Validation(required = true)
     public String connectionName;
 
     /**
@@ -43,7 +42,6 @@ public class Connection extends TeaModel {
      * <p>Connection 的类型。必需项。</p>
      */
     @NameInMap("connectionType")
-    @Validation(required = true)
     public String connectionType;
 
     /**

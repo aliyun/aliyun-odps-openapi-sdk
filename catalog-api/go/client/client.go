@@ -88,7 +88,7 @@ func (s *Binding) SetMembers(v []*string) *Binding {
 
 type SetPolicyRequest struct {
   // 设置的 Policy。
-  Policy *Policy `json:"policy,omitempty" xml:"policy,omitempty" require:"true"`
+  Policy *Policy `json:"policy,omitempty" xml:"policy,omitempty"`
 }
 
 func (s SetPolicyRequest) String() string {
@@ -445,11 +445,11 @@ type Table struct {
   // 表的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/tables/{tableName}
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
   // 表所属的 project ID。
-  ProjectId *string `json:"projectId,omitempty" xml:"projectId,omitempty" require:"true"`
+  ProjectId *string `json:"projectId,omitempty" xml:"projectId,omitempty"`
   // 表所属的 schema 名。
   SchemaName *string `json:"schemaName,omitempty" xml:"schemaName,omitempty"`
   // 表名。
-  TableName *string `json:"tableName,omitempty" xml:"tableName,omitempty" require:"true"`
+  TableName *string `json:"tableName,omitempty" xml:"tableName,omitempty"`
   // 表的类型。
   Type *string `json:"type,omitempty" xml:"type,omitempty"`
   // 表的描述。等价于 SQL DDL 中表的 comment。
@@ -600,7 +600,7 @@ type Connection struct {
   // 资源全局唯一名：namespaces/{namespace_ID}/connections/{connectionName}
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
   // namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 32]。
-  ConnectionName *string `json:"connectionName,omitempty" xml:"connectionName,omitempty" require:"true"`
+  ConnectionName *string `json:"connectionName,omitempty" xml:"connectionName,omitempty"`
   // 可选。最多 1KB。
   Description *string `json:"description,omitempty" xml:"description,omitempty"`
   // Connection 的创建时间（毫秒）
@@ -608,7 +608,7 @@ type Connection struct {
   // 最后修改时间（毫秒）
   LastModifiedTime *string `json:"lastModifiedTime,omitempty" xml:"lastModifiedTime,omitempty"`
   // Connection 的类型。必需项。
-  ConnectionType *string `json:"connectionType,omitempty" xml:"connectionType,omitempty" require:"true"`
+  ConnectionType *string `json:"connectionType,omitempty" xml:"connectionType,omitempty"`
   // 云上资源类型的 connection 对应的选项配置。仅当 connectionType 为 CLOUD_RESOURCE 时才设置。
   CloudResource *CloudResourceOptions `json:"cloudResource,omitempty" xml:"cloudResource,omitempty"`
   // 此 connection 所属的 region。
@@ -667,7 +667,7 @@ type CloudResourceOptions struct {
   // 被委托的账号名。在创建 connection 时自动保存为创建者的账号。
   DelegatedAccount *string `json:"delegatedAccount,omitempty" xml:"delegatedAccount,omitempty"`
   // 授权给 MaxCompute 服务扮演的 RAM 角色 ARN。
-  RamRoleArn *string `json:"ramRoleArn,omitempty" xml:"ramRoleArn,omitempty" require:"true"`
+  RamRoleArn *string `json:"ramRoleArn,omitempty" xml:"ramRoleArn,omitempty"`
 }
 
 func (s CloudResourceOptions) String() string {
@@ -719,7 +719,7 @@ type Role struct {
   // 资源全局唯一名。e.g., namespaces/{namespace_ID}/roles/{roleName}
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
   // namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。
-  RoleName *string `json:"roleName,omitempty" xml:"roleName,omitempty" require:"true"`
+  RoleName *string `json:"roleName,omitempty" xml:"roleName,omitempty"`
   // 可选。最多 1KB。
   Description *string `json:"description,omitempty" xml:"description,omitempty"`
   // Role 包含的权限。
@@ -806,7 +806,7 @@ type Taxonomy struct {
   // 资源全局唯一名。e.g., namespaces/{namespace_ID}/taxonomies/{ID}
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
   // namespace 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。
-  TaxonomyName *string `json:"taxonomyName,omitempty" xml:"taxonomyName,omitempty" require:"true"`
+  TaxonomyName *string `json:"taxonomyName,omitempty" xml:"taxonomyName,omitempty"`
   // 可选。最多 1KB。
   Description *string `json:"description,omitempty" xml:"description,omitempty"`
   // Taxonomy 下开启的 policy 类型列表，默认为 POLICY_TYPE_UNSPECIFIED
@@ -867,7 +867,7 @@ type PolicyTag struct {
   // PolicyTag的完整路径。e.g., namespaces/{namespace_ID}/taxonomies/{TID}/policyTags/{ID}
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
   // 父 Taxonomy 内唯一。大小写敏感。包含字符：[a-z][A-Z][0-9]_，字节数范围 [3, 255]。
-  PolicyTagName *string `json:"policyTagName,omitempty" xml:"policyTagName,omitempty" require:"true"`
+  PolicyTagName *string `json:"policyTagName,omitempty" xml:"policyTagName,omitempty"`
   // 可选。最多 1KB。
   Description *string `json:"description,omitempty" xml:"description,omitempty"`
   // 父节点的name。空代表根节点。
@@ -967,11 +967,11 @@ type DataPolicy struct {
   // namespaces/{namespace_ID}/dataPolicies/{dataPolicyName}。仅输出。
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
   // 用户指定的 data policy 名，在账号级唯一。
-  DataPolicyName *string `json:"dataPolicyName,omitempty" xml:"dataPolicyName,omitempty" require:"true"`
+  DataPolicyName *string `json:"dataPolicyName,omitempty" xml:"dataPolicyName,omitempty"`
   // Data policy 绑定的 policy tag 资源全名。
-  PolicyTag *string `json:"policyTag,omitempty" xml:"policyTag,omitempty" require:"true"`
+  PolicyTag *string `json:"policyTag,omitempty" xml:"policyTag,omitempty"`
   // data policy 的类型，目前仅支持 DATA_MASKING_POLICY 类型。
-  DataPolicyType *string `json:"dataPolicyType,omitempty" xml:"dataPolicyType,omitempty" require:"true"`
+  DataPolicyType *string `json:"dataPolicyType,omitempty" xml:"dataPolicyType,omitempty"`
   // Data policy 上定义的脱敏规则。
   DataMaskingPolicy *DataMaskingPolicy `json:"dataMaskingPolicy,omitempty" xml:"dataMaskingPolicy,omitempty"`
 }
@@ -1011,7 +1011,7 @@ func (s *DataPolicy) SetDataMaskingPolicy(v *DataMaskingPolicy) *DataPolicy {
 
 type DataMaskingPolicy struct {
   // 预定义脱敏策略的类型。
-  PredefinedExpression *string `json:"predefinedExpression,omitempty" xml:"predefinedExpression,omitempty" require:"true"`
+  PredefinedExpression *string `json:"predefinedExpression,omitempty" xml:"predefinedExpression,omitempty"`
   // 预定义脱敏策略的参数。
   Parameters []*string `json:"parameters,omitempty" xml:"parameters,omitempty" type:"Repeated"`
 }
@@ -1066,19 +1066,19 @@ type Project struct {
   // Project的资源全名：projects/{projectId}。仅输出。
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
   // Project唯一ID
-  ProjectId *string `json:"projectId,omitempty" xml:"projectId,omitempty" require:"true"`
+  ProjectId *string `json:"projectId,omitempty" xml:"projectId,omitempty"`
   // Project的拥有者
-  Owner *string `json:"owner,omitempty" xml:"owner,omitempty" require:"true"`
+  Owner *string `json:"owner,omitempty" xml:"owner,omitempty"`
   // Project描述
-  Description *string `json:"description,omitempty" xml:"description,omitempty" require:"true"`
+  Description *string `json:"description,omitempty" xml:"description,omitempty"`
   // 创建时间戳（UTC毫秒）
-  CreateTime *string `json:"createTime,omitempty" xml:"createTime,omitempty" require:"true"`
+  CreateTime *string `json:"createTime,omitempty" xml:"createTime,omitempty"`
   // 最后修改时间戳（UTC毫秒）
-  LastModifiedTime *string `json:"lastModifiedTime,omitempty" xml:"lastModifiedTime,omitempty" require:"true"`
+  LastModifiedTime *string `json:"lastModifiedTime,omitempty" xml:"lastModifiedTime,omitempty"`
   // 是否开启三层模型
-  SchemaEnabled *bool `json:"schemaEnabled,omitempty" xml:"schemaEnabled,omitempty" require:"true"`
+  SchemaEnabled *bool `json:"schemaEnabled,omitempty" xml:"schemaEnabled,omitempty"`
   // 所属region
-  Region *string `json:"region,omitempty" xml:"region,omitempty" require:"true"`
+  Region *string `json:"region,omitempty" xml:"region,omitempty"`
 }
 
 func (s Project) String() string {
@@ -1133,7 +1133,7 @@ type Schema struct {
   // Schema的资源全名：projects/{projectId}/schemas/{schemaName}。仅输出。
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
   // Project下唯一名称
-  SchemaName *string `json:"schemaName,omitempty" xml:"schemaName,omitempty" require:"true" maxLength:"128"`
+  SchemaName *string `json:"schemaName,omitempty" xml:"schemaName,omitempty" maxLength:"128"`
   // 可选描述，不超过xxKB
   Description *string `json:"description,omitempty" xml:"description,omitempty"`
   // Schema类型：DEFAULT/EXTERNAL
@@ -1277,7 +1277,7 @@ func (s *ListSchemasResponse) SetNextPageToken(v string) *ListSchemasResponse {
 // Models
 type Partition struct {
   // 分区spec，格式样例为 bu=tt/ds=20250515
-  Spec *string `json:"spec,omitempty" xml:"spec,omitempty" require:"true"`
+  Spec *string `json:"spec,omitempty" xml:"spec,omitempty"`
 }
 
 func (s Partition) String() string {
@@ -1737,6 +1737,310 @@ func (s *ListDataScanJobsResponse) SetData(v []*ScanJob) *ListDataScanJobsRespon
 }
 
 func (s *ListDataScanJobsResponse) SetNextPageToken(v string) *ListDataScanJobsResponse {
+  s.NextPageToken = &v
+  return s
+}
+
+// Description:
+// 
+// ==================================== Models ====================================
+// Model 实体定义
+type Model struct {
+  // 模型的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/models/{modelName}
+  Name *string `json:"name,omitempty" xml:"name,omitempty"`
+  // 模型名。上级 Schema 内唯一。大小写不敏感。包含字符：[a-z][A-Z][0-9]_，字节个数范围 [3, 255]
+  ModelName *string `json:"modelName,omitempty" xml:"modelName,omitempty"`
+  // 版本名。同一 model 范围内唯一。大小写不敏感。包含字符：[a-z][A-Z][0-9]_，字节个数范围 [3, 255]
+  VersionName *string `json:"versionName,omitempty" xml:"versionName,omitempty"`
+  // 模型的默认版本名
+  DefaultVersion *string `json:"defaultVersion,omitempty" xml:"defaultVersion,omitempty"`
+  // 模型的创建时间（毫秒）
+  CreateTime *string `json:"createTime,omitempty" xml:"createTime,omitempty"`
+  // 模型的修改时间（毫秒）
+  UpdateTime *string `json:"updateTime,omitempty" xml:"updateTime,omitempty"`
+  // 版本的创建时间（毫秒）
+  VersionCreateTime *string `json:"versionCreateTime,omitempty" xml:"versionCreateTime,omitempty"`
+  // 版本的修改时间（毫秒）
+  VersionUpdateTime *string `json:"versionUpdateTime,omitempty" xml:"versionUpdateTime,omitempty"`
+  // 模型的描述，最长 1KB
+  Description *string `json:"description,omitempty" xml:"description,omitempty"`
+  // 版本的描述，最长 1KB
+  VersionDescription *string `json:"versionDescription,omitempty" xml:"versionDescription,omitempty"`
+  // 模型基于最近更新时间的生命周期（天）
+  ExpirationDays *int `json:"expirationDays,omitempty" xml:"expirationDays,omitempty"`
+  // 版本基于最近更新时间的生命周期（天）
+  VersionExpirationDays *int `json:"versionExpirationDays,omitempty" xml:"versionExpirationDays,omitempty"`
+  // 模型的来源类型，创建后不支持修改
+  SourceType *string `json:"sourceType,omitempty" xml:"sourceType,omitempty"`
+  // 模型的类型，创建后不支持修改
+  ModelType *string `json:"modelType,omitempty" xml:"modelType,omitempty"`
+  // 模型的标签
+  Labels map[string]*string `json:"labels,omitempty" xml:"labels,omitempty"`
+  // 版本的预处理信息
+  Transform map[string]*string `json:"transform,omitempty" xml:"transform,omitempty"`
+  // 版本对应模型文件的路径
+  Path *string `json:"path,omitempty" xml:"path,omitempty"`
+  // 版本的参数
+  Options map[string]*string `json:"options,omitempty" xml:"options,omitempty"`
+  // 模型的额外信息
+  ExtraInfo map[string]*string `json:"extraInfo,omitempty" xml:"extraInfo,omitempty"`
+  // 版本的额外信息
+  VersionExtraInfo map[string]*string `json:"versionExtraInfo,omitempty" xml:"versionExtraInfo,omitempty"`
+  // 版本的训练信息
+  TrainingInfo map[string]*string `json:"trainingInfo,omitempty" xml:"trainingInfo,omitempty"`
+  // 版本的推理参数
+  InferenceParameters map[string]*string `json:"inferenceParameters,omitempty" xml:"inferenceParameters,omitempty"`
+  // 版本的列 schema 定义
+  FeatureColumns *ModelFieldSchema `json:"featureColumns,omitempty" xml:"featureColumns,omitempty"`
+}
+
+func (s Model) String() string {
+  return tea.Prettify(s)
+}
+
+func (s Model) GoString() string {
+  return s.String()
+}
+
+func (s *Model) SetName(v string) *Model {
+  s.Name = &v
+  return s
+}
+
+func (s *Model) SetModelName(v string) *Model {
+  s.ModelName = &v
+  return s
+}
+
+func (s *Model) SetVersionName(v string) *Model {
+  s.VersionName = &v
+  return s
+}
+
+func (s *Model) SetDefaultVersion(v string) *Model {
+  s.DefaultVersion = &v
+  return s
+}
+
+func (s *Model) SetCreateTime(v string) *Model {
+  s.CreateTime = &v
+  return s
+}
+
+func (s *Model) SetUpdateTime(v string) *Model {
+  s.UpdateTime = &v
+  return s
+}
+
+func (s *Model) SetVersionCreateTime(v string) *Model {
+  s.VersionCreateTime = &v
+  return s
+}
+
+func (s *Model) SetVersionUpdateTime(v string) *Model {
+  s.VersionUpdateTime = &v
+  return s
+}
+
+func (s *Model) SetDescription(v string) *Model {
+  s.Description = &v
+  return s
+}
+
+func (s *Model) SetVersionDescription(v string) *Model {
+  s.VersionDescription = &v
+  return s
+}
+
+func (s *Model) SetExpirationDays(v int) *Model {
+  s.ExpirationDays = &v
+  return s
+}
+
+func (s *Model) SetVersionExpirationDays(v int) *Model {
+  s.VersionExpirationDays = &v
+  return s
+}
+
+func (s *Model) SetSourceType(v string) *Model {
+  s.SourceType = &v
+  return s
+}
+
+func (s *Model) SetModelType(v string) *Model {
+  s.ModelType = &v
+  return s
+}
+
+func (s *Model) SetLabels(v map[string]*string) *Model {
+  s.Labels = v
+  return s
+}
+
+func (s *Model) SetTransform(v map[string]*string) *Model {
+  s.Transform = v
+  return s
+}
+
+func (s *Model) SetPath(v string) *Model {
+  s.Path = &v
+  return s
+}
+
+func (s *Model) SetOptions(v map[string]*string) *Model {
+  s.Options = v
+  return s
+}
+
+func (s *Model) SetExtraInfo(v map[string]*string) *Model {
+  s.ExtraInfo = v
+  return s
+}
+
+func (s *Model) SetVersionExtraInfo(v map[string]*string) *Model {
+  s.VersionExtraInfo = v
+  return s
+}
+
+func (s *Model) SetTrainingInfo(v map[string]*string) *Model {
+  s.TrainingInfo = v
+  return s
+}
+
+func (s *Model) SetInferenceParameters(v map[string]*string) *Model {
+  s.InferenceParameters = v
+  return s
+}
+
+func (s *Model) SetFeatureColumns(v *ModelFieldSchema) *Model {
+  s.FeatureColumns = v
+  return s
+}
+
+// ModelFieldSchema 定义
+type ModelFieldSchema struct {
+  // 列名或 struct 字段名
+  FieldName *string `json:"fieldName,omitempty" xml:"fieldName,omitempty"`
+  // SQL DDL 中的列类型定义
+  SqlTypeDefinition *string `json:"sqlTypeDefinition,omitempty" xml:"sqlTypeDefinition,omitempty"`
+  // 字段类型
+  TypeCategory *string `json:"typeCategory,omitempty" xml:"typeCategory,omitempty"`
+  // 字段模式：REQUIRED 或 NULLABLE
+  Mode *string `json:"mode,omitempty" xml:"mode,omitempty"`
+  // STRUCT 类型的子字段
+  Fields []*ModelFieldSchema `json:"fields,omitempty" xml:"fields,omitempty" type:"Repeated"`
+  // 列的 comment
+  Description *string `json:"description,omitempty" xml:"description,omitempty"`
+  // CHAR/VARCHAR 类型的最大长度
+  MaxLength *string `json:"maxLength,omitempty" xml:"maxLength,omitempty"`
+  // DECIMAL 类型的精度
+  Precision *string `json:"precision,omitempty" xml:"precision,omitempty"`
+  // DECIMAL 类型的 scale
+  Scale *string `json:"scale,omitempty" xml:"scale,omitempty"`
+  // 默认值的表达式字符串
+  DefaultValueExpression *string `json:"defaultValueExpression,omitempty" xml:"defaultValueExpression,omitempty"`
+}
+
+func (s ModelFieldSchema) String() string {
+  return tea.Prettify(s)
+}
+
+func (s ModelFieldSchema) GoString() string {
+  return s.String()
+}
+
+func (s *ModelFieldSchema) SetFieldName(v string) *ModelFieldSchema {
+  s.FieldName = &v
+  return s
+}
+
+func (s *ModelFieldSchema) SetSqlTypeDefinition(v string) *ModelFieldSchema {
+  s.SqlTypeDefinition = &v
+  return s
+}
+
+func (s *ModelFieldSchema) SetTypeCategory(v string) *ModelFieldSchema {
+  s.TypeCategory = &v
+  return s
+}
+
+func (s *ModelFieldSchema) SetMode(v string) *ModelFieldSchema {
+  s.Mode = &v
+  return s
+}
+
+func (s *ModelFieldSchema) SetFields(v []*ModelFieldSchema) *ModelFieldSchema {
+  s.Fields = v
+  return s
+}
+
+func (s *ModelFieldSchema) SetDescription(v string) *ModelFieldSchema {
+  s.Description = &v
+  return s
+}
+
+func (s *ModelFieldSchema) SetMaxLength(v string) *ModelFieldSchema {
+  s.MaxLength = &v
+  return s
+}
+
+func (s *ModelFieldSchema) SetPrecision(v string) *ModelFieldSchema {
+  s.Precision = &v
+  return s
+}
+
+func (s *ModelFieldSchema) SetScale(v string) *ModelFieldSchema {
+  s.Scale = &v
+  return s
+}
+
+func (s *ModelFieldSchema) SetDefaultValueExpression(v string) *ModelFieldSchema {
+  s.DefaultValueExpression = &v
+  return s
+}
+
+type ListModelsResponse struct {
+  Models []*Model `json:"models,omitempty" xml:"models,omitempty" type:"Repeated"`
+  NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
+}
+
+func (s ListModelsResponse) String() string {
+  return tea.Prettify(s)
+}
+
+func (s ListModelsResponse) GoString() string {
+  return s.String()
+}
+
+func (s *ListModelsResponse) SetModels(v []*Model) *ListModelsResponse {
+  s.Models = v
+  return s
+}
+
+func (s *ListModelsResponse) SetNextPageToken(v string) *ListModelsResponse {
+  s.NextPageToken = &v
+  return s
+}
+
+type ListModelVersionsResponse struct {
+  Models []*Model `json:"models,omitempty" xml:"models,omitempty" type:"Repeated"`
+  NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
+}
+
+func (s ListModelVersionsResponse) String() string {
+  return tea.Prettify(s)
+}
+
+func (s ListModelVersionsResponse) GoString() string {
+  return s.String()
+}
+
+func (s *ListModelVersionsResponse) SetModels(v []*Model) *ListModelVersionsResponse {
+  s.Models = v
+  return s
+}
+
+func (s *ListModelVersionsResponse) SetNextPageToken(v string) *ListModelVersionsResponse {
   s.NextPageToken = &v
   return s
 }
@@ -2700,6 +3004,175 @@ func (client *Client) ListDataScanJobs (namespace *string, dataScanName *string,
 
   _result = &ListDataScanJobsResponse{}
   _body, _err := client.RequestWithModel(&ListDataScanJobsResponse{}, tea.String("GET"), path, query, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 路径生成函数
+func (client *Client) GetModelPath (projectId *string, schemaName *string, modelName *string, versionName *string) (_result *string) {
+  if tea.BoolValue(util.IsUnset(versionName)) {
+    _result = tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models/" + tea.StringValue(modelName))
+    return _result
+  } else {
+    _result = tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models/" + tea.StringValue(modelName) + "@" + tea.StringValue(versionName))
+    return _result
+  }
+
+}
+
+// 创建模型
+func (client *Client) CreateModel (projectId *string, schemaName *string, model *Model) (_result *Model, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models")
+  _result = &Model{}
+  _body, _err := client.RequestWithModel(model, tea.String("POST"), path, nil, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 列出模型
+func (client *Client) ListModels (projectId *string, schemaName *string, pageSize *int, pageToken *string) (_result *ListModelsResponse, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models")
+  query := make(map[string]*string)
+  if !tea.BoolValue(util.IsUnset(pageSize)) {
+    query["pageSize"] = mcutil.ToString(pageSize)
+  }
+
+  if !tea.BoolValue(util.IsUnset(pageToken)) {
+    query["pageToken"] = pageToken
+  }
+
+  _result = &ListModelsResponse{}
+  _body, _err := client.RequestWithModel(&ListModelsResponse{}, tea.String("GET"), path, query, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 获取模型
+func (client *Client) GetModel (projectId *string, schemaName *string, modelName *string, versionName *string) (_result *Model, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := client.GetModelPath(projectId, schemaName, modelName, versionName)
+  _result = &Model{}
+  _body, _err := client.RequestWithModel(&Model{}, tea.String("GET"), path, nil, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 更新模型
+func (client *Client) UpdateModel (projectId *string, schemaName *string, modelName *string, model *Model, updateMask *string, versionName *string) (_result *Model, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := client.GetModelPath(projectId, schemaName, modelName, versionName)
+  query := make(map[string]*string)
+  if !tea.BoolValue(util.IsUnset(updateMask)) {
+    query["updateMask"] = updateMask
+  }
+
+  _result = &Model{}
+  _body, _err := client.RequestWithModel(model, tea.String("PATCH"), path, query, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 删除模型
+func (client *Client) DeleteModel (projectId *string, schemaName *string, modelName *string) (_result *HttpResponse, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := client.GetModelPath(projectId, schemaName, modelName, nil)
+  _result = &HttpResponse{}
+  _body, _err := client.RequestWithoutModel(nil, tea.String("DELETE"), path, nil, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 创建模型版本
+func (client *Client) CreateModelVersion (projectId *string, schemaName *string, modelName *string, model *Model) (_result *Model, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models/" + tea.StringValue(modelName) + ":createVersion")
+  _result = &Model{}
+  _body, _err := client.RequestWithModel(model, tea.String("POST"), path, nil, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 删除模型版本
+func (client *Client) DeleteModelVersion (projectId *string, schemaName *string, modelName *string, versionName *string) (_result *HttpResponse, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := client.GetModelPath(projectId, schemaName, modelName, versionName)
+  _result = &HttpResponse{}
+  _body, _err := client.RequestWithoutModel(nil, tea.String("DELETE"), path, nil, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 列出模型版本
+func (client *Client) ListModelVersions (projectId *string, schemaName *string, modelName *string, pageSize *int, pageToken *string) (_result *ListModelVersionsResponse, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models/" + tea.StringValue(modelName) + ":listVersions")
+  query := make(map[string]*string)
+  if !tea.BoolValue(util.IsUnset(pageSize)) {
+    query["pageSize"] = mcutil.ToString(pageSize)
+  }
+
+  if !tea.BoolValue(util.IsUnset(pageToken)) {
+    query["pageToken"] = pageToken
+  }
+
+  _result = &ListModelVersionsResponse{}
+  _body, _err := client.RequestWithModel(&ListModelVersionsResponse{}, tea.String("GET"), path, query, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 获取模型策略
+func (client *Client) GetModelPolicy (projectId *string, schemaName *string, modelName *string) (_result *Policy, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := client.GetModelPath(projectId, schemaName, modelName, nil)
+  query := make(map[string]*string)
+  query["method"] = tea.String("getPolicy")
+  _result = &Policy{}
+  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+// 设置模型策略
+func (client *Client) SetModelPolicy (projectId *string, schemaName *string, modelName *string, policy *Policy) (_result *Policy, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := client.GetModelPath(projectId, schemaName, modelName, nil)
+  query := make(map[string]*string)
+  query["method"] = tea.String("setPolicy")
+  _result = &Policy{}
+  _body, _err := client.RequestWithModel(policy, tea.String("POST"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
