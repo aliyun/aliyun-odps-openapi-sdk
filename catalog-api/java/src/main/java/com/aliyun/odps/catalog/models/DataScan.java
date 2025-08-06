@@ -5,7 +5,13 @@ import com.aliyun.tea.*;
 
 public class DataScan extends TeaModel {
     /**
-     * <p>用户指定的爬取任务名称。namespace 下唯一。展示时展示 namespace/$nsId/dataScan/$dataScanName</p>
+     * <p>资源全局唯一名。e.g., namespaces/{namespaceID}/dataScans/{dataScanName}</p>
+     */
+    @NameInMap("name")
+    public String name;
+
+    /**
+     * <p>用户指定的爬取任务名称</p>
      */
     @NameInMap("scanName")
     public String scanName;
@@ -38,7 +44,7 @@ public class DataScan extends TeaModel {
      * <p>用户自定义的描述</p>
      */
     @NameInMap("description")
-    public String comments;
+    public String description;
 
     /**
      * <p>系统自动生成的 scan ID，只读字段。展示项</p>
@@ -106,21 +112,17 @@ public class DataScan extends TeaModel {
     @NameInMap("schedulerInterval")
     public String schedulerInterval;
 
-    /**
-     * <p>调度优先级，数值越大优先级越高。内部字段，暂不对客透出，取值范围 [0-9]</p>
-     */
-    @NameInMap("priority")
-    public Integer priority;
-
-    /**
-     * <p>调度间隔时间（以分钟为单位）</p>
-     */
-    @NameInMap("schedulerIntervalMinutes")
-    public Integer schedulerIntervalMinutes;
-
     public static DataScan build(java.util.Map<String, ?> map) throws Exception {
         DataScan self = new DataScan();
         return TeaModel.build(map, self);
+    }
+
+    public DataScan setName(String name) {
+        this.name = name;
+        return this;
+    }
+    public String getName() {
+        return this.name;
     }
 
     public DataScan setScanName(String scanName) {
@@ -163,12 +165,12 @@ public class DataScan extends TeaModel {
         return this.namespaceId;
     }
 
-    public DataScan setComments(String comments) {
-        this.comments = comments;
+    public DataScan setDescription(String description) {
+        this.description = description;
         return this;
     }
-    public String getComments() {
-        return this.comments;
+    public String getDescription() {
+        return this.description;
     }
 
     public DataScan setScanId(String scanId) {
@@ -257,22 +259,6 @@ public class DataScan extends TeaModel {
     }
     public String getSchedulerInterval() {
         return this.schedulerInterval;
-    }
-
-    public DataScan setPriority(Integer priority) {
-        this.priority = priority;
-        return this;
-    }
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    public DataScan setSchedulerIntervalMinutes(Integer schedulerIntervalMinutes) {
-        this.schedulerIntervalMinutes = schedulerIntervalMinutes;
-        return this;
-    }
-    public Integer getSchedulerIntervalMinutes() {
-        return this.schedulerIntervalMinutes;
     }
 
 }

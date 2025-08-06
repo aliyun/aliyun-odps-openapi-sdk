@@ -1459,7 +1459,9 @@ func (s *DataScanProperties) SetAutoCommit(v bool) *DataScanProperties {
 }
 
 type DataScan struct {
-  // 用户指定的爬取任务名称。namespace 下唯一。展示时展示 namespace/$nsId/dataScan/$dataScanName
+  // 资源全局唯一名。e.g., namespaces/{namespaceID}/dataScans/{dataScanName}
+  Name *string `json:"name,omitempty" xml:"name,omitempty"`
+  // 用户指定的爬取任务名称
   ScanName *string `json:"scanName,omitempty" xml:"scanName,omitempty"`
   // 取值范围为：TABLE_DISCOVERY, SCHEMA_DISCOVERY
   Type *string `json:"type,omitempty" xml:"type,omitempty"`
@@ -1470,7 +1472,7 @@ type DataScan struct {
   // dataScan 所属的 namespace
   NamespaceId *string `json:"namespaceId,omitempty" xml:"namespaceId,omitempty"`
   // 用户自定义的描述
-  Comments *string `json:"description,omitempty" xml:"description,omitempty"`
+  Description *string `json:"description,omitempty" xml:"description,omitempty"`
   // 系统自动生成的 scan ID，只读字段。展示项
   ScanId *string `json:"scanId,omitempty" xml:"scanId,omitempty"`
   // 创建的时间，UTC timestamp
@@ -1493,10 +1495,6 @@ type DataScan struct {
   SchedulerMode *string `json:"schedulerMode,omitempty" xml:"schedulerMode,omitempty"`
   // 当 schedulerMode 为 periodic 时，两次爬取任务之间间隔的最大间隔，取值为 [1h-7d]
   SchedulerInterval *string `json:"schedulerInterval,omitempty" xml:"schedulerInterval,omitempty"`
-  // 调度优先级，数值越大优先级越高。内部字段，暂不对客透出，取值范围 [0-9]
-  Priority *int32 `json:"priority,omitempty" xml:"priority,omitempty"`
-  // 调度间隔时间（以分钟为单位）
-  SchedulerIntervalMinutes *int32 `json:"schedulerIntervalMinutes,omitempty" xml:"schedulerIntervalMinutes,omitempty"`
 }
 
 func (s DataScan) String() string {
@@ -1505,6 +1503,11 @@ func (s DataScan) String() string {
 
 func (s DataScan) GoString() string {
   return s.String()
+}
+
+func (s *DataScan) SetName(v string) *DataScan {
+  s.Name = &v
+  return s
 }
 
 func (s *DataScan) SetScanName(v string) *DataScan {
@@ -1532,8 +1535,8 @@ func (s *DataScan) SetNamespaceId(v string) *DataScan {
   return s
 }
 
-func (s *DataScan) SetComments(v string) *DataScan {
-  s.Comments = &v
+func (s *DataScan) SetDescription(v string) *DataScan {
+  s.Description = &v
   return s
 }
 
@@ -1589,16 +1592,6 @@ func (s *DataScan) SetSchedulerMode(v string) *DataScan {
 
 func (s *DataScan) SetSchedulerInterval(v string) *DataScan {
   s.SchedulerInterval = &v
-  return s
-}
-
-func (s *DataScan) SetPriority(v int32) *DataScan {
-  s.Priority = &v
-  return s
-}
-
-func (s *DataScan) SetSchedulerIntervalMinutes(v int32) *DataScan {
-  s.SchedulerIntervalMinutes = &v
   return s
 }
 
@@ -2986,7 +2979,7 @@ func (client *Client) ListDataScans (namespace *string, pageSize *int32, pageTok
 }
 
 func (client *Client) GetDataScanJobsPath (namespace *string, dataScanName *string) (_result *string) {
-  _result = tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespace) + "/dataScans/" + tea.StringValue(dataScanName) + "/jobs")
+  _result = tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespace) + "/dataScans/" + tea.StringValue(dataScanName) + "/scanJobs")
   return _result
 }
 

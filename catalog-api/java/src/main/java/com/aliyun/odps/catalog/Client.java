@@ -574,7 +574,7 @@ public class Client extends com.aliyun.odps.Client {
     }
 
     public String getDataScanJobsPath(String namespace, String dataScanName) throws Exception {
-        return "/api/catalog/v1alpha/namespaces/" + namespace + "/dataScans/" + dataScanName + "/jobs";
+        return "/api/catalog/v1alpha/namespaces/" + namespace + "/dataScans/" + dataScanName + "/scanJobs";
     }
 
     public ListDataScanJobsResponse listDataScanJobs(String namespace, String dataScanName, Integer pageSize, String pageToken) throws Exception {

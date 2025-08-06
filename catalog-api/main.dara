@@ -816,12 +816,13 @@ model DataScanProperties {
 }
 
 model DataScan {
-  scanName?: string(name='scanName', description='用户指定的爬取任务名称。namespace 下唯一。展示时展示 namespace/$nsId/dataScan/$dataScanName'),
+  name?: string(name='name', description='资源全局唯一名。e.g., namespaces/{namespaceID}/dataScans/{dataScanName}'),
+  scanName?: string(name='scanName', description='用户指定的爬取任务名称'),
   type?: string(name='type', description='取值范围为：TABLE_DISCOVERY, SCHEMA_DISCOVERY'),
   creator?: string(name='creator', description='dataScan 的创建者'),
   customerId?: string(name='customerId', description='客户 ID'),
   namespaceId?: string(name='namespaceId', description='dataScan 所属的 namespace'),
-  comments?: string(name='description', description='用户自定义的描述'),
+  description?: string(name='description', description='用户自定义的描述'),
   scanId?: string(name='scanId', description='系统自动生成的 scan ID，只读字段。展示项'),
   creationTime?: int64(name='creationTime', description='创建的时间，UTC timestamp'),
   lastModifiedTime?: int64(name='lastModifiedTime', description='上次修改的时间，UTC timestamp'),
@@ -833,8 +834,6 @@ model DataScan {
   properties?: DataScanProperties(name='properties', description='爬取任务的可选参数，包含更新策略、分类器等'),
   schedulerMode?: string(name='schedulerMode', description='manual/periodic，手动触发或者周期性自动触发'),
   schedulerInterval?: string(name='schedulerInterval', description='当 schedulerMode 为 periodic 时，两次爬取任务之间间隔的最大间隔，取值为 [1h-7d]'),
-  priority?: int32(name='priority', description='调度优先级，数值越大优先级越高。内部字段，暂不对客透出，取值范围 [0-9]'),
-  schedulerIntervalMinutes?: int32(name='schedulerIntervalMinutes', description='调度间隔时间（以分钟为单位）')
 }
 
 model ScanJob {
@@ -914,7 +913,7 @@ model ListDataScanJobsResponse {
 }
 
 function getDataScanJobsPath(namespace: string, dataScanName: string): string {
-  return `/api/catalog/v1alpha/namespaces/${namespace}/dataScans/${dataScanName}/jobs`;
+  return `/api/catalog/v1alpha/namespaces/${namespace}/dataScans/${dataScanName}/scanJobs`;
 }
 
 async function listDataScanJobs(namespace: string, dataScanName: string, pageSize: int32, pageToken: string): ListDataScanJobsResponse {
