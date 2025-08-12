@@ -1139,7 +1139,7 @@ type Schema struct {
   // Schema类型：DEFAULT/EXTERNAL
   Type *string `json:"type,omitempty" xml:"type,omitempty"`
   // Schema拥有者
-  Owner *string `json:"owner,omitempty" xml:"owner,omitempty" require:"true"`
+  Owner *string `json:"owner,omitempty" xml:"owner,omitempty"`
   // 外部schema配置
   ExternalSchemaConfiguration *ExternalSchemaConfiguration `json:"externalSchemaConfiguration,omitempty" xml:"externalSchemaConfiguration,omitempty"`
 }
@@ -1711,7 +1711,7 @@ func (s *ListDataScansResponse) SetDataScans(v []*DataScan) *ListDataScansRespon
 // DataScanJob
 type ListDataScanJobsResponse struct {
   // 返回所有的 dataScan jobs 列表
-  Data []*ScanJob `json:"data,omitempty" xml:"data,omitempty" type:"Repeated"`
+  ScanJobs []*ScanJob `json:"scanJobs,omitempty" xml:"scanJobs,omitempty" type:"Repeated"`
   // 分页 token
   NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
 }
@@ -1724,8 +1724,8 @@ func (s ListDataScanJobsResponse) GoString() string {
   return s.String()
 }
 
-func (s *ListDataScanJobsResponse) SetData(v []*ScanJob) *ListDataScanJobsResponse {
-  s.Data = v
+func (s *ListDataScanJobsResponse) SetScanJobs(v []*ScanJob) *ListDataScanJobsResponse {
+  s.ScanJobs = v
   return s
 }
 

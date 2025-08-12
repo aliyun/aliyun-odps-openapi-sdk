@@ -7,8 +7,8 @@ public class ListDataScanJobsResponse extends TeaModel {
     /**
      * <p>返回所有的 dataScan jobs 列表</p>
      */
-    @NameInMap("data")
-    public java.util.List<ScanJob> data;
+    @NameInMap("scanJobs")
+    public java.util.List<ScanJob> scanJobs;
 
     /**
      * <p>分页 token</p>
@@ -21,12 +21,12 @@ public class ListDataScanJobsResponse extends TeaModel {
         return TeaModel.build(map, self);
     }
 
-    public ListDataScanJobsResponse setData(java.util.List<ScanJob> data) {
-        this.data = data;
+    public ListDataScanJobsResponse setScanJobs(java.util.List<ScanJob> scanJobs) {
+        this.scanJobs = scanJobs;
         return this;
     }
-    public java.util.List<ScanJob> getData() {
-        return this.data;
+    public java.util.List<ScanJob> getScanJobs() {
+        return this.scanJobs;
     }
 
     public ListDataScanJobsResponse setNextPageToken(String nextPageToken) {
