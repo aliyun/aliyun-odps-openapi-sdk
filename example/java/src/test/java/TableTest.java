@@ -41,9 +41,9 @@ import java.util.List;
 
 public class TableTest {
     private static Logger logger = LoggerFactory.getLogger(TableTest.class);
-    private static String projectId;
+    private static String projectId = "dingxin_volume";
     private static com.aliyun.odps.catalog.Client catalogClient;
-    private static Table sBasicTable;
+    private static Table sBasicTable = new Table();
     private static Table mTable;
 
     @BeforeClass
@@ -83,6 +83,7 @@ public class TableTest {
             mTable = catalogClient.createTable(basicTable);
             logger.info("create table succ.");
         } catch (Exception e) {
+            e.printStackTrace();
             Assert.assertTrue(StringUtils.contains(e.getMessage(), "Table already exist"));
             logger.info("create table failed, cause: {}", e.getMessage());
             mTable = catalogClient.getTable(basicTable);

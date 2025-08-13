@@ -109,7 +109,7 @@ handle_directory() {
 
         # pip install .
         echo "Cleaning and installing the Go project..."
-        pip install . || { echo "Python build failed in $dir_path."; exit 1; }
+        # pip install . || { echo "Python build failed in $dir_path."; exit 1; }
 
         cd .. || exit 1
     fi
@@ -126,7 +126,7 @@ echo "Building Java: $build_java"
 echo "Building Python: $build_python"
 
 # 处理每个目录
-# handle_directory "common"
+handle_directory "common"
 handle_directory "catalog-api"
 
 echo "All directories processed successfully."

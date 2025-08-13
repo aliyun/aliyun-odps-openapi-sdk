@@ -2095,7 +2095,7 @@ class Client(OpenApiClient):
         删除模型版本
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_model_path(project_id, schema_name, model_name, version_name)
+        path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}@{version_name}:deleteVersion'
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
             self.request_without_model(None, 'DELETE', path, None, runtime)
@@ -2112,7 +2112,7 @@ class Client(OpenApiClient):
         删除模型版本
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_model_path(project_id, schema_name, model_name, version_name)
+        path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}@{version_name}:deleteVersion'
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
             await self.request_without_model_async(None, 'DELETE', path, None, runtime)

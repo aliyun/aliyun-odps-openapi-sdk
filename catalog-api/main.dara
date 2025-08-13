@@ -1053,7 +1053,7 @@ async function createModelVersion(projectId: string, schemaName: string, modelNa
 // 删除模型版本
 async function deleteModelVersion(projectId: string, schemaName: string, modelName: string, versionName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
-  var path = getModelPath(projectId, schemaName, modelName, versionName);
+  var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models/${modelName}@${versionName}:deleteVersion`;
   return requestWithoutModel(null, 'DELETE', path, null, runtime);
 }
 
