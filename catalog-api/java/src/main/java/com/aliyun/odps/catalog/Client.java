@@ -661,7 +661,7 @@ public class Client extends com.aliyun.odps.Client {
     // 删除模型版本
     public HttpResponse deleteModelVersion(String projectId, String schemaName, String modelName, String versionName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getModelPath(projectId, schemaName, modelName, versionName);
+        String path = "/api/catalog/v1alpha/projects/" + projectId + "/schemas/" + schemaName + "/models/" + modelName + "@" + versionName + ":deleteVersion";
         return TeaModel.toModel(this.requestWithoutModel(null, "DELETE", path, null, runtime), new HttpResponse());
     }
 

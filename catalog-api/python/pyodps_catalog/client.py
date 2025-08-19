@@ -1809,7 +1809,7 @@ class Client(OpenApiClient):
         namespace: str,
         data_scan_name: str,
     ) -> str:
-        return f'/api/catalog/v1alpha/namespaces/{namespace}/dataScans/{data_scan_name}/jobs'
+        return f'/api/catalog/v1alpha/namespaces/{namespace}/dataScans/{data_scan_name}/scanJobs'
 
     def list_data_scan_jobs(
         self,

@@ -1990,12 +1990,13 @@ class DataScanProperties(TeaModel):
 class DataScan(TeaModel):
     def __init__(
         self,
+        name: str = None,
         scan_name: str = None,
         type: str = None,
         creator: str = None,
         customer_id: str = None,
         namespace_id: str = None,
-        comments: str = None,
+        description: str = None,
         scan_id: str = None,
         creation_time: int = None,
         last_modified_time: int = None,
@@ -2007,10 +2008,10 @@ class DataScan(TeaModel):
         properties: DataScanProperties = None,
         scheduler_mode: str = None,
         scheduler_interval: str = None,
-        priority: int = None,
-        scheduler_interval_minutes: int = None,
     ):
-        # 用户指定的爬取任务名称。namespace 下唯一。展示时展示 namespace/$nsId/dataScan/$dataScanName
+        # 资源全局唯一名。e.g., namespaces/{namespaceID}/dataScans/{dataScanName}
+        self.name = name
+        # 用户指定的爬取任务名称
         self.scan_name = scan_name
         # 取值范围为：TABLE_DISCOVERY, SCHEMA_DISCOVERY
         self.type = type
@@ -2021,7 +2022,7 @@ class DataScan(TeaModel):
         # dataScan 所属的 namespace
         self.namespace_id = namespace_id
         # 用户自定义的描述
-        self.comments = comments
+        self.description = description
         # 系统自动生成的 scan ID，只读字段。展示项
         self.scan_id = scan_id
         # 创建的时间，UTC timestamp
@@ -2044,10 +2045,6 @@ class DataScan(TeaModel):
         self.scheduler_mode = scheduler_mode
         # 当 schedulerMode 为 periodic 时，两次爬取任务之间间隔的最大间隔，取值为 [1h-7d]
         self.scheduler_interval = scheduler_interval
-        # 调度优先级，数值越大优先级越高。内部字段，暂不对客透出，取值范围 [0-9]
-        self.priority = priority
-        # 调度间隔时间（以分钟为单位）
-        self.scheduler_interval_minutes = scheduler_interval_minutes
 
     def validate(self):
         if self.source:
@@ -2063,6 +2060,8 @@ class DataScan(TeaModel):
             return _map
 
         result = dict()
+        if self.name is not None:
+            result['name'] = self.name
         if self.scan_name is not None:
             result['scanName'] = self.scan_name
         if self.type is not None:
@@ -2073,8 +2072,8 @@ class DataScan(TeaModel):
             result['customerId'] = self.customer_id
         if self.namespace_id is not None:
             result['namespaceId'] = self.namespace_id
-        if self.comments is not None:
-            result['description'] = self.comments
+        if self.description is not None:
+            result['description'] = self.description
         if self.scan_id is not None:
             result['scanId'] = self.scan_id
         if self.creation_time is not None:
@@ -2097,14 +2096,12 @@ class DataScan(TeaModel):
             result['schedulerMode'] = self.scheduler_mode
         if self.scheduler_interval is not None:
             result['schedulerInterval'] = self.scheduler_interval
-        if self.priority is not None:
-            result['priority'] = self.priority
-        if self.scheduler_interval_minutes is not None:
-            result['schedulerIntervalMinutes'] = self.scheduler_interval_minutes
         return result
 
     def from_map(self, m: dict = None):
         m = m or dict()
+        if m.get('name') is not None:
+            self.name = m.get('name')
         if m.get('scanName') is not None:
             self.scan_name = m.get('scanName')
         if m.get('type') is not None:
@@ -2116,7 +2113,7 @@ class DataScan(TeaModel):
         if m.get('namespaceId') is not None:
             self.namespace_id = m.get('namespaceId')
         if m.get('description') is not None:
-            self.comments = m.get('description')
+            self.description = m.get('description')
         if m.get('scanId') is not None:
             self.scan_id = m.get('scanId')
         if m.get('creationTime') is not None:
@@ -2142,10 +2139,6 @@ class DataScan(TeaModel):
             self.scheduler_mode = m.get('schedulerMode')
         if m.get('schedulerInterval') is not None:
             self.scheduler_interval = m.get('schedulerInterval')
-        if m.get('priority') is not None:
-            self.priority = m.get('priority')
-        if m.get('schedulerIntervalMinutes') is not None:
-            self.scheduler_interval_minutes = m.get('schedulerIntervalMinutes')
         return self
 
 
@@ -2293,17 +2286,17 @@ class ListDataScansResponse(TeaModel):
 class ListDataScanJobsResponse(TeaModel):
     def __init__(
         self,
-        data: List[ScanJob] = None,
+        scan_jobs: List[ScanJob] = None,
         next_page_token: str = None,
     ):
         # 返回所有的 dataScan jobs 列表
-        self.data = data
+        self.scan_jobs = scan_jobs
         # 分页 token
         self.next_page_token = next_page_token
 
     def validate(self):
-        if self.data:
-            for k in self.data:
+        if self.scan_jobs:
+            for k in self.scan_jobs:
                 if k:
                     k.validate()
 
@@ -2313,21 +2306,21 @@ class ListDataScanJobsResponse(TeaModel):
             return _map
 
         result = dict()
-        result['data'] = []
-        if self.data is not None:
-            for k in self.data:
-                result['data'].append(k.to_map() if k else None)
+        result['scanJobs'] = []
+        if self.scan_jobs is not None:
+            for k in self.scan_jobs:
+                result['scanJobs'].append(k.to_map() if k else None)
         if self.next_page_token is not None:
             result['nextPageToken'] = self.next_page_token
         return result
 
     def from_map(self, m: dict = None):
         m = m or dict()
-        self.data = []
-        if m.get('data') is not None:
-            for k in m.get('data'):
+        self.scan_jobs = []
+        if m.get('scanJobs') is not None:
+            for k in m.get('scanJobs'):
                 temp_model = ScanJob()
-                self.data.append(temp_model.from_map(k))
+                self.scan_jobs.append(temp_model.from_map(k))
         if m.get('nextPageToken') is not None:
             self.next_page_token = m.get('nextPageToken')
         return self
