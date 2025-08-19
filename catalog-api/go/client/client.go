@@ -3111,7 +3111,7 @@ func (client *Client) CreateModelVersion (projectId *string, schemaName *string,
 // 删除模型版本
 func (client *Client) DeleteModelVersion (projectId *string, schemaName *string, modelName *string, versionName *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetModelPath(projectId, schemaName, modelName, versionName)
+  path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models/" + tea.StringValue(modelName) + "@" + tea.StringValue(versionName) + ":deleteVersion")
   _result = &HttpResponse{}
   _body, _err := client.RequestWithoutModel(nil, tea.String("DELETE"), path, nil, runtime)
   if _err != nil {
