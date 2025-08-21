@@ -2358,7 +2358,7 @@ func (client *Client) ListRoles (namespace *string, pageSize *int, pageToken *st
 }
 
 // Update role
-func (client *Client) PatchRole (namespace *string, roleName *string, role *Role, updateMask *string) (_result *Role, _err error) {
+func (client *Client) UpdateRole (namespace *string, roleName *string, role *Role, updateMask *string) (_result *Role, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetRolePath(namespace, roleName)
   query := make(map[string]*string)
@@ -2474,7 +2474,7 @@ func (client *Client) ListTaxonomies (namespace *string, pageSize *int, pageToke
   return _result, _err
 }
 
-func (client *Client) PatchTaxonomy (namespace *string, taxonomyId *string, taxonomy *Taxonomy, updateMask *string) (_result *Taxonomy, _err error) {
+func (client *Client) UpdateTaxonomy (namespace *string, taxonomyId *string, taxonomy *Taxonomy, updateMask *string) (_result *Taxonomy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetTaxonomyPath(namespace, taxonomyId)
   query := make(map[string]*string)
@@ -2577,7 +2577,7 @@ func (client *Client) ListPolicyTags (namespace *string, taxonomyId *string, pag
   return _result, _err
 }
 
-func (client *Client) PatchPolicyTag (namespace *string, taxonomyId *string, policyTagId *string, policyTag *PolicyTag, updateMask *string) (_result *PolicyTag, _err error) {
+func (client *Client) UpdatePolicyTag (namespace *string, taxonomyId *string, policyTagId *string, policyTag *PolicyTag, updateMask *string) (_result *PolicyTag, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)
   query := make(map[string]*string)
@@ -2624,7 +2624,7 @@ func (client *Client) GetPolicyTagPolicy (namespace *string, taxonomyId *string,
 
 func (client *Client) CreateDataPolicy (namespace *string, dataPolicy *DataPolicy) (_result *DataPolicy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetParentPath(namespace)
+  path := client.GetDataPoliciesPath(namespace)
   _result = &DataPolicy{}
   _body, _err := client.RequestWithModel(dataPolicy, tea.String("POST"), path, nil, runtime)
   if _err != nil {
@@ -2660,7 +2660,7 @@ func (client *Client) GetDataPolicy (namespace *string, dataPolicyName *string) 
 
 func (client *Client) ListDataPolicies (namespace *string, pageSize *int, pageToken *string) (_result *ListDataPoliciesResponse, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetParentPath(namespace)
+  path := client.GetDataPoliciesPath(namespace)
   query := make(map[string]*string)
   if !tea.BoolValue(util.IsUnset(pageSize)) {
     query["pageSize"] = mcutil.ToString(pageSize)
@@ -2712,7 +2712,7 @@ func (client *Client) GetDataPolicyPath (namespace *string, dataPolicyName *stri
   return _result
 }
 
-func (client *Client) GetParentPath (namespace *string) (_result *string) {
+func (client *Client) GetDataPoliciesPath (namespace *string) (_result *string) {
   _result = tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespace) + "/dataPolicies")
   return _result
 }

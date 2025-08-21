@@ -56,9 +56,9 @@ v1alpha-2 版本引入。
 model Table {
   etag?: string(name='etag', description='用于 read-modify-write 一致性校验。', example=''),
   name?: string(name='name', description='表的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/tables/{tableName}', example=''),
-  projectId: string(name='projectId', description='表所属的 project ID。', example=''),
+  projectId?: string(name='projectId', description='表所属的 project ID。', example=''),
   schemaName?: string(name='schemaName', description='表所属的 schema 名。', example=''),
-  tableName: string(name='tableName', description='表名。', example=''),
+  tableName?: string(name='tableName', description='表名。', example=''),
   type?: string(name='type', description='表的类型。', example=''),
   description?: string(name='description', description='表的描述。等价于 SQL DDL 中表的 comment。', example=''),
   tableSchema?: TableFieldSchema(name='tableSchema', description='表列的 schema 定义。'),
@@ -171,5 +171,7 @@ if (!Util.isUnset(pageSize)) {
 4. darabonba 不存在 List，使用数组代替，比如 [Connection], darabonba map 的使用形式和 Golang 类似，比如 map[string]string
 5. darabonba 不存在 enum 类型，使用 string 类型代替, 没必要为 enum 类型创建一个 type，直接视为 string 即可
 6. model 中的 example 设置为 [] 是不合法的，可以不写 example 字段
+7. 需要注意的是，所有的参数都应该被视为可选参数，也就是使用 ?: 
+
 
 现在，请根据我给出的可读文本，生成 darabonba 代码

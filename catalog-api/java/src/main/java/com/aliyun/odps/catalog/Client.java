@@ -197,7 +197,7 @@ public class Client extends com.aliyun.odps.Client {
     }
 
     // Update role
-    public Role patchRole(String namespace, String roleName, Role role, String updateMask) throws Exception {
+    public Role updateRole(String namespace, String roleName, Role role, String updateMask) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getRolePath(namespace, roleName);
         java.util.Map<String, String> query = new java.util.HashMap<>();
@@ -269,7 +269,7 @@ public class Client extends com.aliyun.odps.Client {
         return TeaModel.toModel(this.requestWithModel(new ListTaxonomiesResponse(), "GET", path, query, runtime), new ListTaxonomiesResponse());
     }
 
-    public Taxonomy patchTaxonomy(String namespace, String taxonomyId, Taxonomy taxonomy, String updateMask) throws Exception {
+    public Taxonomy updateTaxonomy(String namespace, String taxonomyId, Taxonomy taxonomy, String updateMask) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getTaxonomyPath(namespace, taxonomyId);
         java.util.Map<String, String> query = new java.util.HashMap<>();
@@ -330,7 +330,7 @@ public class Client extends com.aliyun.odps.Client {
         return TeaModel.toModel(this.requestWithModel(new ListPolicyTagsResponse(), "GET", path, query, runtime), new ListPolicyTagsResponse());
     }
 
-    public PolicyTag patchPolicyTag(String namespace, String taxonomyId, String policyTagId, PolicyTag policyTag, String updateMask) throws Exception {
+    public PolicyTag updatePolicyTag(String namespace, String taxonomyId, String policyTagId, PolicyTag policyTag, String updateMask) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getPolicyTagPath(namespace, taxonomyId, policyTagId);
         java.util.Map<String, String> query = new java.util.HashMap<>();
@@ -359,7 +359,7 @@ public class Client extends com.aliyun.odps.Client {
 
     public DataPolicy createDataPolicy(String namespace, DataPolicy dataPolicy) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getParentPath(namespace);
+        String path = this.getDataPoliciesPath(namespace);
         return TeaModel.toModel(this.requestWithModel(dataPolicy, "POST", path, null, runtime), new DataPolicy());
     }
 
@@ -377,7 +377,7 @@ public class Client extends com.aliyun.odps.Client {
 
     public ListDataPoliciesResponse listDataPolicies(String namespace, Integer pageSize, String pageToken) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getParentPath(namespace);
+        String path = this.getDataPoliciesPath(namespace);
         java.util.Map<String, String> query = new java.util.HashMap<>();
         if (!com.aliyun.teautil.Common.isUnset(pageSize)) {
             query.put("pageSize", com.aliyun.odps.utils.TeaUtils.toString(pageSize));
@@ -410,7 +410,7 @@ public class Client extends com.aliyun.odps.Client {
         return "/api/catalog/v1alpha/namespaces/" + namespace + "/dataPolicies/" + dataPolicyName + "";
     }
 
-    public String getParentPath(String namespace) throws Exception {
+    public String getDataPoliciesPath(String namespace) throws Exception {
         return "/api/catalog/v1alpha/namespaces/" + namespace + "/dataPolicies";
     }
 

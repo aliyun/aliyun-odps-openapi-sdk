@@ -574,7 +574,7 @@ class Client(OpenApiClient):
             await self.request_with_model_async(catalog_api_models.ListRolesResponse(), 'GET', path, query, runtime)
         )
 
-    def patch_role(
+    def update_role(
         self,
         namespace: str,
         role_name: str,
@@ -594,7 +594,7 @@ class Client(OpenApiClient):
             self.request_with_model(role, 'PATCH', path, query, runtime)
         )
 
-    async def patch_role_async(
+    async def update_role_async(
         self,
         namespace: str,
         role_name: str,
@@ -816,7 +816,7 @@ class Client(OpenApiClient):
             await self.request_with_model_async(catalog_api_models.ListTaxonomiesResponse(), 'GET', path, query, runtime)
         )
 
-    def patch_taxonomy(
+    def update_taxonomy(
         self,
         namespace: str,
         taxonomy_id: str,
@@ -833,7 +833,7 @@ class Client(OpenApiClient):
             self.request_with_model(taxonomy, 'PATCH', path, query, runtime)
         )
 
-    async def patch_taxonomy_async(
+    async def update_taxonomy_async(
         self,
         namespace: str,
         taxonomy_id: str,
@@ -1030,7 +1030,7 @@ class Client(OpenApiClient):
             await self.request_with_model_async(catalog_api_models.ListPolicyTagsResponse(), 'GET', path, query, runtime)
         )
 
-    def patch_policy_tag(
+    def update_policy_tag(
         self,
         namespace: str,
         taxonomy_id: str,
@@ -1048,7 +1048,7 @@ class Client(OpenApiClient):
             self.request_with_model(policy_tag, 'PATCH', path, query, runtime)
         )
 
-    async def patch_policy_tag_async(
+    async def update_policy_tag_async(
         self,
         namespace: str,
         taxonomy_id: str,
@@ -1134,7 +1134,7 @@ class Client(OpenApiClient):
         data_policy: catalog_api_models.DataPolicy,
     ) -> catalog_api_models.DataPolicy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_parent_path(namespace)
+        path = self.get_data_policies_path(namespace)
         return TeaCore.from_map(
             catalog_api_models.DataPolicy(),
             self.request_with_model(data_policy, 'POST', path, None, runtime)
@@ -1146,7 +1146,7 @@ class Client(OpenApiClient):
         data_policy: catalog_api_models.DataPolicy,
     ) -> catalog_api_models.DataPolicy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_parent_path(namespace)
+        path = self.get_data_policies_path(namespace)
         return TeaCore.from_map(
             catalog_api_models.DataPolicy(),
             await self.request_with_model_async(data_policy, 'POST', path, None, runtime)
@@ -1207,7 +1207,7 @@ class Client(OpenApiClient):
         page_token: str,
     ) -> catalog_api_models.ListDataPoliciesResponse:
         runtime = util_models.RuntimeOptions()
-        path = self.get_parent_path(namespace)
+        path = self.get_data_policies_path(namespace)
         query = {}
         if not UtilClient.is_unset(page_size):
             query['pageSize'] = McUtilClient.to_string(page_size)
@@ -1225,7 +1225,7 @@ class Client(OpenApiClient):
         page_token: str,
     ) -> catalog_api_models.ListDataPoliciesResponse:
         runtime = util_models.RuntimeOptions()
-        path = self.get_parent_path(namespace)
+        path = self.get_data_policies_path(namespace)
         query = {}
         if not UtilClient.is_unset(page_size):
             query['pageSize'] = McUtilClient.to_string(page_size)
@@ -1301,7 +1301,7 @@ class Client(OpenApiClient):
     ) -> str:
         return f'/api/catalog/v1alpha/namespaces/{namespace}/dataPolicies/{data_policy_name}'
 
-    def get_parent_path(
+    def get_data_policies_path(
         self,
         namespace: str,
     ) -> str:

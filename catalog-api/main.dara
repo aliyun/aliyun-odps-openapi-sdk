@@ -349,7 +349,7 @@ async function listRoles(namespace: string, pageSize: integer, pageToken: string
 }
 
 // Update role
-async function patchRole(namespace: string, roleName: string, role: Role, updateMask: string): Role {
+async function updateRole(namespace: string, roleName: string, role: Role, updateMask: string): Role {
   var runtime = new Util.RuntimeOptions{};
   var path = getRolePath(namespace, roleName);
   var query: map[string]string = {};
@@ -454,7 +454,7 @@ async function listTaxonomies(namespace: string, pageSize: integer, pageToken: s
   return requestWithModel(new ListTaxonomiesResponse{}, 'GET', path, query, runtime);
 }
 
-async function patchTaxonomy(namespace: string, taxonomyId: string, taxonomy: Taxonomy, updateMask: string): Taxonomy {
+async function updateTaxonomy(namespace: string, taxonomyId: string, taxonomy: Taxonomy, updateMask: string): Taxonomy {
   var runtime = new Util.RuntimeOptions{};
   var path = getTaxonomyPath(namespace, taxonomyId);
   var query: map[string]string = {};
@@ -512,7 +512,7 @@ async function listPolicyTags(namespace: string, taxonomyId: string, pageSize: i
   return requestWithModel(new ListPolicyTagsResponse{}, 'GET', path, query, runtime);
 }
 
-async function patchPolicyTag(namespace: string, taxonomyId: string, policyTagId: string, policyTag: PolicyTag, updateMask: string): PolicyTag {
+async function updatePolicyTag(namespace: string, taxonomyId: string, policyTagId: string, policyTag: PolicyTag, updateMask: string): PolicyTag {
   var runtime = new Util.RuntimeOptions{};
   var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
   var query: map[string]string = {};
@@ -562,7 +562,7 @@ model ListDataPoliciesResponse {
 
 async function createDataPolicy(namespace: string, dataPolicy: DataPolicy): DataPolicy {
   var runtime = new Util.RuntimeOptions{};
-  var path = getParentPath(namespace);
+  var path = getDataPoliciesPath(namespace);
   return requestWithModel(dataPolicy, 'POST', path, null, runtime);
 }
 
@@ -580,7 +580,7 @@ async function getDataPolicy(namespace: string, dataPolicyName: string): DataPol
 
 async function listDataPolicies(namespace: string, pageSize: integer, pageToken: string): ListDataPoliciesResponse {
   var runtime = new Util.RuntimeOptions{};
-  var path = getParentPath(namespace);
+  var path = getDataPoliciesPath(namespace);
   var query: map[string]string = {};
   if (!Util.isUnset(pageSize)) {
     query["pageSize"] = McUtil.toString(pageSize);
@@ -611,7 +611,7 @@ function getDataPolicyPath(namespace: string, dataPolicyName: string): string {
   return `/api/catalog/v1alpha/namespaces/${namespace}/dataPolicies/${dataPolicyName}`;
 }
 
-function getParentPath(namespace: string): string {
+function getDataPoliciesPath(namespace: string): string {
   return `/api/catalog/v1alpha/namespaces/${namespace}/dataPolicies`;
 }
 

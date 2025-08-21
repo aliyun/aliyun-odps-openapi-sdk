@@ -6,7 +6,7 @@ require (
 	github.com/alibabacloud-go/tea v1.2.2
 	github.com/alibabacloud-go/tea-utils/v2 v2.0.6
 	github.com/aliyun/aliyun-odps-go-sdk/tea v0.0.0-20250806094443-b945d7e37a5c
-	github.com/aliyun/aliyun-odps-openapi-sdk/common/go v0.0.0-20250812033759-71215bb059df
+	github.com/aliyun/aliyun-odps-openapi-sdk/common/go v0.0.0-20250819094345-fad1d2d5b148
 )
 
 require (
