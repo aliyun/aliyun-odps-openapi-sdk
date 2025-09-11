@@ -2454,6 +2454,7 @@ class Model(TeaModel):
         training_info: Dict[str, str] = None,
         inference_parameters: Dict[str, str] = None,
         feature_columns: ModelFieldSchema = None,
+        tasks: List[str] = None,
     ):
         # 模型的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/models/{modelName}
         self.name = name
@@ -2501,7 +2502,8 @@ class Model(TeaModel):
         self.inference_parameters = inference_parameters
         # 版本的列 schema 定义
         self.feature_columns = feature_columns
-        # ModelFieldSchema 定义
+        # version 支持的所有 task 类型。要求：对于 LLM/MLLM 类型模型，可取值 text-generation，chat，sentence-embedding 中的一个或多个. 对于 BOOSTED_TREE_CLASSIFIER 类型模型，只能取值为 [predict, predict-proba, feature-importance]（顺序任意）. 对于 BOOSTED_TREE_REGRESSOR 类型模型，只能取值为 [predict, feature-importance]（顺序任意）
+        self.tasks = tasks
 
     def validate(self):
         if self.feature_columns:
@@ -2559,6 +2561,8 @@ class Model(TeaModel):
             result['inferenceParameters'] = self.inference_parameters
         if self.feature_columns is not None:
             result['featureColumns'] = self.feature_columns.to_map()
+        if self.tasks is not None:
+            result['tasks'] = self.tasks
         return result
 
     def from_map(self, m: dict = None):
@@ -2610,6 +2614,8 @@ class Model(TeaModel):
         if m.get('featureColumns') is not None:
             temp_model = ModelFieldSchema()
             self.feature_columns = temp_model.from_map(m['featureColumns'])
+        if m.get('tasks') is not None:
+            self.tasks = m.get('tasks')
         return self
 
 

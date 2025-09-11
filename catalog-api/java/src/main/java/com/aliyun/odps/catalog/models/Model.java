@@ -146,6 +146,12 @@ public class Model extends TeaModel {
     @NameInMap("featureColumns")
     public ModelFieldSchema featureColumns;
 
+    /**
+     * <p>version 支持的所有 task 类型。要求：对于 LLM/MLLM 类型模型，可取值 text-generation，chat，sentence-embedding 中的一个或多个. 对于 BOOSTED_TREE_CLASSIFIER 类型模型，只能取值为 [predict, predict-proba, feature-importance]（顺序任意）. 对于 BOOSTED_TREE_REGRESSOR 类型模型，只能取值为 [predict, feature-importance]（顺序任意）</p>
+     */
+    @NameInMap("tasks")
+    public java.util.List<String> tasks;
+
     public static Model build(java.util.Map<String, ?> map) throws Exception {
         Model self = new Model();
         return TeaModel.build(map, self);
@@ -333,6 +339,14 @@ public class Model extends TeaModel {
     }
     public ModelFieldSchema getFeatureColumns() {
         return this.featureColumns;
+    }
+
+    public Model setTasks(java.util.List<String> tasks) {
+        this.tasks = tasks;
+        return this;
+    }
+    public java.util.List<String> getTasks() {
+        return this.tasks;
     }
 
 }

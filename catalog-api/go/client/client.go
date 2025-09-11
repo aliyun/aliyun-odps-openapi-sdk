@@ -1785,6 +1785,8 @@ type Model struct {
   InferenceParameters map[string]*string `json:"inferenceParameters,omitempty" xml:"inferenceParameters,omitempty"`
   // 版本的列 schema 定义
   FeatureColumns *ModelFieldSchema `json:"featureColumns,omitempty" xml:"featureColumns,omitempty"`
+  // version 支持的所有 task 类型。要求：对于 LLM/MLLM 类型模型，可取值 text-generation，chat，sentence-embedding 中的一个或多个. 对于 BOOSTED_TREE_CLASSIFIER 类型模型，只能取值为 [predict, predict-proba, feature-importance]（顺序任意）. 对于 BOOSTED_TREE_REGRESSOR 类型模型，只能取值为 [predict, feature-importance]（顺序任意）
+  Tasks []*string `json:"tasks,omitempty" xml:"tasks,omitempty" type:"Repeated"`
 }
 
 func (s Model) String() string {
@@ -1907,6 +1909,11 @@ func (s *Model) SetInferenceParameters(v map[string]*string) *Model {
 
 func (s *Model) SetFeatureColumns(v *ModelFieldSchema) *Model {
   s.FeatureColumns = v
+  return s
+}
+
+func (s *Model) SetTasks(v []*string) *Model {
+  s.Tasks = v
   return s
 }
 
