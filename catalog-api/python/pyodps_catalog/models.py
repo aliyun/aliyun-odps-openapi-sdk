@@ -482,13 +482,13 @@ class PartitionedColumn(TeaModel):
 class PartitionDefinition(TeaModel):
     def __init__(
         self,
-        partitioned_column: List[PartitionedColumn] = None,
+        partitioned_columns: List[PartitionedColumn] = None,
     ):
-        self.partitioned_column = partitioned_column
+        self.partitioned_columns = partitioned_columns
 
     def validate(self):
-        if self.partitioned_column:
-            for k in self.partitioned_column:
+        if self.partitioned_columns:
+            for k in self.partitioned_columns:
                 if k:
                     k.validate()
 
@@ -498,19 +498,19 @@ class PartitionDefinition(TeaModel):
             return _map
 
         result = dict()
-        result['partitionedColumn'] = []
-        if self.partitioned_column is not None:
-            for k in self.partitioned_column:
-                result['partitionedColumn'].append(k.to_map() if k else None)
+        result['partitionedColumns'] = []
+        if self.partitioned_columns is not None:
+            for k in self.partitioned_columns:
+                result['partitionedColumns'].append(k.to_map() if k else None)
         return result
 
     def from_map(self, m: dict = None):
         m = m or dict()
-        self.partitioned_column = []
-        if m.get('partitionedColumn') is not None:
-            for k in m.get('partitionedColumn'):
+        self.partitioned_columns = []
+        if m.get('partitionedColumns') is not None:
+            for k in m.get('partitionedColumns'):
                 temp_model = PartitionedColumn()
-                self.partitioned_column.append(temp_model.from_map(k))
+                self.partitioned_columns.append(temp_model.from_map(k))
         return self
 
 

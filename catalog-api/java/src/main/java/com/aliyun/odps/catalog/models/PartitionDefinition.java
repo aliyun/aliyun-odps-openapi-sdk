@@ -4,20 +4,20 @@ package com.aliyun.odps.catalog.models;
 import com.aliyun.tea.*;
 
 public class PartitionDefinition extends TeaModel {
-    @NameInMap("partitionedColumn")
-    public java.util.List<PartitionedColumn> partitionedColumn;
+    @NameInMap("partitionedColumns")
+    public java.util.List<PartitionedColumn> partitionedColumns;
 
     public static PartitionDefinition build(java.util.Map<String, ?> map) throws Exception {
         PartitionDefinition self = new PartitionDefinition();
         return TeaModel.build(map, self);
     }
 
-    public PartitionDefinition setPartitionedColumn(java.util.List<PartitionedColumn> partitionedColumn) {
-        this.partitionedColumn = partitionedColumn;
+    public PartitionDefinition setPartitionedColumns(java.util.List<PartitionedColumn> partitionedColumns) {
+        this.partitionedColumns = partitionedColumns;
         return this;
     }
-    public java.util.List<PartitionedColumn> getPartitionedColumn() {
-        return this.partitionedColumn;
+    public java.util.List<PartitionedColumn> getPartitionedColumns() {
+        return this.partitionedColumns;
     }
 
 }

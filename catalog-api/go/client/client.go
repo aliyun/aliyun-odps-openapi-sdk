@@ -328,7 +328,7 @@ func (s *TableConstraints) SetPrimaryKey(v *Fields) *TableConstraints {
 }
 
 type PartitionDefinition struct {
-  PartitionedColumn []*PartitionedColumn `json:"partitionedColumn,omitempty" xml:"partitionedColumn,omitempty" type:"Repeated"`
+  PartitionedColumns []*PartitionedColumn `json:"partitionedColumns,omitempty" xml:"partitionedColumns,omitempty" type:"Repeated"`
 }
 
 func (s PartitionDefinition) String() string {
@@ -339,8 +339,8 @@ func (s PartitionDefinition) GoString() string {
   return s.String()
 }
 
-func (s *PartitionDefinition) SetPartitionedColumn(v []*PartitionedColumn) *PartitionDefinition {
-  s.PartitionedColumn = v
+func (s *PartitionDefinition) SetPartitionedColumns(v []*PartitionedColumn) *PartitionDefinition {
+  s.PartitionedColumns = v
   return s
 }
 
