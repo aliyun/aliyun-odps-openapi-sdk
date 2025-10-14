@@ -45,7 +45,8 @@ jobs:
 
       - name: Setup gpg
         run: |
-          mkdir ~/.gnupg
+          mkdir ~/.
+          chmod 700 ~/.gnupg
           echo use-agent >> ~/.gnupg/gpg.conf
           echo pinentry-mode loopback >> ~/.gnupg/gpg.conf
           echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
