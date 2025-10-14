@@ -78,7 +78,7 @@ model TableConstraints {
 }
 
 model PartitionDefinition {
-  partitionedColumn?: [PartitionedColumn]
+  partitionedColumns?: [PartitionedColumn]
 }
 
 model PartitionedColumn {
