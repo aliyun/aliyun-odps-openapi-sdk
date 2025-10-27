@@ -112,6 +112,12 @@ public class DataScan extends TeaModel {
     @NameInMap("schedulerInterval")
     public String schedulerInterval;
 
+    /**
+     * <p>这个dataScan一共被调度了多少次</p>
+     */
+    @NameInMap("scheduledCount")
+    public Long scheduledCount;
+
     public static DataScan build(java.util.Map<String, ?> map) throws Exception {
         DataScan self = new DataScan();
         return TeaModel.build(map, self);
@@ -259,6 +265,14 @@ public class DataScan extends TeaModel {
     }
     public String getSchedulerInterval() {
         return this.schedulerInterval;
+    }
+
+    public DataScan setScheduledCount(Long scheduledCount) {
+        this.scheduledCount = scheduledCount;
+        return this;
+    }
+    public Long getScheduledCount() {
+        return this.scheduledCount;
     }
 
 }

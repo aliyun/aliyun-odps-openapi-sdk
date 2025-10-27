@@ -2008,6 +2008,7 @@ class DataScan(TeaModel):
         properties: DataScanProperties = None,
         scheduler_mode: str = None,
         scheduler_interval: str = None,
+        scheduled_count: int = None,
     ):
         # 资源全局唯一名。e.g., namespaces/{namespaceID}/dataScans/{dataScanName}
         self.name = name
@@ -2045,6 +2046,8 @@ class DataScan(TeaModel):
         self.scheduler_mode = scheduler_mode
         # 当 schedulerMode 为 periodic 时，两次爬取任务之间间隔的最大间隔，取值为 [1h-7d]
         self.scheduler_interval = scheduler_interval
+        # 这个dataScan一共被调度了多少次
+        self.scheduled_count = scheduled_count
 
     def validate(self):
         if self.source:
@@ -2096,6 +2099,8 @@ class DataScan(TeaModel):
             result['schedulerMode'] = self.scheduler_mode
         if self.scheduler_interval is not None:
             result['schedulerInterval'] = self.scheduler_interval
+        if self.scheduled_count is not None:
+            result['scheduledCount'] = self.scheduled_count
         return result
 
     def from_map(self, m: dict = None):
@@ -2139,6 +2144,8 @@ class DataScan(TeaModel):
             self.scheduler_mode = m.get('schedulerMode')
         if m.get('schedulerInterval') is not None:
             self.scheduler_interval = m.get('schedulerInterval')
+        if m.get('scheduledCount') is not None:
+            self.scheduled_count = m.get('scheduledCount')
         return self
 
 

@@ -1,6 +1,6 @@
 module github.com/aliyun/aliyun-odps-openapi-sdk/common/go
 
-go 1.23.2
+go 1.25.3
 
 require (
 	github.com/alibabacloud-go/tea v1.2.2

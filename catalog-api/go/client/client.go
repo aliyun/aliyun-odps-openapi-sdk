@@ -1495,6 +1495,8 @@ type DataScan struct {
   SchedulerMode *string `json:"schedulerMode,omitempty" xml:"schedulerMode,omitempty"`
   // 当 schedulerMode 为 periodic 时，两次爬取任务之间间隔的最大间隔，取值为 [1h-7d]
   SchedulerInterval *string `json:"schedulerInterval,omitempty" xml:"schedulerInterval,omitempty"`
+  // 这个dataScan一共被调度了多少次
+  ScheduledCount *int64 `json:"scheduledCount,omitempty" xml:"scheduledCount,omitempty"`
 }
 
 func (s DataScan) String() string {
@@ -1592,6 +1594,11 @@ func (s *DataScan) SetSchedulerMode(v string) *DataScan {
 
 func (s *DataScan) SetSchedulerInterval(v string) *DataScan {
   s.SchedulerInterval = &v
+  return s
+}
+
+func (s *DataScan) SetScheduledCount(v int64) *DataScan {
+  s.ScheduledCount = &v
   return s
 }
 
