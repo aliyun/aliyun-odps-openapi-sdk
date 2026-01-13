@@ -1095,3 +1095,43 @@ async function setModelPolicy(projectId: string, schemaName: string, modelName: 
   query["method"] = "setPolicy";
   return requestWithModel(policy, 'POST', path, query, runtime);
 }
+
+/**
+ * ==================================== Search ====================================
+ */
+// SearchResultEntry 实体定义
+model SearchResultEntry {
+  name?: string(name='name', description='实体的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/tables/{tableName}'),
+  displayName?: string(name='displayName', description='实体的名称'),
+  type?: string(name='type', description='实体的类型，例如 TABLE、RESOURCE、SCHEMA 等'),
+  aspects?: map[string]string(name='aspects', description='实体的其他信息'),
+  createTime?: string(name='createTime', description='实体的创建时间（毫秒）'),
+  lastModifiedTime?: string(name='lastModifiedTime', description='实体的修改时间（毫秒）'),
+  description?: string(name='description', description='实体的描述'),
+}
+
+model SearchResponse = {
+  entries?: [SearchResultEntry],
+  nextPageToken?: string
+}
+
+async function search(namespaceId: string, query: string, pageSize: integer, pageToken: string, orderBy: string): SearchResponse {
+  var runtime = new Util.RuntimeOptions{};
+  var path = `/api/catalog/v1alpha/namespaces/${namespaceId}:search`;
+  var params: map[string]string = {};
+
+  if (!Util.isUnset(pageSize)) {
+    params["pageSize"] = McUtil.toString(pageSize);
+  }
+  if (!Util.isUnset(pageToken)) {
+    params["pageToken"] = pageToken;
+  }
+  if (!Util.isUnset(query)) {
+    params["query"] = McUtil.toString(query);
+  }
+  if (!Util.isUnset(orderBy)) {
+    params["orderBy"] = McUtil.toString(orderBy);
+  }
+
+  return requestWithModel(new SearchResponse{}, 'POST', path, params, runtime);
+}
