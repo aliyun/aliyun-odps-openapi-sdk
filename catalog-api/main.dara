@@ -812,7 +812,8 @@ model DataScanProperties {
   pattern?: string(name='options', description='分区路径识别的pattern, 例如{table}/{part1}={value1}/{part2}={value2}'),
   updatePolicy?: string(name='updatePolicy', description='发现表元数据发生变化时的处理策略。APPEND_ONLY/OVERWRITE/IGNORE'),
   syncRemove?: boolean(name='syncRemove', description='发现表删除时是否自动删除'),
-  autoCommit?: boolean(name='autoCommit', description='false代表爬取任务只输出结果，不提交ddl')
+  autoCommit?: boolean(name='autoCommit', description='false代表爬取任务只输出结果，不提交ddl'),
+  inventoryLocation?: string(name="inventoryLocation", description='指定 OSS Inventory 日志的存储位置，用于增量扫描功能')
 }
 
 model DataScan {
@@ -827,6 +828,7 @@ model DataScan {
   creationTime?: int64(name='creationTime', description='创建的时间，UTC timestamp'),
   lastModifiedTime?: int64(name='lastModifiedTime', description='上次修改的时间，UTC timestamp'),
   lastTriggeredTime?: int64(name='lastTriggeredTime', description='爬取任务上次触发的时间（开始调度时间），UTC timestamp。未触发过默认值为 0'),
+  lastSuccessfulScheduleTime?: int64(name='lastSuccessfulScheduleTime', description='最近一次成功的 DatascanJob 的执行时间。 默认值为 0'),
   lastTriggeredBy?: string(name='lastTriggeredBy', description='触发当前调度的来源；具体用户或调度器'),
   schedulingStatus?: string(name='schedulingStatus', description='dataScan 对象的调度状态。包含 IDLE/IMMEDIATE/PENDING/SCHEDULING 四种状态。dataScan 初始化状态为 IDLE，如果创建后立刻执行，设置为 IMMEDIATE'),
   source?: DataScanSource(name='source', description='元数据爬取和发现来源，包括 location、connection 等信息'),

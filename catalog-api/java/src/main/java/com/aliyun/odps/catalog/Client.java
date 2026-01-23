@@ -698,4 +698,27 @@ public class Client extends com.aliyun.odps.Client {
         query.put("method", "setPolicy");
         return TeaModel.toModel(this.requestWithModel(policy, "POST", path, query, runtime), new Policy());
     }
+
+    public SearchResponse search(String namespaceId, String query, Integer pageSize, String pageToken, String orderBy) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = "/api/catalog/v1alpha/namespaces/" + namespaceId + ":search";
+        java.util.Map<String, String> params = new java.util.HashMap<>();
+        if (!com.aliyun.teautil.Common.isUnset(pageSize)) {
+            params.put("pageSize", com.aliyun.odps.utils.TeaUtils.toString(pageSize));
+        }
+
+        if (!com.aliyun.teautil.Common.isUnset(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+
+        if (!com.aliyun.teautil.Common.isUnset(query)) {
+            params.put("query", com.aliyun.odps.utils.TeaUtils.toString(query));
+        }
+
+        if (!com.aliyun.teautil.Common.isUnset(orderBy)) {
+            params.put("orderBy", com.aliyun.odps.utils.TeaUtils.toString(orderBy));
+        }
+
+        return TeaModel.toModel(this.requestWithModel(new SearchResponse(), "POST", path, params, runtime), new SearchResponse());
+    }
 }

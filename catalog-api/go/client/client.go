@@ -1408,6 +1408,8 @@ type DataScanProperties struct {
   SyncRemove *bool `json:"syncRemove,omitempty" xml:"syncRemove,omitempty"`
   // false代表爬取任务只输出结果，不提交ddl
   AutoCommit *bool `json:"autoCommit,omitempty" xml:"autoCommit,omitempty"`
+  // 指定 OSS Inventory 日志的存储位置，用于增量扫描功能
+  InventoryLocation *string `json:"inventoryLocation,omitempty" xml:"inventoryLocation,omitempty"`
 }
 
 func (s DataScanProperties) String() string {
@@ -1458,6 +1460,11 @@ func (s *DataScanProperties) SetAutoCommit(v bool) *DataScanProperties {
   return s
 }
 
+func (s *DataScanProperties) SetInventoryLocation(v string) *DataScanProperties {
+  s.InventoryLocation = &v
+  return s
+}
+
 type DataScan struct {
   // 资源全局唯一名。e.g., namespaces/{namespaceID}/dataScans/{dataScanName}
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
@@ -1481,6 +1488,8 @@ type DataScan struct {
   LastModifiedTime *int64 `json:"lastModifiedTime,omitempty" xml:"lastModifiedTime,omitempty"`
   // 爬取任务上次触发的时间（开始调度时间），UTC timestamp。未触发过默认值为 0
   LastTriggeredTime *int64 `json:"lastTriggeredTime,omitempty" xml:"lastTriggeredTime,omitempty"`
+  // 最近一次成功的 DatascanJob 的执行时间。 默认值为 0
+  LastSuccessfulScheduleTime *int64 `json:"lastSuccessfulScheduleTime,omitempty" xml:"lastSuccessfulScheduleTime,omitempty"`
   // 触发当前调度的来源；具体用户或调度器
   LastTriggeredBy *string `json:"lastTriggeredBy,omitempty" xml:"lastTriggeredBy,omitempty"`
   // dataScan 对象的调度状态。包含 IDLE/IMMEDIATE/PENDING/SCHEDULING 四种状态。dataScan 初始化状态为 IDLE，如果创建后立刻执行，设置为 IMMEDIATE
@@ -1559,6 +1568,11 @@ func (s *DataScan) SetLastModifiedTime(v int64) *DataScan {
 
 func (s *DataScan) SetLastTriggeredTime(v int64) *DataScan {
   s.LastTriggeredTime = &v
+  return s
+}
+
+func (s *DataScan) SetLastSuccessfulScheduleTime(v int64) *DataScan {
+  s.LastSuccessfulScheduleTime = &v
   return s
 }
 
@@ -2048,6 +2062,93 @@ func (s *ListModelVersionsResponse) SetModels(v []*Model) *ListModelVersionsResp
 }
 
 func (s *ListModelVersionsResponse) SetNextPageToken(v string) *ListModelVersionsResponse {
+  s.NextPageToken = &v
+  return s
+}
+
+// Description:
+// 
+// ==================================== Search ====================================
+// SearchResultEntry 实体定义
+type SearchResultEntry struct {
+  // 实体的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/tables/{tableName}
+  Name *string `json:"name,omitempty" xml:"name,omitempty"`
+  // 实体的名称
+  DisplayName *string `json:"displayName,omitempty" xml:"displayName,omitempty"`
+  // 实体的类型，例如 TABLE、RESOURCE、SCHEMA 等
+  Type *string `json:"type,omitempty" xml:"type,omitempty"`
+  // 实体的其他信息
+  Aspects map[string]*string `json:"aspects,omitempty" xml:"aspects,omitempty"`
+  // 实体的创建时间（毫秒）
+  CreateTime *string `json:"createTime,omitempty" xml:"createTime,omitempty"`
+  // 实体的修改时间（毫秒）
+  LastModifiedTime *string `json:"lastModifiedTime,omitempty" xml:"lastModifiedTime,omitempty"`
+  // 实体的描述
+  Description *string `json:"description,omitempty" xml:"description,omitempty"`
+}
+
+func (s SearchResultEntry) String() string {
+  return tea.Prettify(s)
+}
+
+func (s SearchResultEntry) GoString() string {
+  return s.String()
+}
+
+func (s *SearchResultEntry) SetName(v string) *SearchResultEntry {
+  s.Name = &v
+  return s
+}
+
+func (s *SearchResultEntry) SetDisplayName(v string) *SearchResultEntry {
+  s.DisplayName = &v
+  return s
+}
+
+func (s *SearchResultEntry) SetType(v string) *SearchResultEntry {
+  s.Type = &v
+  return s
+}
+
+func (s *SearchResultEntry) SetAspects(v map[string]*string) *SearchResultEntry {
+  s.Aspects = v
+  return s
+}
+
+func (s *SearchResultEntry) SetCreateTime(v string) *SearchResultEntry {
+  s.CreateTime = &v
+  return s
+}
+
+func (s *SearchResultEntry) SetLastModifiedTime(v string) *SearchResultEntry {
+  s.LastModifiedTime = &v
+  return s
+}
+
+func (s *SearchResultEntry) SetDescription(v string) *SearchResultEntry {
+  s.Description = &v
+  return s
+}
+
+type SearchResponse struct {
+  Entries []*SearchResultEntry `json:"entries,omitempty" xml:"entries,omitempty" type:"Repeated"`
+  NextPageToken *string `json:"nextPageToken,omitempty" xml:"nextPageToken,omitempty"`
+}
+
+func (s SearchResponse) String() string {
+  return tea.Prettify(s)
+}
+
+func (s SearchResponse) GoString() string {
+  return s.String()
+}
+
+func (s *SearchResponse) SetEntries(v []*SearchResultEntry) *SearchResponse {
+  s.Entries = v
+  return s
+}
+
+func (s *SearchResponse) SetNextPageToken(v string) *SearchResponse {
   s.NextPageToken = &v
   return s
 }
@@ -3180,6 +3281,35 @@ func (client *Client) SetModelPolicy (projectId *string, schemaName *string, mod
   query["method"] = tea.String("setPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(policy, tea.String("POST"), path, query, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+func (client *Client) Search (namespaceId *string, query *string, pageSize *int, pageToken *string, orderBy *string) (_result *SearchResponse, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespaceId) + ":search")
+  params := make(map[string]*string)
+  if !tea.BoolValue(util.IsUnset(pageSize)) {
+    params["pageSize"] = mcutil.ToString(pageSize)
+  }
+
+  if !tea.BoolValue(util.IsUnset(pageToken)) {
+    params["pageToken"] = pageToken
+  }
+
+  if !tea.BoolValue(util.IsUnset(query)) {
+    params["query"] = mcutil.ToString(query)
+  }
+
+  if !tea.BoolValue(util.IsUnset(orderBy)) {
+    params["orderBy"] = mcutil.ToString(orderBy)
+  }
+
+  _result = &SearchResponse{}
+  _body, _err := client.RequestWithModel(&SearchResponse{}, tea.String("POST"), path, params, runtime)
   if _err != nil {
     return _result, _err
   }

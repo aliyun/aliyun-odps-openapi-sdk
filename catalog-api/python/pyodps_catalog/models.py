@@ -1921,6 +1921,7 @@ class DataScanProperties(TeaModel):
         update_policy: str = None,
         sync_remove: bool = None,
         auto_commit: bool = None,
+        inventory_location: str = None,
     ):
         # AUTO/PARQUET/ORC/JSON/CSV。只爬取对应属性的数据。若指定，则忽略其他类型的文件。auto为不指定属性自动探测。
         self.format_filter = format_filter
@@ -1938,6 +1939,8 @@ class DataScanProperties(TeaModel):
         self.sync_remove = sync_remove
         # false代表爬取任务只输出结果，不提交ddl
         self.auto_commit = auto_commit
+        # 指定 OSS Inventory 日志的存储位置，用于增量扫描功能
+        self.inventory_location = inventory_location
 
     def validate(self):
         pass
@@ -1964,6 +1967,8 @@ class DataScanProperties(TeaModel):
             result['syncRemove'] = self.sync_remove
         if self.auto_commit is not None:
             result['autoCommit'] = self.auto_commit
+        if self.inventory_location is not None:
+            result['inventoryLocation'] = self.inventory_location
         return result
 
     def from_map(self, m: dict = None):
@@ -1984,6 +1989,8 @@ class DataScanProperties(TeaModel):
             self.sync_remove = m.get('syncRemove')
         if m.get('autoCommit') is not None:
             self.auto_commit = m.get('autoCommit')
+        if m.get('inventoryLocation') is not None:
+            self.inventory_location = m.get('inventoryLocation')
         return self
 
 
@@ -2001,6 +2008,7 @@ class DataScan(TeaModel):
         creation_time: int = None,
         last_modified_time: int = None,
         last_triggered_time: int = None,
+        last_successful_schedule_time: int = None,
         last_triggered_by: str = None,
         scheduling_status: str = None,
         source: DataScanSource = None,
@@ -2032,6 +2040,8 @@ class DataScan(TeaModel):
         self.last_modified_time = last_modified_time
         # 爬取任务上次触发的时间（开始调度时间），UTC timestamp。未触发过默认值为 0
         self.last_triggered_time = last_triggered_time
+        # 最近一次成功的 DatascanJob 的执行时间。 默认值为 0
+        self.last_successful_schedule_time = last_successful_schedule_time
         # 触发当前调度的来源；具体用户或调度器
         self.last_triggered_by = last_triggered_by
         # dataScan 对象的调度状态。包含 IDLE/IMMEDIATE/PENDING/SCHEDULING 四种状态。dataScan 初始化状态为 IDLE，如果创建后立刻执行，设置为 IMMEDIATE
@@ -2085,6 +2095,8 @@ class DataScan(TeaModel):
             result['lastModifiedTime'] = self.last_modified_time
         if self.last_triggered_time is not None:
             result['lastTriggeredTime'] = self.last_triggered_time
+        if self.last_successful_schedule_time is not None:
+            result['lastSuccessfulScheduleTime'] = self.last_successful_schedule_time
         if self.last_triggered_by is not None:
             result['lastTriggeredBy'] = self.last_triggered_by
         if self.scheduling_status is not None:
@@ -2127,6 +2139,8 @@ class DataScan(TeaModel):
             self.last_modified_time = m.get('lastModifiedTime')
         if m.get('lastTriggeredTime') is not None:
             self.last_triggered_time = m.get('lastTriggeredTime')
+        if m.get('lastSuccessfulScheduleTime') is not None:
+            self.last_successful_schedule_time = m.get('lastSuccessfulScheduleTime')
         if m.get('lastTriggeredBy') is not None:
             self.last_triggered_by = m.get('lastTriggeredBy')
         if m.get('schedulingStatus') is not None:
@@ -2704,6 +2718,120 @@ class ListModelVersionsResponse(TeaModel):
             for k in m.get('models'):
                 temp_model = Model()
                 self.models.append(temp_model.from_map(k))
+        if m.get('nextPageToken') is not None:
+            self.next_page_token = m.get('nextPageToken')
+        return self
+
+
+class SearchResultEntry(TeaModel):
+    """
+    ==================================== Search ====================================\
+    """
+    def __init__(
+        self,
+        name: str = None,
+        display_name: str = None,
+        type: str = None,
+        aspects: Dict[str, str] = None,
+        create_time: str = None,
+        last_modified_time: str = None,
+        description: str = None,
+    ):
+        # 实体的完整路径。e.g., projects/{projectId}/schemas/{schemaName}/tables/{tableName}
+        self.name = name
+        # 实体的名称
+        self.display_name = display_name
+        # 实体的类型，例如 TABLE、RESOURCE、SCHEMA 等
+        self.type = type
+        # 实体的其他信息
+        self.aspects = aspects
+        # 实体的创建时间（毫秒）
+        self.create_time = create_time
+        # 实体的修改时间（毫秒）
+        self.last_modified_time = last_modified_time
+        # 实体的描述
+        self.description = description
+
+    def validate(self):
+        pass
+
+    def to_map(self):
+        _map = super().to_map()
+        if _map is not None:
+            return _map
+
+        result = dict()
+        if self.name is not None:
+            result['name'] = self.name
+        if self.display_name is not None:
+            result['displayName'] = self.display_name
+        if self.type is not None:
+            result['type'] = self.type
+        if self.aspects is not None:
+            result['aspects'] = self.aspects
+        if self.create_time is not None:
+            result['createTime'] = self.create_time
+        if self.last_modified_time is not None:
+            result['lastModifiedTime'] = self.last_modified_time
+        if self.description is not None:
+            result['description'] = self.description
+        return result
+
+    def from_map(self, m: dict = None):
+        m = m or dict()
+        if m.get('name') is not None:
+            self.name = m.get('name')
+        if m.get('displayName') is not None:
+            self.display_name = m.get('displayName')
+        if m.get('type') is not None:
+            self.type = m.get('type')
+        if m.get('aspects') is not None:
+            self.aspects = m.get('aspects')
+        if m.get('createTime') is not None:
+            self.create_time = m.get('createTime')
+        if m.get('lastModifiedTime') is not None:
+            self.last_modified_time = m.get('lastModifiedTime')
+        if m.get('description') is not None:
+            self.description = m.get('description')
+        return self
+
+
+class SearchResponse(TeaModel):
+    def __init__(
+        self,
+        entries: List[SearchResultEntry] = None,
+        next_page_token: str = None,
+    ):
+        self.entries = entries
+        self.next_page_token = next_page_token
+
+    def validate(self):
+        if self.entries:
+            for k in self.entries:
+                if k:
+                    k.validate()
+
+    def to_map(self):
+        _map = super().to_map()
+        if _map is not None:
+            return _map
+
+        result = dict()
+        result['entries'] = []
+        if self.entries is not None:
+            for k in self.entries:
+                result['entries'].append(k.to_map() if k else None)
+        if self.next_page_token is not None:
+            result['nextPageToken'] = self.next_page_token
+        return result
+
+    def from_map(self, m: dict = None):
+        m = m or dict()
+        self.entries = []
+        if m.get('entries') is not None:
+            for k in m.get('entries'):
+                temp_model = SearchResultEntry()
+                self.entries.append(temp_model.from_map(k))
         if m.get('nextPageToken') is not None:
             self.next_page_token = m.get('nextPageToken')
         return self

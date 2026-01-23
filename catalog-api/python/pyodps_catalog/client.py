@@ -2237,3 +2237,51 @@ class Client(OpenApiClient):
             catalog_api_models.Policy(),
             await self.request_with_model_async(policy, 'POST', path, query, runtime)
         )
+
+    def search(
+        self,
+        namespace_id: str,
+        query: str,
+        page_size: int,
+        page_token: str,
+        order_by: str,
+    ) -> catalog_api_models.SearchResponse:
+        runtime = util_models.RuntimeOptions()
+        path = f'/api/catalog/v1alpha/namespaces/{namespace_id}:search'
+        params = {}
+        if not UtilClient.is_unset(page_size):
+            params['pageSize'] = McUtilClient.to_string(page_size)
+        if not UtilClient.is_unset(page_token):
+            params['pageToken'] = page_token
+        if not UtilClient.is_unset(query):
+            params['query'] = McUtilClient.to_string(query)
+        if not UtilClient.is_unset(order_by):
+            params['orderBy'] = McUtilClient.to_string(order_by)
+        return TeaCore.from_map(
+            catalog_api_models.SearchResponse(),
+            self.request_with_model(catalog_api_models.SearchResponse(), 'POST', path, params, runtime)
+        )
+
+    async def search_async(
+        self,
+        namespace_id: str,
+        query: str,
+        page_size: int,
+        page_token: str,
+        order_by: str,
+    ) -> catalog_api_models.SearchResponse:
+        runtime = util_models.RuntimeOptions()
+        path = f'/api/catalog/v1alpha/namespaces/{namespace_id}:search'
+        params = {}
+        if not UtilClient.is_unset(page_size):
+            params['pageSize'] = McUtilClient.to_string(page_size)
+        if not UtilClient.is_unset(page_token):
+            params['pageToken'] = page_token
+        if not UtilClient.is_unset(query):
+            params['query'] = McUtilClient.to_string(query)
+        if not UtilClient.is_unset(order_by):
+            params['orderBy'] = McUtilClient.to_string(order_by)
+        return TeaCore.from_map(
+            catalog_api_models.SearchResponse(),
+            await self.request_with_model_async(catalog_api_models.SearchResponse(), 'POST', path, params, runtime)
+        )

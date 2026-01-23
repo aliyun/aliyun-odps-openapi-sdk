@@ -24,7 +24,7 @@ from setuptools import setup, find_packages
 """
 setup module for maxcompute_tea_openapi.
 
-Created on 27/10/2025
+Created on 23/01/2026
 
 @author: Alibaba Cloud MaxCompute Team
 """

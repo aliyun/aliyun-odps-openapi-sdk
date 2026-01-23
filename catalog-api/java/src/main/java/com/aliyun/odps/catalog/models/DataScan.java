@@ -71,6 +71,12 @@ public class DataScan extends TeaModel {
     public Long lastTriggeredTime;
 
     /**
+     * <p>最近一次成功的 DatascanJob 的执行时间。 默认值为 0</p>
+     */
+    @NameInMap("lastSuccessfulScheduleTime")
+    public Long lastSuccessfulScheduleTime;
+
+    /**
      * <p>触发当前调度的来源；具体用户或调度器</p>
      */
     @NameInMap("lastTriggeredBy")
@@ -209,6 +215,14 @@ public class DataScan extends TeaModel {
     }
     public Long getLastTriggeredTime() {
         return this.lastTriggeredTime;
+    }
+
+    public DataScan setLastSuccessfulScheduleTime(Long lastSuccessfulScheduleTime) {
+        this.lastSuccessfulScheduleTime = lastSuccessfulScheduleTime;
+        return this;
+    }
+    public Long getLastSuccessfulScheduleTime() {
+        return this.lastSuccessfulScheduleTime;
     }
 
     public DataScan setLastTriggeredBy(String lastTriggeredBy) {

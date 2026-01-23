@@ -52,6 +52,12 @@ public class DataScanProperties extends TeaModel {
     @NameInMap("autoCommit")
     public Boolean autoCommit;
 
+    /**
+     * <p>指定 OSS Inventory 日志的存储位置，用于增量扫描功能</p>
+     */
+    @NameInMap("inventoryLocation")
+    public String inventoryLocation;
+
     public static DataScanProperties build(java.util.Map<String, ?> map) throws Exception {
         DataScanProperties self = new DataScanProperties();
         return TeaModel.build(map, self);
@@ -119,6 +125,14 @@ public class DataScanProperties extends TeaModel {
     }
     public Boolean getAutoCommit() {
         return this.autoCommit;
+    }
+
+    public DataScanProperties setInventoryLocation(String inventoryLocation) {
+        this.inventoryLocation = inventoryLocation;
+        return this;
+    }
+    public String getInventoryLocation() {
+        return this.inventoryLocation;
     }
 
 }
