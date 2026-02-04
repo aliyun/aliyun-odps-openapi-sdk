@@ -2246,6 +2246,38 @@ class Client(OpenApiClient):
         page_token: str,
         order_by: str,
     ) -> catalog_api_models.SearchResponse:
+        """
+        搜索指定 namespace 下的各种实体。
+        
+        @param namespace_id: 主账号ID，在该主账号范围内执行搜索。
+        
+        @param query: 搜索查询串，由 1 个到多个查询条件组成，查询条件之间用逗号 `,` 分隔。
+        - 语法示例：`name:foo,type=TABLE,region=cn-hangzhou`、`description:bar,type=RESOURCE,project=proj`
+        - 查询条件列表：
+        1. `name:foo`：将 `foo` 作为子字符串与实体名称匹配。
+        2. `description:bar`：将 `bar` 作为子字符串与实体描述匹配。
+        3. `type=TABLE`：匹配特定类型的实体（必选）。当前支持 `TABLE`、`RESOURCE`、`SCHEMA`。
+        4. `project=proj`：仅搜索指定单个 project 下的查询条件。要求调用方拥有该 project 的 `SearchProject` 权限。
+        5. `project=(proj1|proj2|proj3)`：搜索多个 project 下的实体（最多 512 个）。要求调用方同时拥有这些 projects 的 `SearchProject` 权限。
+        6. `region=region_id`：搜索指定 region 的 project 下的实体。
+        - 约束：
+        - 查询条件 3 必选。
+        - 查询条件 4 与查询条件 5 不能同时存在。
+        - 查询条件 6 不能与查询条件 4 或 5 同时存在。
+        
+        @param page_size: 每页返回结果条数。
+        - 必须 > 0
+        - 最大 100
+        
+        @param page_token: 翻页 token；用于从上一次响应的 token 继续获取下一页。
+        
+        @param order_by: 结果排序方式。可取值包括：
+        - `default`：内部存储顺序（默认）
+        - `create_time asc`：创建时间正序
+        - `create_time desc`：创建时间倒序
+        - `last_modified_time asc`：最近修改时间正序
+        - `last_modified_time desc`：最近修改时间倒序
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace_id}:search'
         params = {}
@@ -2270,6 +2302,38 @@ class Client(OpenApiClient):
         page_token: str,
         order_by: str,
     ) -> catalog_api_models.SearchResponse:
+        """
+        搜索指定 namespace 下的各种实体。
+        
+        @param namespace_id: 主账号ID，在该主账号范围内执行搜索。
+        
+        @param query: 搜索查询串，由 1 个到多个查询条件组成，查询条件之间用逗号 `,` 分隔。
+        - 语法示例：`name:foo,type=TABLE,region=cn-hangzhou`、`description:bar,type=RESOURCE,project=proj`
+        - 查询条件列表：
+        1. `name:foo`：将 `foo` 作为子字符串与实体名称匹配。
+        2. `description:bar`：将 `bar` 作为子字符串与实体描述匹配。
+        3. `type=TABLE`：匹配特定类型的实体（必选）。当前支持 `TABLE`、`RESOURCE`、`SCHEMA`。
+        4. `project=proj`：仅搜索指定单个 project 下的查询条件。要求调用方拥有该 project 的 `SearchProject` 权限。
+        5. `project=(proj1|proj2|proj3)`：搜索多个 project 下的实体（最多 512 个）。要求调用方同时拥有这些 projects 的 `SearchProject` 权限。
+        6. `region=region_id`：搜索指定 region 的 project 下的实体。
+        - 约束：
+        - 查询条件 3 必选。
+        - 查询条件 4 与查询条件 5 不能同时存在。
+        - 查询条件 6 不能与查询条件 4 或 5 同时存在。
+        
+        @param page_size: 每页返回结果条数。
+        - 必须 > 0
+        - 最大 100
+        
+        @param page_token: 翻页 token；用于从上一次响应的 token 继续获取下一页。
+        
+        @param order_by: 结果排序方式。可取值包括：
+        - `default`：内部存储顺序（默认）
+        - `create_time asc`：创建时间正序
+        - `create_time desc`：创建时间倒序
+        - `last_modified_time asc`：最近修改时间正序
+        - `last_modified_time desc`：最近修改时间倒序
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace_id}:search'
         params = {}
