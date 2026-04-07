@@ -106,7 +106,18 @@ public class Table extends TeaModel {
     @NameInMap("externalDataConfiguration")
     public ExternalDataConfiguration externalDataConfiguration;
 
-    // 新增字段
+    /**
+     * <p>managed lake table 配置</p>
+     */
+    @NameInMap("maxLakeConfiguration")
+    public MaxLakeConfiguration maxLakeConfiguration;
+
+    /**
+     * <p>external catalog 信息</p>
+     */
+    @NameInMap("externalCatalogTableOptions")
+    public ExternalCatalogTableOptions externalCatalogTableOptions;
+
     public static Table build(java.util.Map<String, ?> map) throws Exception {
         Table self = new Table();
         return TeaModel.build(map, self);
@@ -246,6 +257,22 @@ public class Table extends TeaModel {
     }
     public ExternalDataConfiguration getExternalDataConfiguration() {
         return this.externalDataConfiguration;
+    }
+
+    public Table setMaxLakeConfiguration(MaxLakeConfiguration maxLakeConfiguration) {
+        this.maxLakeConfiguration = maxLakeConfiguration;
+        return this;
+    }
+    public MaxLakeConfiguration getMaxLakeConfiguration() {
+        return this.maxLakeConfiguration;
+    }
+
+    public Table setExternalCatalogTableOptions(ExternalCatalogTableOptions externalCatalogTableOptions) {
+        this.externalCatalogTableOptions = externalCatalogTableOptions;
+        return this;
+    }
+    public ExternalCatalogTableOptions getExternalCatalogTableOptions() {
+        return this.externalCatalogTableOptions;
     }
 
 }

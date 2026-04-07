@@ -101,6 +101,16 @@ model ExternalDataConfiguration {
   connection?: string(name='connection', description='关联的 Connection ID')
 }
 
+model MaxLakeConfiguration {
+  storageUri?: string(name='storageUri', description='表所在的 URI'),
+  tableFormat?: string(name='tableFormat', description='支持格式：ICEBERG'),
+  connection?: string(name='connection', description='关联的 Connection ID')
+}
+
+model ExternalCatalogTableOptions {
+  parameters?: map[string]string(name='parameters', description='external catalog 属性')
+}
+
 
 model Table {
   etag?: string(name='etag', description='用于 read-modify-write 一致性校验。', example=''),
@@ -119,7 +129,9 @@ model Table {
   lastModifiedTime?: string(name='lastModifiedTime', description='表的修改时间（毫秒）。仅输出。'),
   expirationOptions?: ExpirationOptions(name='expirationOptions', description='可选。表的过期时间配置。'),
   labels?: map[string]string(name='labels', description='可选。表上的标签。'),
-  externalDataConfiguration?: ExternalDataConfiguration(name='externalDataConfiguration', description='外部表配置') // 新增字段
+  externalDataConfiguration?: ExternalDataConfiguration(name='externalDataConfiguration', description='外部表配置'),
+  maxLakeConfiguration?: MaxLakeConfiguration(name='maxLakeConfiguration', description='managed lake table 配置'),
+  externalCatalogTableOptions?: ExternalCatalogTableOptions(name='externalCatalogTableOptions', description='external catalog 信息')
 }
 
 

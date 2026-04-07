@@ -439,6 +439,56 @@ func (s *ExternalDataConfiguration) SetConnection(v string) *ExternalDataConfigu
   return s
 }
 
+type MaxLakeConfiguration struct {
+  // 表所在的 URI
+  StorageUri *string `json:"storageUri,omitempty" xml:"storageUri,omitempty"`
+  // 支持格式：ICEBERG
+  TableFormat *string `json:"tableFormat,omitempty" xml:"tableFormat,omitempty"`
+  // 关联的 Connection ID
+  Connection *string `json:"connection,omitempty" xml:"connection,omitempty"`
+}
+
+func (s MaxLakeConfiguration) String() string {
+  return tea.Prettify(s)
+}
+
+func (s MaxLakeConfiguration) GoString() string {
+  return s.String()
+}
+
+func (s *MaxLakeConfiguration) SetStorageUri(v string) *MaxLakeConfiguration {
+  s.StorageUri = &v
+  return s
+}
+
+func (s *MaxLakeConfiguration) SetTableFormat(v string) *MaxLakeConfiguration {
+  s.TableFormat = &v
+  return s
+}
+
+func (s *MaxLakeConfiguration) SetConnection(v string) *MaxLakeConfiguration {
+  s.Connection = &v
+  return s
+}
+
+type ExternalCatalogTableOptions struct {
+  // external catalog 属性
+  Parameters map[string]*string `json:"parameters,omitempty" xml:"parameters,omitempty"`
+}
+
+func (s ExternalCatalogTableOptions) String() string {
+  return tea.Prettify(s)
+}
+
+func (s ExternalCatalogTableOptions) GoString() string {
+  return s.String()
+}
+
+func (s *ExternalCatalogTableOptions) SetParameters(v map[string]*string) *ExternalCatalogTableOptions {
+  s.Parameters = v
+  return s
+}
+
 type Table struct {
   // 用于 read-modify-write 一致性校验。
   Etag *string `json:"etag,omitempty" xml:"etag,omitempty"`
@@ -474,7 +524,10 @@ type Table struct {
   Labels map[string]*string `json:"labels,omitempty" xml:"labels,omitempty"`
   // 外部表配置
   ExternalDataConfiguration *ExternalDataConfiguration `json:"externalDataConfiguration,omitempty" xml:"externalDataConfiguration,omitempty"`
-  // 新增字段
+  // managed lake table 配置
+  MaxLakeConfiguration *MaxLakeConfiguration `json:"maxLakeConfiguration,omitempty" xml:"maxLakeConfiguration,omitempty"`
+  // external catalog 信息
+  ExternalCatalogTableOptions *ExternalCatalogTableOptions `json:"externalCatalogTableOptions,omitempty" xml:"externalCatalogTableOptions,omitempty"`
 }
 
 func (s Table) String() string {
@@ -567,6 +620,16 @@ func (s *Table) SetLabels(v map[string]*string) *Table {
 
 func (s *Table) SetExternalDataConfiguration(v *ExternalDataConfiguration) *Table {
   s.ExternalDataConfiguration = v
+  return s
+}
+
+func (s *Table) SetMaxLakeConfiguration(v *MaxLakeConfiguration) *Table {
+  s.MaxLakeConfiguration = v
+  return s
+}
+
+func (s *Table) SetExternalCatalogTableOptions(v *ExternalCatalogTableOptions) *Table {
+  s.ExternalCatalogTableOptions = v
   return s
 }
 

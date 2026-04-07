@@ -622,6 +622,76 @@ class ExternalDataConfiguration(TeaModel):
         return self
 
 
+class MaxLakeConfiguration(TeaModel):
+    def __init__(
+        self,
+        storage_uri: str = None,
+        table_format: str = None,
+        connection: str = None,
+    ):
+        # 表所在的 URI
+        self.storage_uri = storage_uri
+        # 支持格式：ICEBERG
+        self.table_format = table_format
+        # 关联的 Connection ID
+        self.connection = connection
+
+    def validate(self):
+        pass
+
+    def to_map(self):
+        _map = super().to_map()
+        if _map is not None:
+            return _map
+
+        result = dict()
+        if self.storage_uri is not None:
+            result['storageUri'] = self.storage_uri
+        if self.table_format is not None:
+            result['tableFormat'] = self.table_format
+        if self.connection is not None:
+            result['connection'] = self.connection
+        return result
+
+    def from_map(self, m: dict = None):
+        m = m or dict()
+        if m.get('storageUri') is not None:
+            self.storage_uri = m.get('storageUri')
+        if m.get('tableFormat') is not None:
+            self.table_format = m.get('tableFormat')
+        if m.get('connection') is not None:
+            self.connection = m.get('connection')
+        return self
+
+
+class ExternalCatalogTableOptions(TeaModel):
+    def __init__(
+        self,
+        parameters: Dict[str, str] = None,
+    ):
+        # external catalog 属性
+        self.parameters = parameters
+
+    def validate(self):
+        pass
+
+    def to_map(self):
+        _map = super().to_map()
+        if _map is not None:
+            return _map
+
+        result = dict()
+        if self.parameters is not None:
+            result['parameters'] = self.parameters
+        return result
+
+    def from_map(self, m: dict = None):
+        m = m or dict()
+        if m.get('parameters') is not None:
+            self.parameters = m.get('parameters')
+        return self
+
+
 class Table(TeaModel):
     def __init__(
         self,
@@ -642,6 +712,8 @@ class Table(TeaModel):
         expiration_options: ExpirationOptions = None,
         labels: Dict[str, str] = None,
         external_data_configuration: ExternalDataConfiguration = None,
+        max_lake_configuration: MaxLakeConfiguration = None,
+        external_catalog_table_options: ExternalCatalogTableOptions = None,
     ):
         # 用于 read-modify-write 一致性校验。
         self.etag = etag
@@ -677,6 +749,10 @@ class Table(TeaModel):
         self.labels = labels
         # 外部表配置
         self.external_data_configuration = external_data_configuration
+        # managed lake table 配置
+        self.max_lake_configuration = max_lake_configuration
+        # external catalog 信息
+        self.external_catalog_table_options = external_catalog_table_options
 
     def validate(self):
         if self.table_schema:
@@ -693,6 +769,10 @@ class Table(TeaModel):
             self.expiration_options.validate()
         if self.external_data_configuration:
             self.external_data_configuration.validate()
+        if self.max_lake_configuration:
+            self.max_lake_configuration.validate()
+        if self.external_catalog_table_options:
+            self.external_catalog_table_options.validate()
 
     def to_map(self):
         _map = super().to_map()
@@ -734,6 +814,10 @@ class Table(TeaModel):
             result['labels'] = self.labels
         if self.external_data_configuration is not None:
             result['externalDataConfiguration'] = self.external_data_configuration.to_map()
+        if self.max_lake_configuration is not None:
+            result['maxLakeConfiguration'] = self.max_lake_configuration.to_map()
+        if self.external_catalog_table_options is not None:
+            result['externalCatalogTableOptions'] = self.external_catalog_table_options.to_map()
         return result
 
     def from_map(self, m: dict = None):
@@ -779,6 +863,12 @@ class Table(TeaModel):
         if m.get('externalDataConfiguration') is not None:
             temp_model = ExternalDataConfiguration()
             self.external_data_configuration = temp_model.from_map(m['externalDataConfiguration'])
+        if m.get('maxLakeConfiguration') is not None:
+            temp_model = MaxLakeConfiguration()
+            self.max_lake_configuration = temp_model.from_map(m['maxLakeConfiguration'])
+        if m.get('externalCatalogTableOptions') is not None:
+            temp_model = ExternalCatalogTableOptions()
+            self.external_catalog_table_options = temp_model.from_map(m['externalCatalogTableOptions'])
         return self
 
 
