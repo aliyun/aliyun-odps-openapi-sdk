@@ -2349,3 +2349,35 @@ class Client(OpenApiClient):
             catalog_api_models.SearchResponse(),
             await self.request_with_model_async(catalog_api_models.SearchResponse(), 'POST', path, params, runtime)
         )
+
+    def get_data_token(
+        self,
+        table: catalog_api_models.Table,
+        duration: int,
+    ) -> catalog_api_models.DataToken:
+        runtime = util_models.RuntimeOptions()
+        path = self.get_table_path(table)
+        full_path = f'{path}:getDataToken'
+        params = {}
+        if not UtilClient.is_unset(duration):
+            params['duration'] = McUtilClient.to_string(duration)
+        return TeaCore.from_map(
+            catalog_api_models.DataToken(),
+            self.request_with_model(catalog_api_models.Policy(), 'POST', full_path, params, runtime)
+        )
+
+    async def get_data_token_async(
+        self,
+        table: catalog_api_models.Table,
+        duration: int,
+    ) -> catalog_api_models.DataToken:
+        runtime = util_models.RuntimeOptions()
+        path = self.get_table_path(table)
+        full_path = f'{path}:getDataToken'
+        params = {}
+        if not UtilClient.is_unset(duration):
+            params['duration'] = McUtilClient.to_string(duration)
+        return TeaCore.from_map(
+            catalog_api_models.DataToken(),
+            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', full_path, params, runtime)
+        )

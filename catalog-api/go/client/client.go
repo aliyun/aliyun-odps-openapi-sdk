@@ -2216,6 +2216,45 @@ func (s *SearchResponse) SetNextPageToken(v string) *SearchResponse {
   return s
 }
 
+type DataToken struct {
+  // 格式版本，目前为 V1
+  Version *string `json:"version,omitempty" xml:"version,omitempty"`
+  // 类型，目前只支持 STS
+  Type *string `json:"type,omitempty" xml:"type,omitempty"`
+  // Token 的内容，base64 编码
+  Value *string `json:"value,omitempty" xml:"value,omitempty"`
+  // 过期时间
+  Expiration *string `json:"expiration,omitempty" xml:"expiration,omitempty"`
+}
+
+func (s DataToken) String() string {
+  return tea.Prettify(s)
+}
+
+func (s DataToken) GoString() string {
+  return s.String()
+}
+
+func (s *DataToken) SetVersion(v string) *DataToken {
+  s.Version = &v
+  return s
+}
+
+func (s *DataToken) SetType(v string) *DataToken {
+  s.Type = &v
+  return s
+}
+
+func (s *DataToken) SetValue(v string) *DataToken {
+  s.Value = &v
+  return s
+}
+
+func (s *DataToken) SetExpiration(v string) *DataToken {
+  s.Expiration = &v
+  return s
+}
+
 type Client struct {
   openapi.Client
 }
@@ -3409,6 +3448,24 @@ func (client *Client) Search (namespaceId *string, query *string, pageSize *int,
 
   _result = &SearchResponse{}
   _body, _err := client.RequestWithModel(&SearchResponse{}, tea.String("POST"), path, params, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+func (client *Client) GetDataToken (table *Table, duration *int) (_result *DataToken, _err error) {
+  runtime := &util.RuntimeOptions{}
+  path := client.GetTablePath(table)
+  fullPath := tea.String(tea.StringValue(path) + ":getDataToken")
+  params := make(map[string]*string)
+  if !tea.BoolValue(util.IsUnset(duration)) {
+    params["duration"] = mcutil.ToString(duration)
+  }
+
+  _result = &DataToken{}
+  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), fullPath, params, runtime)
   if _err != nil {
     return _result, _err
   }

@@ -2927,3 +2927,52 @@ class SearchResponse(TeaModel):
         return self
 
 
+class DataToken(TeaModel):
+    def __init__(
+        self,
+        version: str = None,
+        type: str = None,
+        value: str = None,
+        expiration: str = None,
+    ):
+        # 格式版本，目前为 V1
+        self.version = version
+        # 类型，目前只支持 STS
+        self.type = type
+        # Token 的内容，base64 编码
+        self.value = value
+        # 过期时间
+        self.expiration = expiration
+
+    def validate(self):
+        pass
+
+    def to_map(self):
+        _map = super().to_map()
+        if _map is not None:
+            return _map
+
+        result = dict()
+        if self.version is not None:
+            result['version'] = self.version
+        if self.type is not None:
+            result['type'] = self.type
+        if self.value is not None:
+            result['value'] = self.value
+        if self.expiration is not None:
+            result['expiration'] = self.expiration
+        return result
+
+    def from_map(self, m: dict = None):
+        m = m or dict()
+        if m.get('version') is not None:
+            self.version = m.get('version')
+        if m.get('type') is not None:
+            self.type = m.get('type')
+        if m.get('value') is not None:
+            self.value = m.get('value')
+        if m.get('expiration') is not None:
+            self.expiration = m.get('expiration')
+        return self
+
+

@@ -1181,3 +1181,21 @@ async function search(namespaceId: string, query: string, pageSize: integer, pag
 
   return requestWithModel(new SearchResponse{}, 'POST', path, params, runtime);
 }
+
+model DataToken = {
+  version?: string(name='version', description='格式版本，目前为 V1'),
+  type?: string(name='type', description='类型，目前只支持 STS'),
+  value?: string(name='value', description='Token 的内容，base64 编码'),
+  expiration?: string(name='expiration', description='过期时间')
+}
+
+async function getDataToken(table: Table, duration: integer): DataToken {
+  var runtime = new Util.RuntimeOptions{};
+  var path = getTablePath(table);
+  var fullPath = `${path}:getDataToken`;
+  var params: map[string]string = {};
+  if (!Util.isUnset(duration)) {
+    params["duration"] = McUtil.toString(duration);
+  }
+  return requestWithModel(new Policy{}, 'POST', fullPath, params, runtime);
+}

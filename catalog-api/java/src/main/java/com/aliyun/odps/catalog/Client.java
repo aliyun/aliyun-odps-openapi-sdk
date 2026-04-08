@@ -750,4 +750,16 @@ public class Client extends com.aliyun.odps.Client {
 
         return TeaModel.toModel(this.requestWithModel(new SearchResponse(), "POST", path, params, runtime), new SearchResponse());
     }
+
+    public DataToken getDataToken(Table table, Integer duration) throws Exception {
+        com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+        String path = this.getTablePath(table);
+        String fullPath = "" + path + ":getDataToken";
+        java.util.Map<String, String> params = new java.util.HashMap<>();
+        if (!com.aliyun.teautil.Common.isUnset(duration)) {
+            params.put("duration", com.aliyun.odps.utils.TeaUtils.toString(duration));
+        }
+
+        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", fullPath, params, runtime), new DataToken());
+    }
 }
