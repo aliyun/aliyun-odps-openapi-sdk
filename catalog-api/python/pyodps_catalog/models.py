@@ -760,6 +760,7 @@ class Table(TeaModel):
         self.max_lake_configuration = max_lake_configuration
         # external catalog 信息
         self.external_catalog_table_options = external_catalog_table_options
+        # 限流：每用户每秒最多 10 次请求
 
     def validate(self):
         if self.table_schema:
@@ -887,6 +888,7 @@ class ListTablesResponse(TeaModel):
     ):
         self.tables = tables
         self.next_page_token = next_page_token
+        # 限流：每用户每秒最多 10 次请求
 
     def validate(self):
         if self.tables:
@@ -930,6 +932,7 @@ class CloudResourceOptions(TeaModel):
         self.delegated_account = delegated_account
         # 授权给 MaxCompute 服务扮演的 RAM 角色 ARN。
         self.ram_role_arn = ram_role_arn
+        # 限流：每用户每秒最多 10 次请求
 
     def validate(self):
         pass
@@ -1512,6 +1515,7 @@ class ListDataPoliciesResponse(TeaModel):
         self.data_policies = data_policies
         # 分页标记。
         self.next_page_token = next_page_token
+        # 限流：每用户每秒最多 10 次请求
 
     def validate(self):
         if self.data_policies:
@@ -2410,6 +2414,7 @@ class ListDataScansResponse(TeaModel):
         self.next_page_token = next_page_token
         # 返回所有的 dataScans 列表。
         self.data_scans = data_scans
+        # 限流：每用户每秒最多 10 次请求
 
     def validate(self):
         if self.data_scans:
@@ -2999,6 +3004,7 @@ class DataToken(TeaModel):
         self.value = value
         # 过期时间
         self.expiration = expiration
+        # 限流：每用户每秒最多 100 次请求
 
     def validate(self):
         pass

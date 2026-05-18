@@ -21,6 +21,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Table:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Table(),
@@ -31,6 +34,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Table:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Table(),
@@ -41,6 +47,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
@@ -51,6 +60,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
@@ -61,6 +73,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Table:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Table(),
@@ -71,6 +86,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Table:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Table(),
@@ -81,6 +99,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Table:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Table(),
@@ -91,6 +112,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Table:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Table(),
@@ -104,6 +128,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListTablesResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/tables'
         query = {}
@@ -123,6 +150,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListTablesResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/tables'
         query = {}
@@ -140,6 +170,9 @@ class Client(OpenApiClient):
         table: catalog_api_models.Table,
         policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_table_path(table)}:setPolicy'
         query = {}
@@ -153,6 +186,9 @@ class Client(OpenApiClient):
         table: catalog_api_models.Table,
         policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_table_path(table)}:setPolicy'
         query = {}
@@ -165,6 +201,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_table_path(table)}:getPolicy'
         query = {}
@@ -177,6 +216,9 @@ class Client(OpenApiClient):
         self,
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_table_path(table)}:getPolicy'
         query = {}
@@ -208,6 +250,9 @@ class Client(OpenApiClient):
         namespace: str,
         connection: catalog_api_models.Connection,
     ) -> catalog_api_models.Connection:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/connections'
         return TeaCore.from_map(
@@ -220,6 +265,9 @@ class Client(OpenApiClient):
         namespace: str,
         connection: catalog_api_models.Connection,
     ) -> catalog_api_models.Connection:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/connections'
         return TeaCore.from_map(
@@ -233,6 +281,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListConnectionsResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/connections'
         query = {}
@@ -251,6 +302,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListConnectionsResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/connections'
         query = {}
@@ -268,6 +322,9 @@ class Client(OpenApiClient):
         namespace: str,
         connection_name: str,
     ) -> catalog_api_models.Connection:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_connection_path(namespace, connection_name)
         return TeaCore.from_map(
@@ -280,6 +337,9 @@ class Client(OpenApiClient):
         namespace: str,
         connection_name: str,
     ) -> catalog_api_models.Connection:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_connection_path(namespace, connection_name)
         return TeaCore.from_map(
@@ -294,6 +354,9 @@ class Client(OpenApiClient):
         connection: catalog_api_models.Connection,
         update_mask: str,
     ) -> catalog_api_models.Connection:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_connection_path(namespace, connection_name)
         query = {}
@@ -310,6 +373,9 @@ class Client(OpenApiClient):
         connection: catalog_api_models.Connection,
         update_mask: str,
     ) -> catalog_api_models.Connection:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_connection_path(namespace, connection_name)
         query = {}
@@ -324,6 +390,9 @@ class Client(OpenApiClient):
         namespace: str,
         connection_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_connection_path(namespace, connection_name)
         return TeaCore.from_map(
@@ -336,6 +405,9 @@ class Client(OpenApiClient):
         namespace: str,
         connection_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_connection_path(namespace, connection_name)
         return TeaCore.from_map(
@@ -349,6 +421,9 @@ class Client(OpenApiClient):
         connection_name: str,
         request: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_connection_path(namespace, connection_name)}:setPolicy'
         query = {}
@@ -363,6 +438,9 @@ class Client(OpenApiClient):
         connection_name: str,
         request: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_connection_path(namespace, connection_name)}:setPolicy'
         query = {}
@@ -376,6 +454,9 @@ class Client(OpenApiClient):
         namespace: str,
         connection_name: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_connection_path(namespace, connection_name)}:getPolicy'
         query = {}
@@ -389,6 +470,9 @@ class Client(OpenApiClient):
         namespace: str,
         connection_name: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_connection_path(namespace, connection_name)}:getPolicy'
         query = {}
@@ -421,6 +505,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Role:
         """
         Create role
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/roles'
@@ -436,6 +521,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Role:
         """
         Create role
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/roles'
@@ -451,6 +537,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.HttpResponse:
         """
         Delete role
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_role_path(namespace, role_name)
@@ -466,6 +553,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.HttpResponse:
         """
         Delete role
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_role_path(namespace, role_name)
@@ -482,6 +570,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Role:
         """
         Get role
+        限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_role_path(namespace, role_name)
@@ -501,6 +590,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Role:
         """
         Get role
+        限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_role_path(namespace, role_name)
@@ -522,6 +612,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.ListRolesResponse:
         """
         List roles
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/roles'
@@ -549,6 +640,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.ListRolesResponse:
         """
         List roles
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/roles'
@@ -575,6 +667,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Role:
         """
         Update role
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_role_path(namespace, role_name)
@@ -595,6 +688,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Role:
         """
         Update role
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_role_path(namespace, role_name)
@@ -614,6 +708,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Policy:
         """
         Set role policy
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_role_path(namespace, role_name)}:setPolicy'
@@ -631,6 +726,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Policy:
         """
         Set role policy
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_role_path(namespace, role_name)}:setPolicy'
@@ -647,6 +743,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Policy:
         """
         Get role policy
+        限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_role_path(namespace, role_name)}:getPolicy'
@@ -663,6 +760,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Policy:
         """
         Get role policy
+        限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_role_path(namespace, role_name)}:getPolicy'
@@ -697,6 +795,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Taxonomy:
         """
         Taxonomy operations
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/taxonomies'
@@ -712,6 +811,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Taxonomy:
         """
         Taxonomy operations
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/taxonomies'
@@ -725,6 +825,9 @@ class Client(OpenApiClient):
         namespace: str,
         taxonomy_id: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         return TeaCore.from_map(
@@ -737,6 +840,9 @@ class Client(OpenApiClient):
         namespace: str,
         taxonomy_id: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         return TeaCore.from_map(
@@ -749,6 +855,9 @@ class Client(OpenApiClient):
         namespace: str,
         taxonomy_id: str,
     ) -> catalog_api_models.Taxonomy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         return TeaCore.from_map(
@@ -761,6 +870,9 @@ class Client(OpenApiClient):
         namespace: str,
         taxonomy_id: str,
     ) -> catalog_api_models.Taxonomy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         return TeaCore.from_map(
@@ -774,6 +886,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListTaxonomiesResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/taxonomies'
         query = {}
@@ -792,6 +907,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListTaxonomiesResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace}/taxonomies'
         query = {}
@@ -811,6 +929,9 @@ class Client(OpenApiClient):
         taxonomy: catalog_api_models.Taxonomy,
         update_mask: str,
     ) -> catalog_api_models.Taxonomy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         query = {}
@@ -828,6 +949,9 @@ class Client(OpenApiClient):
         taxonomy: catalog_api_models.Taxonomy,
         update_mask: str,
     ) -> catalog_api_models.Taxonomy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         query = {}
@@ -844,6 +968,9 @@ class Client(OpenApiClient):
         taxonomy_id: str,
         policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}:setPolicy'
         query = {}
@@ -859,6 +986,9 @@ class Client(OpenApiClient):
         taxonomy_id: str,
         policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}:setPolicy'
         query = {}
@@ -873,6 +1003,9 @@ class Client(OpenApiClient):
         namespace: str,
         taxonomy_id: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}:getPolicy'
         query = {}
@@ -886,6 +1019,9 @@ class Client(OpenApiClient):
         namespace: str,
         taxonomy_id: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}:getPolicy'
         query = {}
@@ -902,6 +1038,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.PolicyTag:
         """
         PolicyTag operations
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}/policyTags'
@@ -918,6 +1055,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.PolicyTag:
         """
         PolicyTag operations
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}/policyTags'
@@ -932,6 +1070,9 @@ class Client(OpenApiClient):
         taxonomy_id: str,
         policy_tag_id: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         return TeaCore.from_map(
@@ -945,6 +1086,9 @@ class Client(OpenApiClient):
         taxonomy_id: str,
         policy_tag_id: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         return TeaCore.from_map(
@@ -958,6 +1102,9 @@ class Client(OpenApiClient):
         taxonomy_id: str,
         policy_tag_id: str,
     ) -> catalog_api_models.PolicyTag:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         return TeaCore.from_map(
@@ -971,6 +1118,9 @@ class Client(OpenApiClient):
         taxonomy_id: str,
         policy_tag_id: str,
     ) -> catalog_api_models.PolicyTag:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         return TeaCore.from_map(
@@ -985,6 +1135,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListPolicyTagsResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}/policyTags'
         query = {}
@@ -1004,6 +1157,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListPolicyTagsResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}/policyTags'
         query = {}
@@ -1024,6 +1180,9 @@ class Client(OpenApiClient):
         policy_tag: catalog_api_models.PolicyTag,
         update_mask: str,
     ) -> catalog_api_models.PolicyTag:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         query = {}
@@ -1042,6 +1201,9 @@ class Client(OpenApiClient):
         policy_tag: catalog_api_models.PolicyTag,
         update_mask: str,
     ) -> catalog_api_models.PolicyTag:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         query = {}
@@ -1059,6 +1221,9 @@ class Client(OpenApiClient):
         policy_tag_id: str,
         policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)}:setPolicy'
         query = {}
@@ -1074,6 +1239,9 @@ class Client(OpenApiClient):
         policy_tag_id: str,
         policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)}:setPolicy'
         query = {}
@@ -1088,6 +1256,9 @@ class Client(OpenApiClient):
         taxonomy_id: str,
         policy_tag_id: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)}:getPolicy'
         query = {}
@@ -1102,6 +1273,9 @@ class Client(OpenApiClient):
         taxonomy_id: str,
         policy_tag_id: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)}:getPolicy'
         query = {}
@@ -1115,6 +1289,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_policy: catalog_api_models.DataPolicy,
     ) -> catalog_api_models.DataPolicy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_policies_path(namespace)
         return TeaCore.from_map(
@@ -1127,6 +1304,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_policy: catalog_api_models.DataPolicy,
     ) -> catalog_api_models.DataPolicy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_policies_path(namespace)
         return TeaCore.from_map(
@@ -1139,6 +1319,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_policy_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_policy_path(namespace, data_policy_name)
         return TeaCore.from_map(
@@ -1151,6 +1334,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_policy_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_policy_path(namespace, data_policy_name)
         return TeaCore.from_map(
@@ -1163,6 +1349,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_policy_name: str,
     ) -> catalog_api_models.DataPolicy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_policy_path(namespace, data_policy_name)
         return TeaCore.from_map(
@@ -1175,6 +1364,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_policy_name: str,
     ) -> catalog_api_models.DataPolicy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_policy_path(namespace, data_policy_name)
         return TeaCore.from_map(
@@ -1188,6 +1380,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListDataPoliciesResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_policies_path(namespace)
         query = {}
@@ -1206,6 +1401,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListDataPoliciesResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_policies_path(namespace)
         query = {}
@@ -1224,6 +1422,9 @@ class Client(OpenApiClient):
         data_policy_name: str,
         request: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_data_policy_path(namespace, data_policy_name)}:setPolicy'
         query = {}
@@ -1238,6 +1439,9 @@ class Client(OpenApiClient):
         data_policy_name: str,
         request: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_data_policy_path(namespace, data_policy_name)}:setPolicy'
         query = {}
@@ -1251,6 +1455,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_policy_name: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_data_policy_path(namespace, data_policy_name)}:getPolicy'
         query = {}
@@ -1264,6 +1471,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_policy_name: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_data_policy_path(namespace, data_policy_name)}:getPolicy'
         query = {}
@@ -1308,6 +1518,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.ListProjectsResponse:
         """
         Methods
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         query = {}
@@ -1327,6 +1538,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.ListProjectsResponse:
         """
         Methods
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         query = {}
@@ -1343,6 +1555,9 @@ class Client(OpenApiClient):
         self,
         project_id: str,
     ) -> catalog_api_models.Project:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Project(),
@@ -1353,6 +1568,9 @@ class Client(OpenApiClient):
         self,
         project_id: str,
     ) -> catalog_api_models.Project:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Project(),
@@ -1364,6 +1582,9 @@ class Client(OpenApiClient):
         project_id: str,
         schema: catalog_api_models.Schema,
     ) -> catalog_api_models.Schema:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas'
         return TeaCore.from_map(
@@ -1376,6 +1597,9 @@ class Client(OpenApiClient):
         project_id: str,
         schema: catalog_api_models.Schema,
     ) -> catalog_api_models.Schema:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas'
         return TeaCore.from_map(
@@ -1389,6 +1613,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListSchemasResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas'
         query = {}
@@ -1407,6 +1634,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListSchemasResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas'
         query = {}
@@ -1424,6 +1654,9 @@ class Client(OpenApiClient):
         project_id: str,
         schema_name: str,
     ) -> catalog_api_models.Schema:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Schema(),
@@ -1435,6 +1668,9 @@ class Client(OpenApiClient):
         project_id: str,
         schema_name: str,
     ) -> catalog_api_models.Schema:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Schema(),
@@ -1448,6 +1684,9 @@ class Client(OpenApiClient):
         update_mask: str,
         schema: catalog_api_models.Schema,
     ) -> catalog_api_models.Schema:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_schema_path(project_id, schema_name)
         query = {}
@@ -1464,6 +1703,9 @@ class Client(OpenApiClient):
         update_mask: str,
         schema: catalog_api_models.Schema,
     ) -> catalog_api_models.Schema:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_schema_path(project_id, schema_name)
         query = {}
@@ -1478,6 +1720,9 @@ class Client(OpenApiClient):
         project_id: str,
         schema_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_schema_path(project_id, schema_name)
         return TeaCore.from_map(
@@ -1490,6 +1735,9 @@ class Client(OpenApiClient):
         project_id: str,
         schema_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_schema_path(project_id, schema_name)
         return TeaCore.from_map(
@@ -1503,6 +1751,9 @@ class Client(OpenApiClient):
         schema_name: str,
         policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_schema_path(project_id, schema_name)}:setPolicy'
         query = {}
@@ -1517,6 +1768,9 @@ class Client(OpenApiClient):
         schema_name: str,
         policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_schema_path(project_id, schema_name)}:setPolicy'
         query = {}
@@ -1530,6 +1784,9 @@ class Client(OpenApiClient):
         project_id: str,
         schema_name: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_schema_path(project_id, schema_name)}:getPolicy'
         query = {}
@@ -1543,6 +1800,9 @@ class Client(OpenApiClient):
         project_id: str,
         schema_name: str,
     ) -> catalog_api_models.Policy:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_schema_path(project_id, schema_name)}:getPolicy'
         query = {}
@@ -1569,25 +1829,29 @@ class Client(OpenApiClient):
         table_name: str,
         page_size: int,
         page_token: str,
+        query: str,
         view: str,
     ) -> catalog_api_models.ListPartitionsResponse:
         """
         Methods
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_table_partitions_path(project_id, schema_name, table_name)
-        query = {}
+        params = {}
         if not UtilClient.is_unset(page_size):
-            query['pageSize'] = McUtilClient.to_string(page_size)
+            params['pageSize'] = McUtilClient.to_string(page_size)
         if not UtilClient.is_unset(page_token):
-            query['pageToken'] = page_token
+            params['pageToken'] = page_token
+        if not UtilClient.is_unset(query):
+            params['query'] = query
         if not UtilClient.is_unset(view):
-            query['view'] = view
+            params['view'] = view
             if UtilClient.equal_string(view, 'FULL'):
-                query['apiScope'] = 'inner'
+                params['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.ListPartitionsResponse(),
-            self.request_with_model(catalog_api_models.ListPartitionsResponse(), 'GET', path, query, runtime)
+            self.request_with_model(catalog_api_models.ListPartitionsResponse(), 'GET', path, params, runtime)
         )
 
     async def list_partitions_async(
@@ -1597,25 +1861,29 @@ class Client(OpenApiClient):
         table_name: str,
         page_size: int,
         page_token: str,
+        query: str,
         view: str,
     ) -> catalog_api_models.ListPartitionsResponse:
         """
         Methods
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_table_partitions_path(project_id, schema_name, table_name)
-        query = {}
+        params = {}
         if not UtilClient.is_unset(page_size):
-            query['pageSize'] = McUtilClient.to_string(page_size)
+            params['pageSize'] = McUtilClient.to_string(page_size)
         if not UtilClient.is_unset(page_token):
-            query['pageToken'] = page_token
+            params['pageToken'] = page_token
+        if not UtilClient.is_unset(query):
+            params['query'] = query
         if not UtilClient.is_unset(view):
-            query['view'] = view
+            params['view'] = view
             if UtilClient.equal_string(view, 'FULL'):
-                query['apiScope'] = 'inner'
+                params['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.ListPartitionsResponse(),
-            await self.request_with_model_async(catalog_api_models.ListPartitionsResponse(), 'GET', path, query, runtime)
+            await self.request_with_model_async(catalog_api_models.ListPartitionsResponse(), 'GET', path, params, runtime)
         )
 
     def get_data_scan_path(
@@ -1643,6 +1911,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_scan_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
             self.request_without_model(catalog_api_models.ScanJob(), 'POST', self.get_trigger_data_scan_path(namespace, data_scan_name), None, util_models.RuntimeOptions())
@@ -1653,6 +1924,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_scan_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
             await self.request_without_model_async(catalog_api_models.ScanJob(), 'POST', self.get_trigger_data_scan_path(namespace, data_scan_name), None, util_models.RuntimeOptions())
@@ -1664,6 +1938,9 @@ class Client(OpenApiClient):
         data_scan: catalog_api_models.DataScan,
         update_mask: str,
     ) -> catalog_api_models.DataScan:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         query = {}
         query['updateMask'] = update_mask
@@ -1678,6 +1955,9 @@ class Client(OpenApiClient):
         data_scan: catalog_api_models.DataScan,
         update_mask: str,
     ) -> catalog_api_models.DataScan:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         query = {}
         query['updateMask'] = update_mask
@@ -1691,6 +1971,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_scan_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
@@ -1702,6 +1985,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_scan_name: str,
     ) -> catalog_api_models.HttpResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
@@ -1713,6 +1999,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_scan: catalog_api_models.DataScan,
     ) -> catalog_api_models.DataScan:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.DataScan(),
@@ -1724,6 +2013,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_scan: catalog_api_models.DataScan,
     ) -> catalog_api_models.DataScan:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.DataScan(),
@@ -1735,6 +2027,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_scan_name: str,
     ) -> catalog_api_models.DataScan:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.DataScan(),
@@ -1746,6 +2041,9 @@ class Client(OpenApiClient):
         namespace: str,
         data_scan_name: str,
     ) -> catalog_api_models.DataScan:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.DataScan(),
@@ -1758,6 +2056,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListDataScansResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_scans_path(namespace)
         query = {}
@@ -1776,6 +2077,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListDataScansResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_scans_path(namespace)
         query = {}
@@ -1802,6 +2106,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListDataScanJobsResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_scan_jobs_path(namespace, data_scan_name)
         query = {}
@@ -1821,6 +2128,9 @@ class Client(OpenApiClient):
         page_size: int,
         page_token: str,
     ) -> catalog_api_models.ListDataScanJobsResponse:
+        """
+        限流：每用户每秒最多 10 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_data_scan_jobs_path(namespace, data_scan_name)
         query = {}
@@ -1856,6 +2166,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Model:
         """
         创建模型
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models'
@@ -1872,6 +2183,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Model:
         """
         创建模型
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models'
@@ -1889,6 +2201,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.ListModelsResponse:
         """
         列出模型
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models'
@@ -1911,6 +2224,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.ListModelsResponse:
         """
         列出模型
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models'
@@ -1933,6 +2247,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Model:
         """
         获取模型
+        限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_model_path(project_id, schema_name, model_name, version_name)
@@ -1950,6 +2265,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Model:
         """
         获取模型
+        限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_model_path(project_id, schema_name, model_name, version_name)
@@ -1969,6 +2285,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Model:
         """
         更新模型
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_model_path(project_id, schema_name, model_name, version_name)
@@ -1991,6 +2308,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Model:
         """
         更新模型
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_model_path(project_id, schema_name, model_name, version_name)
@@ -2010,6 +2328,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.HttpResponse:
         """
         删除模型
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_model_path(project_id, schema_name, model_name, None)
@@ -2026,6 +2345,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.HttpResponse:
         """
         删除模型
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_model_path(project_id, schema_name, model_name, None)
@@ -2043,6 +2363,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Model:
         """
         创建模型版本
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}:createVersion'
@@ -2060,6 +2381,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Model:
         """
         创建模型版本
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}:createVersion'
@@ -2077,6 +2399,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.HttpResponse:
         """
         删除模型版本
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}@{version_name}:deleteVersion'
@@ -2094,6 +2417,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.HttpResponse:
         """
         删除模型版本
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}@{version_name}:deleteVersion'
@@ -2112,6 +2436,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.ListModelVersionsResponse:
         """
         列出模型版本
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}:listVersions'
@@ -2135,6 +2460,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.ListModelVersionsResponse:
         """
         列出模型版本
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}:listVersions'
@@ -2156,6 +2482,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Policy:
         """
         获取模型策略
+        限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_model_path(project_id, schema_name, model_name, None)}:getPolicy'
@@ -2173,6 +2500,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Policy:
         """
         获取模型策略
+        限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_model_path(project_id, schema_name, model_name, None)}:getPolicy'
@@ -2191,6 +2519,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Policy:
         """
         设置模型策略
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_model_path(project_id, schema_name, model_name, None)}:setPolicy'
@@ -2209,6 +2538,7 @@ class Client(OpenApiClient):
     ) -> catalog_api_models.Policy:
         """
         设置模型策略
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'{self.get_model_path(project_id, schema_name, model_name, None)}:setPolicy'
@@ -2257,6 +2587,7 @@ class Client(OpenApiClient):
         - `create_time desc`：创建时间倒序
         - `last_modified_time asc`：最近修改时间正序
         - `last_modified_time desc`：最近修改时间倒序
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace_id}:search'
@@ -2313,6 +2644,7 @@ class Client(OpenApiClient):
         - `create_time desc`：创建时间倒序
         - `last_modified_time asc`：最近修改时间正序
         - `last_modified_time desc`：最近修改时间倒序
+        限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/namespaces/{namespace_id}:search'
@@ -2335,6 +2667,9 @@ class Client(OpenApiClient):
         table: catalog_api_models.Table,
         duration: int,
     ) -> catalog_api_models.DataToken:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_table_path(table)
         full_path = f'{path}:getDataToken'
@@ -2351,6 +2686,9 @@ class Client(OpenApiClient):
         table: catalog_api_models.Table,
         duration: int,
     ) -> catalog_api_models.DataToken:
+        """
+        限流：每用户每秒最多 100 次请求
+        """
         runtime = util_models.RuntimeOptions()
         path = self.get_table_path(table)
         full_path = f'{path}:getDataToken'

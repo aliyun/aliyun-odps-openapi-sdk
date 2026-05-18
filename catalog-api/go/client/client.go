@@ -2331,6 +2331,7 @@ func (client *Client)Init(config *openapi.Config)(_err error) {
 
 
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) UpdateTable (table *Table) (_result *Table, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &Table{}
@@ -2342,6 +2343,7 @@ func (client *Client) UpdateTable (table *Table) (_result *Table, _err error) {
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeleteTable (table *Table) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &HttpResponse{}
@@ -2353,6 +2355,7 @@ func (client *Client) DeleteTable (table *Table) (_result *HttpResponse, _err er
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreateTable (table *Table) (_result *Table, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &Table{}
@@ -2364,6 +2367,7 @@ func (client *Client) CreateTable (table *Table) (_result *Table, _err error) {
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetTable (table *Table) (_result *Table, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &Table{}
@@ -2375,6 +2379,7 @@ func (client *Client) GetTable (table *Table) (_result *Table, _err error) {
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListTables (projectId *string, schemaName *string, pageSize *int32, pageToken *string) (_result *ListTablesResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/tables")
@@ -2396,6 +2401,7 @@ func (client *Client) ListTables (projectId *string, schemaName *string, pageSiz
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) SetTablePolicy (table *Table, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetTablePath(table)) + ":setPolicy")
@@ -2409,6 +2415,7 @@ func (client *Client) SetTablePolicy (table *Table, policy *SetPolicyRequest) (_
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetTablePolicy (table *Table) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetTablePath(table)) + ":getPolicy")
@@ -2444,6 +2451,7 @@ func (client *Client) GetTablesPath (table *Table) (_result *string) {
 
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreateConnection (namespace *string, connection *Connection) (_result *Connection, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespace) + "/connections")
@@ -2456,6 +2464,7 @@ func (client *Client) CreateConnection (namespace *string, connection *Connectio
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListConnections (namespace *string, pageSize *int, pageToken *string) (_result *ListConnectionsResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespace) + "/connections")
@@ -2477,6 +2486,7 @@ func (client *Client) ListConnections (namespace *string, pageSize *int, pageTok
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetConnection (namespace *string, connectionName *string) (_result *Connection, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetConnectionPath(namespace, connectionName)
@@ -2489,6 +2499,7 @@ func (client *Client) GetConnection (namespace *string, connectionName *string) 
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) UpdateConnection (namespace *string, connectionName *string, connection *Connection, updateMask *string) (_result *Connection, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetConnectionPath(namespace, connectionName)
@@ -2503,6 +2514,7 @@ func (client *Client) UpdateConnection (namespace *string, connectionName *strin
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeleteConnection (namespace *string, connectionName *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetConnectionPath(namespace, connectionName)
@@ -2515,6 +2527,7 @@ func (client *Client) DeleteConnection (namespace *string, connectionName *strin
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) SetConnectionPolicy (namespace *string, connectionName *string, request *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetConnectionPath(namespace, connectionName)) + ":setPolicy")
@@ -2528,6 +2541,7 @@ func (client *Client) SetConnectionPolicy (namespace *string, connectionName *st
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetConnectionPolicy (namespace *string, connectionName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetConnectionPath(namespace, connectionName)) + ":getPolicy")
@@ -2553,6 +2567,7 @@ func (client *Client) GetRolePath (namespace *string, roleName *string) (_result
 }
 
 // Create role
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreateRole (namespace *string, role *Role) (_result *Role, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespace) + "/roles")
@@ -2566,6 +2581,7 @@ func (client *Client) CreateRole (namespace *string, role *Role) (_result *Role,
 }
 
 // Delete role
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeleteRole (namespace *string, roleName *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetRolePath(namespace, roleName)
@@ -2579,6 +2595,7 @@ func (client *Client) DeleteRole (namespace *string, roleName *string) (_result 
 }
 
 // Get role
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetRole (namespace *string, roleName *string, view *string) (_result *Role, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetRolePath(namespace, roleName)
@@ -2597,6 +2614,7 @@ func (client *Client) GetRole (namespace *string, roleName *string, view *string
 }
 
 // List roles
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListRoles (namespace *string, pageSize *int, pageToken *string, view *string, showDeleted *bool) (_result *ListRolesResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespace) + "/roles")
@@ -2627,6 +2645,7 @@ func (client *Client) ListRoles (namespace *string, pageSize *int, pageToken *st
 }
 
 // Update role
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) UpdateRole (namespace *string, roleName *string, role *Role, updateMask *string) (_result *Role, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetRolePath(namespace, roleName)
@@ -2645,6 +2664,7 @@ func (client *Client) UpdateRole (namespace *string, roleName *string, role *Rol
 }
 
 // Set role policy
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) SetRolePolicy (namespace *string, roleName *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetRolePath(namespace, roleName)) + ":setPolicy")
@@ -2659,6 +2679,7 @@ func (client *Client) SetRolePolicy (namespace *string, roleName *string, policy
 }
 
 // Get role policy
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetRolePolicy (namespace *string, roleName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetRolePath(namespace, roleName)) + ":getPolicy")
@@ -2684,6 +2705,7 @@ func (client *Client) GetPolicyTagPath (namespace *string, taxonomyId *string, p
 }
 
 // Taxonomy operations
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreateTaxonomy (namespace *string, taxonomy *Taxonomy) (_result *Taxonomy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespace) + "/taxonomies")
@@ -2696,6 +2718,7 @@ func (client *Client) CreateTaxonomy (namespace *string, taxonomy *Taxonomy) (_r
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeleteTaxonomy (namespace *string, taxonomyId *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetTaxonomyPath(namespace, taxonomyId)
@@ -2708,6 +2731,7 @@ func (client *Client) DeleteTaxonomy (namespace *string, taxonomyId *string) (_r
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetTaxonomy (namespace *string, taxonomyId *string) (_result *Taxonomy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetTaxonomyPath(namespace, taxonomyId)
@@ -2720,6 +2744,7 @@ func (client *Client) GetTaxonomy (namespace *string, taxonomyId *string) (_resu
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListTaxonomies (namespace *string, pageSize *int, pageToken *string) (_result *ListTaxonomiesResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespace) + "/taxonomies")
@@ -2741,6 +2766,7 @@ func (client *Client) ListTaxonomies (namespace *string, pageSize *int, pageToke
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) UpdateTaxonomy (namespace *string, taxonomyId *string, taxonomy *Taxonomy, updateMask *string) (_result *Taxonomy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetTaxonomyPath(namespace, taxonomyId)
@@ -2758,6 +2784,7 @@ func (client *Client) UpdateTaxonomy (namespace *string, taxonomyId *string, tax
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) SetTaxonomyPolicy (namespace *string, taxonomyId *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetTaxonomyPath(namespace, taxonomyId)) + ":setPolicy")
@@ -2772,6 +2799,7 @@ func (client *Client) SetTaxonomyPolicy (namespace *string, taxonomyId *string, 
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetTaxonomyPolicy (namespace *string, taxonomyId *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetTaxonomyPath(namespace, taxonomyId)) + ":getPolicy")
@@ -2786,6 +2814,7 @@ func (client *Client) GetTaxonomyPolicy (namespace *string, taxonomyId *string) 
 }
 
 // PolicyTag operations
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreatePolicyTag (namespace *string, taxonomyId *string, policyTag *PolicyTag) (_result *PolicyTag, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetTaxonomyPath(namespace, taxonomyId)) + "/policyTags")
@@ -2798,6 +2827,7 @@ func (client *Client) CreatePolicyTag (namespace *string, taxonomyId *string, po
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeletePolicyTag (namespace *string, taxonomyId *string, policyTagId *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)
@@ -2810,6 +2840,7 @@ func (client *Client) DeletePolicyTag (namespace *string, taxonomyId *string, po
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetPolicyTag (namespace *string, taxonomyId *string, policyTagId *string) (_result *PolicyTag, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)
@@ -2822,6 +2853,7 @@ func (client *Client) GetPolicyTag (namespace *string, taxonomyId *string, polic
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListPolicyTags (namespace *string, taxonomyId *string, pageSize *int, pageToken *string) (_result *ListPolicyTagsResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetTaxonomyPath(namespace, taxonomyId)) + "/policyTags")
@@ -2843,6 +2875,7 @@ func (client *Client) ListPolicyTags (namespace *string, taxonomyId *string, pag
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) UpdatePolicyTag (namespace *string, taxonomyId *string, policyTagId *string, policyTag *PolicyTag, updateMask *string) (_result *PolicyTag, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)
@@ -2860,6 +2893,7 @@ func (client *Client) UpdatePolicyTag (namespace *string, taxonomyId *string, po
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) SetPolicyTagPolicy (namespace *string, taxonomyId *string, policyTagId *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)) + ":setPolicy")
@@ -2873,6 +2907,7 @@ func (client *Client) SetPolicyTagPolicy (namespace *string, taxonomyId *string,
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetPolicyTagPolicy (namespace *string, taxonomyId *string, policyTagId *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)) + ":getPolicy")
@@ -2886,6 +2921,7 @@ func (client *Client) GetPolicyTagPolicy (namespace *string, taxonomyId *string,
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreateDataPolicy (namespace *string, dataPolicy *DataPolicy) (_result *DataPolicy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetDataPoliciesPath(namespace)
@@ -2898,6 +2934,7 @@ func (client *Client) CreateDataPolicy (namespace *string, dataPolicy *DataPolic
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeleteDataPolicy (namespace *string, dataPolicyName *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetDataPolicyPath(namespace, dataPolicyName)
@@ -2910,6 +2947,7 @@ func (client *Client) DeleteDataPolicy (namespace *string, dataPolicyName *strin
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetDataPolicy (namespace *string, dataPolicyName *string) (_result *DataPolicy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetDataPolicyPath(namespace, dataPolicyName)
@@ -2922,6 +2960,7 @@ func (client *Client) GetDataPolicy (namespace *string, dataPolicyName *string) 
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListDataPolicies (namespace *string, pageSize *int, pageToken *string) (_result *ListDataPoliciesResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetDataPoliciesPath(namespace)
@@ -2943,6 +2982,7 @@ func (client *Client) ListDataPolicies (namespace *string, pageSize *int, pageTo
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) SetDataPolicyPolicy (namespace *string, dataPolicyName *string, request *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetDataPolicyPath(namespace, dataPolicyName)) + ":setPolicy")
@@ -2956,6 +2996,7 @@ func (client *Client) SetDataPolicyPolicy (namespace *string, dataPolicyName *st
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetDataPolicyPolicy (namespace *string, dataPolicyName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetDataPolicyPath(namespace, dataPolicyName)) + ":getPolicy")
@@ -2991,6 +3032,7 @@ func (client *Client) GetSchemaPath (projectId *string, schemaName *string) (_re
 }
 
 // Methods
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListProjects (pageSize *int, pageToken *string) (_result *ListProjectsResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   query := make(map[string]*string)
@@ -3011,6 +3053,7 @@ func (client *Client) ListProjects (pageSize *int, pageToken *string) (_result *
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetProject (projectId *string) (_result *Project, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &Project{}
@@ -3022,6 +3065,7 @@ func (client *Client) GetProject (projectId *string) (_result *Project, _err err
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreateSchema (projectId *string, schema *Schema) (_result *Schema, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas")
@@ -3034,6 +3078,7 @@ func (client *Client) CreateSchema (projectId *string, schema *Schema) (_result 
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListSchemas (projectId *string, pageSize *int, pageToken *string) (_result *ListSchemasResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas")
@@ -3055,6 +3100,7 @@ func (client *Client) ListSchemas (projectId *string, pageSize *int, pageToken *
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetSchema (projectId *string, schemaName *string) (_result *Schema, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &Schema{}
@@ -3066,6 +3112,7 @@ func (client *Client) GetSchema (projectId *string, schemaName *string) (_result
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) UpdateSchema (projectId *string, schemaName *string, updateMask *string, schema *Schema) (_result *Schema, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetSchemaPath(projectId, schemaName)
@@ -3080,6 +3127,7 @@ func (client *Client) UpdateSchema (projectId *string, schemaName *string, updat
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeleteSchema (projectId *string, schemaName *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetSchemaPath(projectId, schemaName)
@@ -3092,6 +3140,7 @@ func (client *Client) DeleteSchema (projectId *string, schemaName *string) (_res
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) SetSchemaPolicy (projectId *string, schemaName *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetSchemaPath(projectId, schemaName)) + ":setPolicy")
@@ -3105,6 +3154,7 @@ func (client *Client) SetSchemaPolicy (projectId *string, schemaName *string, po
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetSchemaPolicy (projectId *string, schemaName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetSchemaPath(projectId, schemaName)) + ":getPolicy")
@@ -3125,28 +3175,33 @@ func (client *Client) GetTablePartitionsPath (projectId *string, schemaName *str
 }
 
 // Methods
-func (client *Client) ListPartitions (projectId *string, schemaName *string, tableName *string, pageSize *int, pageToken *string, view *string) (_result *ListPartitionsResponse, _err error) {
+// 限流：每用户每秒最多 10 次请求
+func (client *Client) ListPartitions (projectId *string, schemaName *string, tableName *string, pageSize *int, pageToken *string, query *string, view *string) (_result *ListPartitionsResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetTablePartitionsPath(projectId, schemaName, tableName)
-  query := make(map[string]*string)
+  params := make(map[string]*string)
   if !tea.BoolValue(util.IsUnset(pageSize)) {
-    query["pageSize"] = mcutil.ToString(pageSize)
+    params["pageSize"] = mcutil.ToString(pageSize)
   }
 
   if !tea.BoolValue(util.IsUnset(pageToken)) {
-    query["pageToken"] = pageToken
+    params["pageToken"] = pageToken
+  }
+
+  if !tea.BoolValue(util.IsUnset(query)) {
+    params["query"] = query
   }
 
   if !tea.BoolValue(util.IsUnset(view)) {
-    query["view"] = view
+    params["view"] = view
     if tea.BoolValue(util.EqualString(view, tea.String("FULL"))) {
-      query["apiScope"] = tea.String("inner")
+      params["apiScope"] = tea.String("inner")
     }
 
   }
 
   _result = &ListPartitionsResponse{}
-  _body, _err := client.RequestWithModel(&ListPartitionsResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.RequestWithModel(&ListPartitionsResponse{}, tea.String("GET"), path, params, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3169,6 +3224,7 @@ func (client *Client) GetTriggerDataScanPath (namespace *string, dataScanName *s
   return _result
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) TriggerDataScan (namespace *string, dataScanName *string) (_result *HttpResponse, _err error) {
   _result = &HttpResponse{}
   _body, _err := client.RequestWithoutModel(&ScanJob{}, tea.String("POST"), client.GetTriggerDataScanPath(namespace, dataScanName), nil, &util.RuntimeOptions{})
@@ -3179,6 +3235,7 @@ func (client *Client) TriggerDataScan (namespace *string, dataScanName *string) 
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) UpdateDataScan (namespace *string, dataScan *DataScan, updateMask *string) (_result *DataScan, _err error) {
   runtime := &util.RuntimeOptions{}
   query := make(map[string]*string)
@@ -3192,6 +3249,7 @@ func (client *Client) UpdateDataScan (namespace *string, dataScan *DataScan, upd
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeleteDataScan (namespace *string, dataScanName *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &HttpResponse{}
@@ -3203,6 +3261,7 @@ func (client *Client) DeleteDataScan (namespace *string, dataScanName *string) (
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreateDataScan (namespace *string, dataScan *DataScan) (_result *DataScan, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &DataScan{}
@@ -3214,6 +3273,7 @@ func (client *Client) CreateDataScan (namespace *string, dataScan *DataScan) (_r
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetDataScan (namespace *string, dataScanName *string) (_result *DataScan, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &DataScan{}
@@ -3225,6 +3285,7 @@ func (client *Client) GetDataScan (namespace *string, dataScanName *string) (_re
   return _result, _err
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListDataScans (namespace *string, pageSize *int32, pageToken *string) (_result *ListDataScansResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetDataScansPath(namespace)
@@ -3251,6 +3312,7 @@ func (client *Client) GetDataScanJobsPath (namespace *string, dataScanName *stri
   return _result
 }
 
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListDataScanJobs (namespace *string, dataScanName *string, pageSize *int32, pageToken *string) (_result *ListDataScanJobsResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetDataScanJobsPath(namespace, dataScanName)
@@ -3285,6 +3347,7 @@ func (client *Client) GetModelPath (projectId *string, schemaName *string, model
 }
 
 // 创建模型
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreateModel (projectId *string, schemaName *string, model *Model) (_result *Model, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models")
@@ -3298,6 +3361,7 @@ func (client *Client) CreateModel (projectId *string, schemaName *string, model 
 }
 
 // 列出模型
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListModels (projectId *string, schemaName *string, pageSize *int, pageToken *string) (_result *ListModelsResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models")
@@ -3320,6 +3384,7 @@ func (client *Client) ListModels (projectId *string, schemaName *string, pageSiz
 }
 
 // 获取模型
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetModel (projectId *string, schemaName *string, modelName *string, versionName *string) (_result *Model, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetModelPath(projectId, schemaName, modelName, versionName)
@@ -3333,6 +3398,7 @@ func (client *Client) GetModel (projectId *string, schemaName *string, modelName
 }
 
 // 更新模型
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) UpdateModel (projectId *string, schemaName *string, modelName *string, model *Model, updateMask *string, versionName *string) (_result *Model, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetModelPath(projectId, schemaName, modelName, versionName)
@@ -3351,6 +3417,7 @@ func (client *Client) UpdateModel (projectId *string, schemaName *string, modelN
 }
 
 // 删除模型
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeleteModel (projectId *string, schemaName *string, modelName *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetModelPath(projectId, schemaName, modelName, nil)
@@ -3364,6 +3431,7 @@ func (client *Client) DeleteModel (projectId *string, schemaName *string, modelN
 }
 
 // 创建模型版本
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) CreateModelVersion (projectId *string, schemaName *string, modelName *string, model *Model) (_result *Model, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models/" + tea.StringValue(modelName) + ":createVersion")
@@ -3377,6 +3445,7 @@ func (client *Client) CreateModelVersion (projectId *string, schemaName *string,
 }
 
 // 删除模型版本
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) DeleteModelVersion (projectId *string, schemaName *string, modelName *string, versionName *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models/" + tea.StringValue(modelName) + "@" + tea.StringValue(versionName) + ":deleteVersion")
@@ -3390,6 +3459,7 @@ func (client *Client) DeleteModelVersion (projectId *string, schemaName *string,
 }
 
 // 列出模型版本
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) ListModelVersions (projectId *string, schemaName *string, modelName *string, pageSize *int, pageToken *string) (_result *ListModelVersionsResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models/" + tea.StringValue(modelName) + ":listVersions")
@@ -3412,6 +3482,7 @@ func (client *Client) ListModelVersions (projectId *string, schemaName *string, 
 }
 
 // 获取模型策略
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetModelPolicy (projectId *string, schemaName *string, modelName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetModelPath(projectId, schemaName, modelName, nil)) + ":getPolicy")
@@ -3426,6 +3497,7 @@ func (client *Client) GetModelPolicy (projectId *string, schemaName *string, mod
 }
 
 // 设置模型策略
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) SetModelPolicy (projectId *string, schemaName *string, modelName *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String(tea.StringValue(client.GetModelPath(projectId, schemaName, modelName, nil)) + ":setPolicy")
@@ -3475,6 +3547,7 @@ func (client *Client) SetModelPolicy (projectId *string, schemaName *string, mod
  - `create_time desc`：创建时间倒序
  - `last_modified_time asc`：最近修改时间正序
  - `last_modified_time desc`：最近修改时间倒序
+// 限流：每用户每秒最多 10 次请求
 func (client *Client) Search (namespaceId *string, query *string, pageSize *int, pageToken *string, orderBy *string) (_result *SearchResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/namespaces/" + tea.StringValue(namespaceId) + ":search")
@@ -3504,6 +3577,7 @@ func (client *Client) Search (namespaceId *string, query *string, pageSize *int,
   return _result, _err
 }
 
+// 限流：每用户每秒最多 100 次请求
 func (client *Client) GetDataToken (table *Table, duration *int) (_result *DataToken, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetTablePath(table)

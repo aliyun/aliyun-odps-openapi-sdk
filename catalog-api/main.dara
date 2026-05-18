@@ -136,21 +136,25 @@ model Table {
 }
 
 
+// 限流：每用户每秒最多 10 次请求
 async function updateTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
   return requestWithModel(table, 'PUT', getTablePath(table), null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function deleteTable(table: Table): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   return requestWithoutModel(table, 'DELETE', getTablePath(table), null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function createTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
   return requestWithModel(table, 'POST', getTablesPath(table), null, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
   return requestWithModel(table, 'GET', getTablePath(table), null, runtime);
@@ -161,6 +165,7 @@ model ListTablesResponse = {
   nextPageToken?: string
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function listTables(projectId: string, schemaName: string, pageSize: int32, pageToken: string): ListTablesResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/tables`;
@@ -174,6 +179,7 @@ async function listTables(projectId: string, schemaName: string, pageSize: int32
   return requestWithModel(new ListTablesResponse{}, 'GET', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function setTablePolicy(table: Table, policy: SetPolicyRequest): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getTablePath(table)}:setPolicy`;
@@ -181,6 +187,7 @@ async function setTablePolicy(table: Table, policy: SetPolicyRequest): Policy {
   return requestWithModel(policy, 'POST', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getTablePolicy(table: Table): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getTablePath(table)}:getPolicy`;
@@ -225,12 +232,14 @@ model CloudResourceOptions {
   ramRoleArn?: string(name='ramRoleArn', description='授权给 MaxCompute 服务扮演的 RAM 角色 ARN。')
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function createConnection(namespace: string, connection: Connection): Connection {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/namespaces/${namespace}/connections`;
   return requestWithModel(connection, 'POST', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function listConnections(namespace: string, pageSize: integer, pageToken: string): ListConnectionsResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/namespaces/${namespace}/connections`;
@@ -244,12 +253,14 @@ async function listConnections(namespace: string, pageSize: integer, pageToken: 
   return requestWithModel(new ListConnectionsResponse{}, 'GET', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getConnection(namespace: string, connectionName: string): Connection {
   var runtime = new Util.RuntimeOptions{};
   var path = getConnectionPath(namespace, connectionName);
   return requestWithModel(new Connection{}, 'GET', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function updateConnection(namespace: string, connectionName: string, connection: Connection, updateMask: string): Connection {
   var runtime = new Util.RuntimeOptions{};
   var path = getConnectionPath(namespace, connectionName);
@@ -258,12 +269,14 @@ async function updateConnection(namespace: string, connectionName: string, conne
   return requestWithModel(connection, 'PATCH', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function deleteConnection(namespace: string, connectionName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getConnectionPath(namespace, connectionName);
   return requestWithoutModel(new Connection{}, 'DELETE', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function setConnectionPolicy(namespace: string, connectionName: string, request: SetPolicyRequest): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getConnectionPath(namespace, connectionName)}:setPolicy`;
@@ -271,6 +284,7 @@ async function setConnectionPolicy(namespace: string, connectionName: string, re
   return requestWithModel(request, 'POST', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getConnectionPolicy(namespace: string, connectionName: string): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getConnectionPath(namespace, connectionName)}:getPolicy`;
@@ -313,6 +327,7 @@ function getRolePath(namespace: string, roleName: string): string {
 }
 
 // Create role
+// 限流：每用户每秒最多 10 次请求
 async function createRole(namespace: string, role: Role): Role {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/namespaces/${namespace}/roles`;
@@ -320,6 +335,7 @@ async function createRole(namespace: string, role: Role): Role {
 }
 
 // Delete role
+// 限流：每用户每秒最多 10 次请求
 async function deleteRole(namespace: string, roleName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getRolePath(namespace, roleName);
@@ -327,6 +343,7 @@ async function deleteRole(namespace: string, roleName: string): HttpResponse {
 }
 
 // Get role
+// 限流：每用户每秒最多 100 次请求
 async function getRole(namespace: string, roleName: string, view: string): Role {
   var runtime = new Util.RuntimeOptions{};
   var path = getRolePath(namespace, roleName);
@@ -338,6 +355,7 @@ async function getRole(namespace: string, roleName: string, view: string): Role 
 }
 
 // List roles
+// 限流：每用户每秒最多 10 次请求
 async function listRoles(namespace: string, pageSize: integer, pageToken: string, view: string, showDeleted: boolean): ListRolesResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/namespaces/${namespace}/roles`;
@@ -358,6 +376,7 @@ async function listRoles(namespace: string, pageSize: integer, pageToken: string
 }
 
 // Update role
+// 限流：每用户每秒最多 10 次请求
 async function updateRole(namespace: string, roleName: string, role: Role, updateMask: string): Role {
   var runtime = new Util.RuntimeOptions{};
   var path = getRolePath(namespace, roleName);
@@ -369,6 +388,7 @@ async function updateRole(namespace: string, roleName: string, role: Role, updat
 }
 
 // Set role policy
+// 限流：每用户每秒最多 10 次请求
 async function setRolePolicy(namespace: string, roleName: string, policy: SetPolicyRequest): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getRolePath(namespace, roleName)}:setPolicy`;
@@ -377,6 +397,7 @@ async function setRolePolicy(namespace: string, roleName: string, policy: SetPol
 }
 
 // Get role policy
+// 限流：每用户每秒最多 100 次请求
 async function getRolePolicy(namespace: string, roleName: string): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getRolePath(namespace, roleName)}:getPolicy`;
@@ -430,24 +451,28 @@ function getPolicyTagPath(namespace: string, taxonomyId: string, policyTagId: st
 }
 
 // Taxonomy operations
+// 限流：每用户每秒最多 10 次请求
 async function createTaxonomy(namespace: string, taxonomy: Taxonomy): Taxonomy {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/namespaces/${namespace}/taxonomies`;
   return requestWithModel(taxonomy, 'POST', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function deleteTaxonomy(namespace: string, taxonomyId: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getTaxonomyPath(namespace, taxonomyId);
   return requestWithoutModel(new Taxonomy{}, 'DELETE', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getTaxonomy(namespace: string, taxonomyId: string): Taxonomy {
   var runtime = new Util.RuntimeOptions{};
   var path = getTaxonomyPath(namespace, taxonomyId);
   return requestWithModel(new Taxonomy{}, 'GET', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function listTaxonomies(namespace: string, pageSize: integer, pageToken: string): ListTaxonomiesResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/namespaces/${namespace}/taxonomies`;
@@ -461,6 +486,7 @@ async function listTaxonomies(namespace: string, pageSize: integer, pageToken: s
   return requestWithModel(new ListTaxonomiesResponse{}, 'GET', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function updateTaxonomy(namespace: string, taxonomyId: string, taxonomy: Taxonomy, updateMask: string): Taxonomy {
   var runtime = new Util.RuntimeOptions{};
   var path = getTaxonomyPath(namespace, taxonomyId);
@@ -471,6 +497,7 @@ async function updateTaxonomy(namespace: string, taxonomyId: string, taxonomy: T
   return requestWithModel(taxonomy, 'PATCH', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function setTaxonomyPolicy(namespace: string, taxonomyId: string, policy: SetPolicyRequest): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getTaxonomyPath(namespace, taxonomyId)}:setPolicy`;
@@ -479,6 +506,7 @@ async function setTaxonomyPolicy(namespace: string, taxonomyId: string, policy: 
   return requestWithModel(policy, 'POST', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getTaxonomyPolicy(namespace: string, taxonomyId: string): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getTaxonomyPath(namespace, taxonomyId)}:getPolicy`;
@@ -487,24 +515,28 @@ async function getTaxonomyPolicy(namespace: string, taxonomyId: string): Policy 
 }
 
 // PolicyTag operations
+// 限流：每用户每秒最多 10 次请求
 async function createPolicyTag(namespace: string, taxonomyId: string, policyTag: PolicyTag): PolicyTag {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getTaxonomyPath(namespace, taxonomyId)}/policyTags`;
   return requestWithModel(policyTag, 'POST', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function deletePolicyTag(namespace: string, taxonomyId: string, policyTagId: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
   return requestWithoutModel(new PolicyTag{}, 'DELETE', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getPolicyTag(namespace: string, taxonomyId: string, policyTagId: string): PolicyTag {
   var runtime = new Util.RuntimeOptions{};
   var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
   return requestWithModel(new PolicyTag{}, 'GET', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function listPolicyTags(namespace: string, taxonomyId: string, pageSize: integer, pageToken: string): ListPolicyTagsResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getTaxonomyPath(namespace, taxonomyId)}/policyTags`;
@@ -518,6 +550,7 @@ async function listPolicyTags(namespace: string, taxonomyId: string, pageSize: i
   return requestWithModel(new ListPolicyTagsResponse{}, 'GET', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function updatePolicyTag(namespace: string, taxonomyId: string, policyTagId: string, policyTag: PolicyTag, updateMask: string): PolicyTag {
   var runtime = new Util.RuntimeOptions{};
   var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
@@ -528,6 +561,7 @@ async function updatePolicyTag(namespace: string, taxonomyId: string, policyTagI
   return requestWithModel(policyTag, 'PATCH', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function setPolicyTagPolicy(namespace: string, taxonomyId: string, policyTagId: string, policy: SetPolicyRequest): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getPolicyTagPath(namespace, taxonomyId, policyTagId)}:setPolicy`;
@@ -535,6 +569,7 @@ async function setPolicyTagPolicy(namespace: string, taxonomyId: string, policyT
   return requestWithModel(policy, 'POST', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getPolicyTagPolicy(namespace: string, taxonomyId: string, policyTagId: string): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getPolicyTagPath(namespace, taxonomyId, policyTagId)}:getPolicy`;
@@ -564,24 +599,28 @@ model ListDataPoliciesResponse {
   nextPageToken?: string(name='nextPageToken', description='分页标记。', example='')
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function createDataPolicy(namespace: string, dataPolicy: DataPolicy): DataPolicy {
   var runtime = new Util.RuntimeOptions{};
   var path = getDataPoliciesPath(namespace);
   return requestWithModel(dataPolicy, 'POST', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function deleteDataPolicy(namespace: string, dataPolicyName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getDataPolicyPath(namespace, dataPolicyName);
   return requestWithoutModel(new DataPolicy{}, 'DELETE', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getDataPolicy(namespace: string, dataPolicyName: string): DataPolicy {
   var runtime = new Util.RuntimeOptions{};
   var path = getDataPolicyPath(namespace, dataPolicyName);
   return requestWithModel(new DataPolicy{}, 'GET', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function listDataPolicies(namespace: string, pageSize: integer, pageToken: string): ListDataPoliciesResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getDataPoliciesPath(namespace);
@@ -595,6 +634,7 @@ async function listDataPolicies(namespace: string, pageSize: integer, pageToken:
   return requestWithModel(new ListDataPoliciesResponse{}, 'GET', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function setDataPolicyPolicy(namespace: string, dataPolicyName: string, request: SetPolicyRequest): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getDataPolicyPath(namespace, dataPolicyName)}:setPolicy`;
@@ -602,6 +642,7 @@ async function setDataPolicyPolicy(namespace: string, dataPolicyName: string, re
   return requestWithModel(request, 'POST', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getDataPolicyPolicy(namespace: string, dataPolicyName: string): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getDataPolicyPath(namespace, dataPolicyName)}:getPolicy`;
@@ -675,6 +716,7 @@ function getSchemaPath(projectId: string, schemaName: string): string {
 }
 
 // Methods
+// 限流：每用户每秒最多 10 次请求
 async function listProjects(pageSize: integer, pageToken: string): ListProjectsResponse {
   var runtime = new Util.RuntimeOptions{};
   var query: map[string]string = {};
@@ -687,17 +729,20 @@ async function listProjects(pageSize: integer, pageToken: string): ListProjectsR
   return requestWithModel(new ListProjectsResponse{}, 'GET', '/api/catalog/v1alpha/projects', query, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getProject(projectId: string): Project {
   var runtime = new Util.RuntimeOptions{};
   return requestWithModel(new Project{}, 'GET', getProjectPath(projectId), null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function createSchema(projectId: string, schema: Schema): Schema {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/projects/${projectId}/schemas`;
   return requestWithModel(schema, 'POST', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function listSchemas(projectId: string, pageSize: integer, pageToken: string): ListSchemasResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/projects/${projectId}/schemas`;
@@ -711,11 +756,13 @@ async function listSchemas(projectId: string, pageSize: integer, pageToken: stri
   return requestWithModel(new ListSchemasResponse{}, 'GET', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getSchema(projectId: string, schemaName: string): Schema {
   var runtime = new Util.RuntimeOptions{};
   return requestWithModel(new Schema{}, 'GET', getSchemaPath(projectId, schemaName), null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function updateSchema(projectId: string, schemaName: string, updateMask: string, schema: Schema): Schema {
   var runtime = new Util.RuntimeOptions{};
   var path = getSchemaPath(projectId, schemaName);
@@ -724,12 +771,14 @@ async function updateSchema(projectId: string, schemaName: string, updateMask: s
   return requestWithModel(schema, 'PATCH', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function deleteSchema(projectId: string, schemaName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getSchemaPath(projectId, schemaName);
   return requestWithoutModel(new Schema{}, 'DELETE', path, null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function setSchemaPolicy(projectId: string, schemaName: string, policy: SetPolicyRequest): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getSchemaPath(projectId, schemaName)}:setPolicy`;
@@ -737,6 +786,7 @@ async function setSchemaPolicy(projectId: string, schemaName: string, policy: Se
   return requestWithModel(policy, 'POST', path, query, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getSchemaPolicy(projectId: string, schemaName: string): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getSchemaPath(projectId, schemaName)}:getPolicy`;
@@ -769,34 +819,40 @@ function getTablePartitionsPath(projectId: string, schemaName: string, tableName
 }
 
 // Methods
+// 限流：每用户每秒最多 10 次请求
 async function listPartitions(
   projectId: string,
   schemaName: string,
   tableName: string,
   pageSize: integer,
   pageToken: string,
+  query: string,
   view: string
 ): ListPartitionsResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getTablePartitionsPath(projectId, schemaName, tableName);
-  var query: map[string]string = {};
+  var params: map[string]string = {};
   
   if (!Util.isUnset(pageSize)) {
-    query["pageSize"] = McUtil.toString(pageSize);
+    params["pageSize"] = McUtil.toString(pageSize);
   }
   
   if (!Util.isUnset(pageToken)) {
-    query["pageToken"] = pageToken;
+    params["pageToken"] = pageToken;
+  }
+
+  if (!Util.isUnset(query)) {
+    params["query"] = query;
   }
 
   if (!Util.isUnset(view)) {
-    query["view"] = view;
+    params["view"] = view;
     if (Util.equalString(view, "FULL")) {
-      query["apiScope"] = "inner";
+      params["apiScope"] = "inner";
     }
   }
   
-  return requestWithModel(new ListPartitionsResponse{}, 'GET', path, query, runtime);
+  return requestWithModel(new ListPartitionsResponse{}, 'GET', path, params, runtime);
 }
 
 
@@ -879,10 +935,12 @@ function getTriggerDataScanPath(namespace: string, dataScanName: string): string
    return `/api/catalog/v1alpha/namespaces/${namespace}/dataScans/${dataScanName}:trigger`;
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function triggerDataScan(namespace: string, dataScanName: string): HttpResponse{
     return requestWithoutModel(new ScanJob{}, 'POST', getTriggerDataScanPath(namespace, dataScanName), null, new Util.RuntimeOptions{});
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function updateDataScan(namespace: string, dataScan: DataScan, updateMask: string): DataScan {
   var runtime = new Util.RuntimeOptions{};
   var query: map[string]string = {};
@@ -890,16 +948,19 @@ async function updateDataScan(namespace: string, dataScan: DataScan, updateMask:
   return requestWithModel(dataScan, 'PATCH', getDataScanPath(namespace, dataScan.scanName), query, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function deleteDataScan(namespace: string, dataScanName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   return requestWithoutModel(new DataScan{}, 'DELETE', getDataScanPath(namespace, dataScanName), null, runtime);
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function createDataScan(namespace:string, dataScan: DataScan): DataScan {
   var runtime = new Util.RuntimeOptions{};
   return requestWithModel(dataScan, 'POST', getDataScansPath(namespace), null, runtime);
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getDataScan(namespace:string, dataScanName: string): DataScan {
   var runtime = new Util.RuntimeOptions{};
   return requestWithModel(new DataScan{}, 'GET', getDataScanPath(namespace, dataScanName), null, runtime);
@@ -910,6 +971,7 @@ model ListDataScansResponse {
   dataScans?: [DataScan](name='dataScans', description='返回所有的 dataScans 列表。')
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function listDataScans(namespace: string, pageSize: int32, pageToken: string): ListDataScansResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getDataScansPath(namespace);
@@ -933,6 +995,7 @@ function getDataScanJobsPath(namespace: string, dataScanName: string): string {
   return `/api/catalog/v1alpha/namespaces/${namespace}/dataScans/${dataScanName}/scanJobs`;
 }
 
+// 限流：每用户每秒最多 10 次请求
 async function listDataScanJobs(namespace: string, dataScanName: string, pageSize: int32, pageToken: string): ListDataScanJobsResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getDataScanJobsPath(namespace, dataScanName);
@@ -1012,6 +1075,7 @@ function getModelPath(projectId: string, schemaName: string, modelName: string, 
 }
 
 // 创建模型
+// 限流：每用户每秒最多 10 次请求
 async function createModel(projectId: string, schemaName: string, model: Model): Model {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models`;
@@ -1019,6 +1083,7 @@ async function createModel(projectId: string, schemaName: string, model: Model):
 }
 
 // 列出模型
+// 限流：每用户每秒最多 10 次请求
 async function listModels(projectId: string, schemaName: string, pageSize: integer, pageToken: string): ListModelsResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models`;
@@ -1035,6 +1100,7 @@ async function listModels(projectId: string, schemaName: string, pageSize: integ
 }
 
 // 获取模型
+// 限流：每用户每秒最多 100 次请求
 async function getModel(projectId: string, schemaName: string, modelName: string, versionName: string): Model {
   var runtime = new Util.RuntimeOptions{};
   var path = getModelPath(projectId, schemaName, modelName, versionName);
@@ -1042,6 +1108,7 @@ async function getModel(projectId: string, schemaName: string, modelName: string
 }
 
 // 更新模型
+// 限流：每用户每秒最多 10 次请求
 async function updateModel(projectId: string, schemaName: string, modelName: string, 
                           model: Model, updateMask: string, versionName: string): Model {
   var runtime = new Util.RuntimeOptions{};
@@ -1056,6 +1123,7 @@ async function updateModel(projectId: string, schemaName: string, modelName: str
 }
 
 // 删除模型
+// 限流：每用户每秒最多 10 次请求
 async function deleteModel(projectId: string, schemaName: string, modelName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getModelPath(projectId, schemaName, modelName, null);
@@ -1063,6 +1131,7 @@ async function deleteModel(projectId: string, schemaName: string, modelName: str
 }
 
 // 创建模型版本
+// 限流：每用户每秒最多 10 次请求
 async function createModelVersion(projectId: string, schemaName: string, modelName: string, model: Model): Model {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models/${modelName}:createVersion`;
@@ -1070,6 +1139,7 @@ async function createModelVersion(projectId: string, schemaName: string, modelNa
 }
 
 // 删除模型版本
+// 限流：每用户每秒最多 10 次请求
 async function deleteModelVersion(projectId: string, schemaName: string, modelName: string, versionName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models/${modelName}@${versionName}:deleteVersion`;
@@ -1079,6 +1149,7 @@ async function deleteModelVersion(projectId: string, schemaName: string, modelNa
 
 
 // 列出模型版本
+// 限流：每用户每秒最多 10 次请求
 async function listModelVersions(projectId: string, schemaName: string, modelName: string, 
                                 pageSize: integer, pageToken: string): ListModelVersionsResponse {
   var runtime = new Util.RuntimeOptions{};
@@ -1096,6 +1167,7 @@ async function listModelVersions(projectId: string, schemaName: string, modelNam
 }
 
 // 获取模型策略
+// 限流：每用户每秒最多 100 次请求
 async function getModelPolicy(projectId: string, schemaName: string, modelName: string): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getModelPath(projectId, schemaName, modelName, null)}:getPolicy`;
@@ -1104,6 +1176,7 @@ async function getModelPolicy(projectId: string, schemaName: string, modelName: 
 }
 
 // 设置模型策略
+// 限流：每用户每秒最多 10 次请求
 async function setModelPolicy(projectId: string, schemaName: string, modelName: string, policy: SetPolicyRequest): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getModelPath(projectId, schemaName, modelName, null)}:setPolicy`;
@@ -1162,6 +1235,7 @@ model SearchResponse = {
  *  - `last_modified_time asc`：最近修改时间正序
  *  - `last_modified_time desc`：最近修改时间倒序
  */
+// 限流：每用户每秒最多 10 次请求
 async function search(namespaceId: string, query: string, pageSize: integer, pageToken: string, orderBy: string): SearchResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/namespaces/${namespaceId}:search`;
@@ -1190,6 +1264,7 @@ model DataToken = {
   expiration?: string(name='expiration', description='过期时间')
 }
 
+// 限流：每用户每秒最多 100 次请求
 async function getDataToken(table: Table, duration: integer): DataToken {
   var runtime = new Util.RuntimeOptions{};
   var path = getTablePath(table);
