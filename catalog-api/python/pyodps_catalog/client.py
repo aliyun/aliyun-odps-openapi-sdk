@@ -138,12 +138,11 @@ class Client(OpenApiClient):
     def set_table_policy(
         self,
         table: catalog_api_models.Table,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_table_path(table)
+        path = f'{self.get_table_path(table)}:setPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(policy, 'POST', path, query, runtime)
@@ -152,12 +151,11 @@ class Client(OpenApiClient):
     async def set_table_policy_async(
         self,
         table: catalog_api_models.Table,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_table_path(table)
+        path = f'{self.get_table_path(table)}:setPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(policy, 'POST', path, query, runtime)
@@ -168,9 +166,8 @@ class Client(OpenApiClient):
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_table_path(table)
+        path = f'{self.get_table_path(table)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -181,9 +178,8 @@ class Client(OpenApiClient):
         table: catalog_api_models.Table,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_table_path(table)
+        path = f'{self.get_table_path(table)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -354,9 +350,8 @@ class Client(OpenApiClient):
         request: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_connection_path(namespace, connection_name)
+        path = f'{self.get_connection_path(namespace, connection_name)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(request, 'POST', path, query, runtime)
@@ -369,9 +364,8 @@ class Client(OpenApiClient):
         request: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_connection_path(namespace, connection_name)
+        path = f'{self.get_connection_path(namespace, connection_name)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(request, 'POST', path, query, runtime)
@@ -383,9 +377,8 @@ class Client(OpenApiClient):
         connection_name: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_connection_path(namespace, connection_name)
+        path = f'{self.get_connection_path(namespace, connection_name)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -397,9 +390,8 @@ class Client(OpenApiClient):
         connection_name: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_connection_path(namespace, connection_name)
+        path = f'{self.get_connection_path(namespace, connection_name)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -618,15 +610,14 @@ class Client(OpenApiClient):
         self,
         namespace: str,
         role_name: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         """
         Set role policy
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_role_path(namespace, role_name)
+        path = f'{self.get_role_path(namespace, role_name)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(policy, 'POST', path, query, runtime)
@@ -636,15 +627,14 @@ class Client(OpenApiClient):
         self,
         namespace: str,
         role_name: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         """
         Set role policy
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_role_path(namespace, role_name)
+        path = f'{self.get_role_path(namespace, role_name)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(policy, 'POST', path, query, runtime)
@@ -659,9 +649,8 @@ class Client(OpenApiClient):
         Get role policy
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_role_path(namespace, role_name)
+        path = f'{self.get_role_path(namespace, role_name)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -676,9 +665,8 @@ class Client(OpenApiClient):
         Get role policy
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_role_path(namespace, role_name)
+        path = f'{self.get_role_path(namespace, role_name)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -854,10 +842,10 @@ class Client(OpenApiClient):
         self,
         namespace: str,
         taxonomy_id: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_taxonomy_path(namespace, taxonomy_id)
+        path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}:setPolicy'
         query = {}
         query['method'] = 'setPolicy'
         return TeaCore.from_map(
@@ -869,10 +857,10 @@ class Client(OpenApiClient):
         self,
         namespace: str,
         taxonomy_id: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_taxonomy_path(namespace, taxonomy_id)
+        path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}:setPolicy'
         query = {}
         query['method'] = 'setPolicy'
         return TeaCore.from_map(
@@ -886,9 +874,8 @@ class Client(OpenApiClient):
         taxonomy_id: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_taxonomy_path(namespace, taxonomy_id)
+        path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -900,9 +887,8 @@ class Client(OpenApiClient):
         taxonomy_id: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_taxonomy_path(namespace, taxonomy_id)
+        path = f'{self.get_taxonomy_path(namespace, taxonomy_id)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -1071,12 +1057,11 @@ class Client(OpenApiClient):
         namespace: str,
         taxonomy_id: str,
         policy_tag_id: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
+        path = f'{self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(policy, 'POST', path, query, runtime)
@@ -1087,12 +1072,11 @@ class Client(OpenApiClient):
         namespace: str,
         taxonomy_id: str,
         policy_tag_id: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
+        path = f'{self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(policy, 'POST', path, query, runtime)
@@ -1105,9 +1089,8 @@ class Client(OpenApiClient):
         policy_tag_id: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
+        path = f'{self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -1120,9 +1103,8 @@ class Client(OpenApiClient):
         policy_tag_id: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
+        path = f'{self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -1243,9 +1225,8 @@ class Client(OpenApiClient):
         request: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_data_policy_path(namespace, data_policy_name)
+        path = f'{self.get_data_policy_path(namespace, data_policy_name)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(request, 'POST', path, query, runtime)
@@ -1258,9 +1239,8 @@ class Client(OpenApiClient):
         request: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_data_policy_path(namespace, data_policy_name)
+        path = f'{self.get_data_policy_path(namespace, data_policy_name)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(request, 'POST', path, query, runtime)
@@ -1272,9 +1252,8 @@ class Client(OpenApiClient):
         data_policy_name: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_data_policy_path(namespace, data_policy_name)
+        path = f'{self.get_data_policy_path(namespace, data_policy_name)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -1286,9 +1265,8 @@ class Client(OpenApiClient):
         data_policy_name: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_data_policy_path(namespace, data_policy_name)
+        path = f'{self.get_data_policy_path(namespace, data_policy_name)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -1523,12 +1501,11 @@ class Client(OpenApiClient):
         self,
         project_id: str,
         schema_name: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_schema_path(project_id, schema_name)
+        path = f'{self.get_schema_path(project_id, schema_name)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(policy, 'POST', path, query, runtime)
@@ -1538,12 +1515,11 @@ class Client(OpenApiClient):
         self,
         project_id: str,
         schema_name: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_schema_path(project_id, schema_name)
+        path = f'{self.get_schema_path(project_id, schema_name)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(policy, 'POST', path, query, runtime)
@@ -1555,9 +1531,8 @@ class Client(OpenApiClient):
         schema_name: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_schema_path(project_id, schema_name)
+        path = f'{self.get_schema_path(project_id, schema_name)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -1569,9 +1544,8 @@ class Client(OpenApiClient):
         schema_name: str,
     ) -> catalog_api_models.Policy:
         runtime = util_models.RuntimeOptions()
-        path = self.get_schema_path(project_id, schema_name)
+        path = f'{self.get_schema_path(project_id, schema_name)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -1595,6 +1569,7 @@ class Client(OpenApiClient):
         table_name: str,
         page_size: int,
         page_token: str,
+        view: str,
     ) -> catalog_api_models.ListPartitionsResponse:
         """
         Methods
@@ -1606,6 +1581,10 @@ class Client(OpenApiClient):
             query['pageSize'] = McUtilClient.to_string(page_size)
         if not UtilClient.is_unset(page_token):
             query['pageToken'] = page_token
+        if not UtilClient.is_unset(view):
+            query['view'] = view
+            if UtilClient.equal_string(view, 'FULL'):
+                query['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.ListPartitionsResponse(),
             self.request_with_model(catalog_api_models.ListPartitionsResponse(), 'GET', path, query, runtime)
@@ -1618,6 +1597,7 @@ class Client(OpenApiClient):
         table_name: str,
         page_size: int,
         page_token: str,
+        view: str,
     ) -> catalog_api_models.ListPartitionsResponse:
         """
         Methods
@@ -1629,6 +1609,10 @@ class Client(OpenApiClient):
             query['pageSize'] = McUtilClient.to_string(page_size)
         if not UtilClient.is_unset(page_token):
             query['pageToken'] = page_token
+        if not UtilClient.is_unset(view):
+            query['view'] = view
+            if UtilClient.equal_string(view, 'FULL'):
+                query['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.ListPartitionsResponse(),
             await self.request_with_model_async(catalog_api_models.ListPartitionsResponse(), 'GET', path, query, runtime)
@@ -2174,9 +2158,8 @@ class Client(OpenApiClient):
         获取模型策略
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_model_path(project_id, schema_name, model_name, None)
+        path = f'{self.get_model_path(project_id, schema_name, model_name, None)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -2192,9 +2175,8 @@ class Client(OpenApiClient):
         获取模型策略
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_model_path(project_id, schema_name, model_name, None)
+        path = f'{self.get_model_path(project_id, schema_name, model_name, None)}:getPolicy'
         query = {}
-        query['method'] = 'getPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
@@ -2205,15 +2187,14 @@ class Client(OpenApiClient):
         project_id: str,
         schema_name: str,
         model_name: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         """
         设置模型策略
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_model_path(project_id, schema_name, model_name, None)
+        path = f'{self.get_model_path(project_id, schema_name, model_name, None)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             self.request_with_model(policy, 'POST', path, query, runtime)
@@ -2224,15 +2205,14 @@ class Client(OpenApiClient):
         project_id: str,
         schema_name: str,
         model_name: str,
-        policy: catalog_api_models.Policy,
+        policy: catalog_api_models.SetPolicyRequest,
     ) -> catalog_api_models.Policy:
         """
         设置模型策略
         """
         runtime = util_models.RuntimeOptions()
-        path = self.get_model_path(project_id, schema_name, model_name, None)
+        path = f'{self.get_model_path(project_id, schema_name, model_name, None)}:setPolicy'
         query = {}
-        query['method'] = 'setPolicy'
         return TeaCore.from_map(
             catalog_api_models.Policy(),
             await self.request_with_model_async(policy, 'POST', path, query, runtime)

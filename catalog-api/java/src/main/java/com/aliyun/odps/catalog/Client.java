@@ -46,19 +46,17 @@ public class Client extends com.aliyun.odps.Client {
         return TeaModel.toModel(this.requestWithModel(new ListTablesResponse(), "GET", path, query, runtime), new ListTablesResponse());
     }
 
-    public Policy setTablePolicy(Table table, Policy policy) throws Exception {
+    public Policy setTablePolicy(Table table, SetPolicyRequest policy) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getTablePath(table);
+        String path = "" + this.getTablePath(table) + ":setPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "getPolicy");
         return TeaModel.toModel(this.requestWithModel(policy, "POST", path, query, runtime), new Policy());
     }
 
     public Policy getTablePolicy(Table table) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getTablePath(table);
+        String path = "" + this.getTablePath(table) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "getPolicy");
         return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
     }
 
@@ -123,17 +121,15 @@ public class Client extends com.aliyun.odps.Client {
 
     public Policy setConnectionPolicy(String namespace, String connectionName, SetPolicyRequest request) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getConnectionPath(namespace, connectionName);
+        String path = "" + this.getConnectionPath(namespace, connectionName) + ":setPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "setPolicy");
         return TeaModel.toModel(this.requestWithModel(request, "POST", path, query, runtime), new Policy());
     }
 
     public Policy getConnectionPolicy(String namespace, String connectionName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getConnectionPath(namespace, connectionName);
+        String path = "" + this.getConnectionPath(namespace, connectionName) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "getPolicy");
         return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
     }
 
@@ -209,20 +205,18 @@ public class Client extends com.aliyun.odps.Client {
     }
 
     // Set role policy
-    public Policy setRolePolicy(String namespace, String roleName, Policy policy) throws Exception {
+    public Policy setRolePolicy(String namespace, String roleName, SetPolicyRequest policy) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getRolePath(namespace, roleName);
+        String path = "" + this.getRolePath(namespace, roleName) + ":setPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "setPolicy");
         return TeaModel.toModel(this.requestWithModel(policy, "POST", path, query, runtime), new Policy());
     }
 
     // Get role policy
     public Policy getRolePolicy(String namespace, String roleName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getRolePath(namespace, roleName);
+        String path = "" + this.getRolePath(namespace, roleName) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "getPolicy");
         return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
     }
 
@@ -280,9 +274,9 @@ public class Client extends com.aliyun.odps.Client {
         return TeaModel.toModel(this.requestWithModel(taxonomy, "PATCH", path, query, runtime), new Taxonomy());
     }
 
-    public Policy setTaxonomyPolicy(String namespace, String taxonomyId, Policy policy) throws Exception {
+    public Policy setTaxonomyPolicy(String namespace, String taxonomyId, SetPolicyRequest policy) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getTaxonomyPath(namespace, taxonomyId);
+        String path = "" + this.getTaxonomyPath(namespace, taxonomyId) + ":setPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
         query.put("method", "setPolicy");
         return TeaModel.toModel(this.requestWithModel(policy, "POST", path, query, runtime), new Policy());
@@ -290,9 +284,8 @@ public class Client extends com.aliyun.odps.Client {
 
     public Policy getTaxonomyPolicy(String namespace, String taxonomyId) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getTaxonomyPath(namespace, taxonomyId);
+        String path = "" + this.getTaxonomyPath(namespace, taxonomyId) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "getPolicy");
         return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
     }
 
@@ -341,19 +334,17 @@ public class Client extends com.aliyun.odps.Client {
         return TeaModel.toModel(this.requestWithModel(policyTag, "PATCH", path, query, runtime), new PolicyTag());
     }
 
-    public Policy setPolicyTagPolicy(String namespace, String taxonomyId, String policyTagId, Policy policy) throws Exception {
+    public Policy setPolicyTagPolicy(String namespace, String taxonomyId, String policyTagId, SetPolicyRequest policy) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getPolicyTagPath(namespace, taxonomyId, policyTagId);
+        String path = "" + this.getPolicyTagPath(namespace, taxonomyId, policyTagId) + ":setPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "setPolicy");
         return TeaModel.toModel(this.requestWithModel(policy, "POST", path, query, runtime), new Policy());
     }
 
     public Policy getPolicyTagPolicy(String namespace, String taxonomyId, String policyTagId) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getPolicyTagPath(namespace, taxonomyId, policyTagId);
+        String path = "" + this.getPolicyTagPath(namespace, taxonomyId, policyTagId) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "getPolicy");
         return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
     }
 
@@ -392,17 +383,15 @@ public class Client extends com.aliyun.odps.Client {
 
     public Policy setDataPolicyPolicy(String namespace, String dataPolicyName, SetPolicyRequest request) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getDataPolicyPath(namespace, dataPolicyName);
+        String path = "" + this.getDataPolicyPath(namespace, dataPolicyName) + ":setPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "setPolicy");
         return TeaModel.toModel(this.requestWithModel(request, "POST", path, query, runtime), new Policy());
     }
 
     public Policy getDataPolicyPolicy(String namespace, String dataPolicyName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getDataPolicyPath(namespace, dataPolicyName);
+        String path = "" + this.getDataPolicyPath(namespace, dataPolicyName) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "getPolicy");
         return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
     }
 
@@ -483,19 +472,17 @@ public class Client extends com.aliyun.odps.Client {
         return TeaModel.toModel(this.requestWithoutModel(new Schema(), "DELETE", path, null, runtime), new HttpResponse());
     }
 
-    public Policy setSchemaPolicy(String projectId, String schemaName, Policy policy) throws Exception {
+    public Policy setSchemaPolicy(String projectId, String schemaName, SetPolicyRequest policy) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getSchemaPath(projectId, schemaName);
+        String path = "" + this.getSchemaPath(projectId, schemaName) + ":setPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "setPolicy");
         return TeaModel.toModel(this.requestWithModel(policy, "POST", path, query, runtime), new Policy());
     }
 
     public Policy getSchemaPolicy(String projectId, String schemaName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getSchemaPath(projectId, schemaName);
+        String path = "" + this.getSchemaPath(projectId, schemaName) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "getPolicy");
         return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
     }
 
@@ -505,7 +492,7 @@ public class Client extends com.aliyun.odps.Client {
     }
 
     // Methods
-    public ListPartitionsResponse listPartitions(String projectId, String schemaName, String tableName, Integer pageSize, String pageToken) throws Exception {
+    public ListPartitionsResponse listPartitions(String projectId, String schemaName, String tableName, Integer pageSize, String pageToken, String view) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getTablePartitionsPath(projectId, schemaName, tableName);
         java.util.Map<String, String> query = new java.util.HashMap<>();
@@ -515,6 +502,14 @@ public class Client extends com.aliyun.odps.Client {
 
         if (!com.aliyun.teautil.Common.isUnset(pageToken)) {
             query.put("pageToken", pageToken);
+        }
+
+        if (!com.aliyun.teautil.Common.isUnset(view)) {
+            query.put("view", view);
+            if (com.aliyun.teautil.Common.equalString(view, "FULL")) {
+                query.put("apiScope", "inner");
+            }
+
         }
 
         return TeaModel.toModel(this.requestWithModel(new ListPartitionsResponse(), "GET", path, query, runtime), new ListPartitionsResponse());
@@ -684,18 +679,16 @@ public class Client extends com.aliyun.odps.Client {
     // 获取模型策略
     public Policy getModelPolicy(String projectId, String schemaName, String modelName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getModelPath(projectId, schemaName, modelName, null);
+        String path = "" + this.getModelPath(projectId, schemaName, modelName, null) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "getPolicy");
         return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
     }
 
     // 设置模型策略
-    public Policy setModelPolicy(String projectId, String schemaName, String modelName, Policy policy) throws Exception {
+    public Policy setModelPolicy(String projectId, String schemaName, String modelName, SetPolicyRequest policy) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        String path = this.getModelPath(projectId, schemaName, modelName, null);
+        String path = "" + this.getModelPath(projectId, schemaName, modelName, null) + ":setPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        query.put("method", "setPolicy");
         return TeaModel.toModel(this.requestWithModel(policy, "POST", path, query, runtime), new Policy());
     }
 

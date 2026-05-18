@@ -74,6 +74,12 @@ public class TableFieldSchema extends TeaModel {
     @NameInMap("defaultValueExpression")
     public String defaultValueExpression;
 
+    /**
+     * <p>如果是 VECTOR 类型，表示向量的维度。</p>
+     */
+    @NameInMap("dimension")
+    public String dimension;
+
     public static TableFieldSchema build(java.util.Map<String, ?> map) throws Exception {
         TableFieldSchema self = new TableFieldSchema();
         return TeaModel.build(map, self);
@@ -165,6 +171,14 @@ public class TableFieldSchema extends TeaModel {
     }
     public String getDefaultValueExpression() {
         return this.defaultValueExpression;
+    }
+
+    public TableFieldSchema setDimension(String dimension) {
+        this.dimension = dimension;
+        return this;
+    }
+    public String getDimension() {
+        return this.dimension;
     }
 
 }

@@ -56,6 +56,12 @@ public class Project extends TeaModel {
     @NameInMap("region")
     public String region;
 
+    /**
+     * <p>是否为外部 catalog project</p>
+     */
+    @NameInMap("externalCatalog")
+    public Boolean externalCatalog;
+
     public static Project build(java.util.Map<String, ?> map) throws Exception {
         Project self = new Project();
         return TeaModel.build(map, self);
@@ -123,6 +129,14 @@ public class Project extends TeaModel {
     }
     public String getRegion() {
         return this.region;
+    }
+
+    public Project setExternalCatalog(Boolean externalCatalog) {
+        this.externalCatalog = externalCatalog;
+        return this;
+    }
+    public Boolean getExternalCatalog() {
+        return this.externalCatalog;
     }
 
 }

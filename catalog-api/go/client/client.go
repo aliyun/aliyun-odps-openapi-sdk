@@ -130,6 +130,8 @@ type TableFieldSchema struct {
   Scale *string `json:"scale,omitempty" xml:"scale,omitempty"`
   // 可选。默认值的表达式字符串。
   DefaultValueExpression *string `json:"defaultValueExpression,omitempty" xml:"defaultValueExpression,omitempty"`
+  // 如果是 VECTOR 类型，表示向量的维度。
+  Dimension *string `json:"dimension,omitempty" xml:"dimension,omitempty"`
 }
 
 func (s TableFieldSchema) String() string {
@@ -192,6 +194,11 @@ func (s *TableFieldSchema) SetScale(v string) *TableFieldSchema {
 
 func (s *TableFieldSchema) SetDefaultValueExpression(v string) *TableFieldSchema {
   s.DefaultValueExpression = &v
+  return s
+}
+
+func (s *TableFieldSchema) SetDimension(v string) *TableFieldSchema {
+  s.Dimension = &v
   return s
 }
 
@@ -1142,6 +1149,8 @@ type Project struct {
   SchemaEnabled *bool `json:"schemaEnabled,omitempty" xml:"schemaEnabled,omitempty"`
   // 所属region
   Region *string `json:"region,omitempty" xml:"region,omitempty"`
+  // 是否为外部 catalog project
+  ExternalCatalog *bool `json:"externalCatalog,omitempty" xml:"externalCatalog,omitempty"`
 }
 
 func (s Project) String() string {
@@ -1192,6 +1201,11 @@ func (s *Project) SetRegion(v string) *Project {
   return s
 }
 
+func (s *Project) SetExternalCatalog(v bool) *Project {
+  s.ExternalCatalog = &v
+  return s
+}
+
 type Schema struct {
   // Schema的资源全名：projects/{projectId}/schemas/{schemaName}。仅输出。
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
@@ -1205,6 +1219,10 @@ type Schema struct {
   Owner *string `json:"owner,omitempty" xml:"owner,omitempty"`
   // 外部schema配置
   ExternalSchemaConfiguration *ExternalSchemaConfiguration `json:"externalSchemaConfiguration,omitempty" xml:"externalSchemaConfiguration,omitempty"`
+  // Schema 下表的默认过期天数
+  DefaultTableExpirationDays *string `json:"defaultTableExpirationDays,omitempty" xml:"defaultTableExpirationDays,omitempty"`
+  // Schema 下分区的默认过期天数
+  DefaultPartitionExpirationDays *string `json:"defaultPartitionExpirationDays,omitempty" xml:"defaultPartitionExpirationDays,omitempty"`
 }
 
 func (s Schema) String() string {
@@ -1242,6 +1260,16 @@ func (s *Schema) SetOwner(v string) *Schema {
 
 func (s *Schema) SetExternalSchemaConfiguration(v *ExternalSchemaConfiguration) *Schema {
   s.ExternalSchemaConfiguration = v
+  return s
+}
+
+func (s *Schema) SetDefaultTableExpirationDays(v string) *Schema {
+  s.DefaultTableExpirationDays = &v
+  return s
+}
+
+func (s *Schema) SetDefaultPartitionExpirationDays(v string) *Schema {
+  s.DefaultPartitionExpirationDays = &v
   return s
 }
 
@@ -1341,6 +1369,12 @@ func (s *ListSchemasResponse) SetNextPageToken(v string) *ListSchemasResponse {
 type Partition struct {
   // 分区spec，格式样例为 bu=tt/ds=20250515
   Spec *string `json:"spec,omitempty" xml:"spec,omitempty"`
+  // 分区的创建时间（毫秒）。仅输出。
+  CreateTime *string `json:"createTime,omitempty" xml:"createTime,omitempty"`
+  // 分区的修改时间（毫秒）。仅输出。
+  LastModifiedTime *string `json:"lastModifiedTime,omitempty" xml:"lastModifiedTime,omitempty"`
+  // 分区的最后访问时间（毫秒）。仅输出。
+  LastAccessTime *string `json:"lastAccessTime,omitempty" xml:"lastAccessTime,omitempty"`
 }
 
 func (s Partition) String() string {
@@ -1353,6 +1387,21 @@ func (s Partition) GoString() string {
 
 func (s *Partition) SetSpec(v string) *Partition {
   s.Spec = &v
+  return s
+}
+
+func (s *Partition) SetCreateTime(v string) *Partition {
+  s.CreateTime = &v
+  return s
+}
+
+func (s *Partition) SetLastModifiedTime(v string) *Partition {
+  s.LastModifiedTime = &v
+  return s
+}
+
+func (s *Partition) SetLastAccessTime(v string) *Partition {
+  s.LastAccessTime = &v
   return s
 }
 
@@ -2023,6 +2072,8 @@ type ModelFieldSchema struct {
   Scale *string `json:"scale,omitempty" xml:"scale,omitempty"`
   // 默认值的表达式字符串
   DefaultValueExpression *string `json:"defaultValueExpression,omitempty" xml:"defaultValueExpression,omitempty"`
+  // 如果是 VECTOR 类型，表示向量的维度
+  Dimension *string `json:"dimension,omitempty" xml:"dimension,omitempty"`
 }
 
 func (s ModelFieldSchema) String() string {
@@ -2080,6 +2131,11 @@ func (s *ModelFieldSchema) SetScale(v string) *ModelFieldSchema {
 
 func (s *ModelFieldSchema) SetDefaultValueExpression(v string) *ModelFieldSchema {
   s.DefaultValueExpression = &v
+  return s
+}
+
+func (s *ModelFieldSchema) SetDimension(v string) *ModelFieldSchema {
+  s.Dimension = &v
   return s
 }
 
@@ -2340,11 +2396,10 @@ func (client *Client) ListTables (projectId *string, schemaName *string, pageSiz
   return _result, _err
 }
 
-func (client *Client) SetTablePolicy (table *Table, policy *Policy) (_result *Policy, _err error) {
+func (client *Client) SetTablePolicy (table *Table, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetTablePath(table)
+  path := tea.String(tea.StringValue(client.GetTablePath(table)) + ":setPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("getPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(policy, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2356,9 +2411,8 @@ func (client *Client) SetTablePolicy (table *Table, policy *Policy) (_result *Po
 
 func (client *Client) GetTablePolicy (table *Table) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetTablePath(table)
+  path := tea.String(tea.StringValue(client.GetTablePath(table)) + ":getPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("getPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2463,9 +2517,8 @@ func (client *Client) DeleteConnection (namespace *string, connectionName *strin
 
 func (client *Client) SetConnectionPolicy (namespace *string, connectionName *string, request *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetConnectionPath(namespace, connectionName)
+  path := tea.String(tea.StringValue(client.GetConnectionPath(namespace, connectionName)) + ":setPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("setPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(request, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2477,9 +2530,8 @@ func (client *Client) SetConnectionPolicy (namespace *string, connectionName *st
 
 func (client *Client) GetConnectionPolicy (namespace *string, connectionName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetConnectionPath(namespace, connectionName)
+  path := tea.String(tea.StringValue(client.GetConnectionPath(namespace, connectionName)) + ":getPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("getPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2593,11 +2645,10 @@ func (client *Client) UpdateRole (namespace *string, roleName *string, role *Rol
 }
 
 // Set role policy
-func (client *Client) SetRolePolicy (namespace *string, roleName *string, policy *Policy) (_result *Policy, _err error) {
+func (client *Client) SetRolePolicy (namespace *string, roleName *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetRolePath(namespace, roleName)
+  path := tea.String(tea.StringValue(client.GetRolePath(namespace, roleName)) + ":setPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("setPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(policy, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2610,9 +2661,8 @@ func (client *Client) SetRolePolicy (namespace *string, roleName *string, policy
 // Get role policy
 func (client *Client) GetRolePolicy (namespace *string, roleName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetRolePath(namespace, roleName)
+  path := tea.String(tea.StringValue(client.GetRolePath(namespace, roleName)) + ":getPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("getPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2708,9 +2758,9 @@ func (client *Client) UpdateTaxonomy (namespace *string, taxonomyId *string, tax
   return _result, _err
 }
 
-func (client *Client) SetTaxonomyPolicy (namespace *string, taxonomyId *string, policy *Policy) (_result *Policy, _err error) {
+func (client *Client) SetTaxonomyPolicy (namespace *string, taxonomyId *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetTaxonomyPath(namespace, taxonomyId)
+  path := tea.String(tea.StringValue(client.GetTaxonomyPath(namespace, taxonomyId)) + ":setPolicy")
   query := make(map[string]*string)
   query["method"] = tea.String("setPolicy")
   _result = &Policy{}
@@ -2724,9 +2774,8 @@ func (client *Client) SetTaxonomyPolicy (namespace *string, taxonomyId *string, 
 
 func (client *Client) GetTaxonomyPolicy (namespace *string, taxonomyId *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetTaxonomyPath(namespace, taxonomyId)
+  path := tea.String(tea.StringValue(client.GetTaxonomyPath(namespace, taxonomyId)) + ":getPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("getPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2811,11 +2860,10 @@ func (client *Client) UpdatePolicyTag (namespace *string, taxonomyId *string, po
   return _result, _err
 }
 
-func (client *Client) SetPolicyTagPolicy (namespace *string, taxonomyId *string, policyTagId *string, policy *Policy) (_result *Policy, _err error) {
+func (client *Client) SetPolicyTagPolicy (namespace *string, taxonomyId *string, policyTagId *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)
+  path := tea.String(tea.StringValue(client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)) + ":setPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("setPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(policy, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2827,9 +2875,8 @@ func (client *Client) SetPolicyTagPolicy (namespace *string, taxonomyId *string,
 
 func (client *Client) GetPolicyTagPolicy (namespace *string, taxonomyId *string, policyTagId *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)
+  path := tea.String(tea.StringValue(client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)) + ":getPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("getPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2898,9 +2945,8 @@ func (client *Client) ListDataPolicies (namespace *string, pageSize *int, pageTo
 
 func (client *Client) SetDataPolicyPolicy (namespace *string, dataPolicyName *string, request *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetDataPolicyPath(namespace, dataPolicyName)
+  path := tea.String(tea.StringValue(client.GetDataPolicyPath(namespace, dataPolicyName)) + ":setPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("setPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(request, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -2912,9 +2958,8 @@ func (client *Client) SetDataPolicyPolicy (namespace *string, dataPolicyName *st
 
 func (client *Client) GetDataPolicyPolicy (namespace *string, dataPolicyName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetDataPolicyPath(namespace, dataPolicyName)
+  path := tea.String(tea.StringValue(client.GetDataPolicyPath(namespace, dataPolicyName)) + ":getPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("getPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -3047,11 +3092,10 @@ func (client *Client) DeleteSchema (projectId *string, schemaName *string) (_res
   return _result, _err
 }
 
-func (client *Client) SetSchemaPolicy (projectId *string, schemaName *string, policy *Policy) (_result *Policy, _err error) {
+func (client *Client) SetSchemaPolicy (projectId *string, schemaName *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetSchemaPath(projectId, schemaName)
+  path := tea.String(tea.StringValue(client.GetSchemaPath(projectId, schemaName)) + ":setPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("setPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(policy, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -3063,9 +3107,8 @@ func (client *Client) SetSchemaPolicy (projectId *string, schemaName *string, po
 
 func (client *Client) GetSchemaPolicy (projectId *string, schemaName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetSchemaPath(projectId, schemaName)
+  path := tea.String(tea.StringValue(client.GetSchemaPath(projectId, schemaName)) + ":getPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("getPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -3082,7 +3125,7 @@ func (client *Client) GetTablePartitionsPath (projectId *string, schemaName *str
 }
 
 // Methods
-func (client *Client) ListPartitions (projectId *string, schemaName *string, tableName *string, pageSize *int, pageToken *string) (_result *ListPartitionsResponse, _err error) {
+func (client *Client) ListPartitions (projectId *string, schemaName *string, tableName *string, pageSize *int, pageToken *string, view *string) (_result *ListPartitionsResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetTablePartitionsPath(projectId, schemaName, tableName)
   query := make(map[string]*string)
@@ -3092,6 +3135,14 @@ func (client *Client) ListPartitions (projectId *string, schemaName *string, tab
 
   if !tea.BoolValue(util.IsUnset(pageToken)) {
     query["pageToken"] = pageToken
+  }
+
+  if !tea.BoolValue(util.IsUnset(view)) {
+    query["view"] = view
+    if tea.BoolValue(util.EqualString(view, tea.String("FULL"))) {
+      query["apiScope"] = tea.String("inner")
+    }
+
   }
 
   _result = &ListPartitionsResponse{}
@@ -3363,9 +3414,8 @@ func (client *Client) ListModelVersions (projectId *string, schemaName *string, 
 // 获取模型策略
 func (client *Client) GetModelPolicy (projectId *string, schemaName *string, modelName *string) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetModelPath(projectId, schemaName, modelName, nil)
+  path := tea.String(tea.StringValue(client.GetModelPath(projectId, schemaName, modelName, nil)) + ":getPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("getPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
   if _err != nil {
@@ -3376,11 +3426,10 @@ func (client *Client) GetModelPolicy (projectId *string, schemaName *string, mod
 }
 
 // 设置模型策略
-func (client *Client) SetModelPolicy (projectId *string, schemaName *string, modelName *string, policy *Policy) (_result *Policy, _err error) {
+func (client *Client) SetModelPolicy (projectId *string, schemaName *string, modelName *string, policy *SetPolicyRequest) (_result *Policy, _err error) {
   runtime := &util.RuntimeOptions{}
-  path := client.GetModelPath(projectId, schemaName, modelName, nil)
+  path := tea.String(tea.StringValue(client.GetModelPath(projectId, schemaName, modelName, nil)) + ":setPolicy")
   query := make(map[string]*string)
-  query["method"] = tea.String("setPolicy")
   _result = &Policy{}
   _body, _err := client.RequestWithModel(policy, tea.String("POST"), path, query, runtime)
   if _err != nil {

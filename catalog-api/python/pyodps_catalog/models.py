@@ -194,6 +194,7 @@ class TableFieldSchema(TeaModel):
         precision: str = None,
         scale: str = None,
         default_value_expression: str = None,
+        dimension: str = None,
     ):
         # 列名（如果是顶层列），或者 struct 字段名。
         self.field_name = field_name
@@ -217,6 +218,8 @@ class TableFieldSchema(TeaModel):
         self.scale = scale
         # 可选。默认值的表达式字符串。
         self.default_value_expression = default_value_expression
+        # 如果是 VECTOR 类型，表示向量的维度。
+        self.dimension = dimension
 
     def validate(self):
         if self.fields:
@@ -256,6 +259,8 @@ class TableFieldSchema(TeaModel):
             result['scale'] = self.scale
         if self.default_value_expression is not None:
             result['defaultValueExpression'] = self.default_value_expression
+        if self.dimension is not None:
+            result['dimension'] = self.dimension
         return result
 
     def from_map(self, m: dict = None):
@@ -286,6 +291,8 @@ class TableFieldSchema(TeaModel):
             self.scale = m.get('scale')
         if m.get('defaultValueExpression') is not None:
             self.default_value_expression = m.get('defaultValueExpression')
+        if m.get('dimension') is not None:
+            self.dimension = m.get('dimension')
         return self
 
 
@@ -1552,6 +1559,7 @@ class Project(TeaModel):
         last_modified_time: str = None,
         schema_enabled: bool = None,
         region: str = None,
+        external_catalog: bool = None,
     ):
         # Project的资源全名：projects/{projectId}。仅输出。
         self.name = name
@@ -1569,6 +1577,8 @@ class Project(TeaModel):
         self.schema_enabled = schema_enabled
         # 所属region
         self.region = region
+        # 是否为外部 catalog project
+        self.external_catalog = external_catalog
 
     def validate(self):
         pass
@@ -1595,6 +1605,8 @@ class Project(TeaModel):
             result['schemaEnabled'] = self.schema_enabled
         if self.region is not None:
             result['region'] = self.region
+        if self.external_catalog is not None:
+            result['externalCatalog'] = self.external_catalog
         return result
 
     def from_map(self, m: dict = None):
@@ -1615,6 +1627,8 @@ class Project(TeaModel):
             self.schema_enabled = m.get('schemaEnabled')
         if m.get('region') is not None:
             self.region = m.get('region')
+        if m.get('externalCatalog') is not None:
+            self.external_catalog = m.get('externalCatalog')
         return self
 
 
@@ -1692,6 +1706,8 @@ class Schema(TeaModel):
         type: str = None,
         owner: str = None,
         external_schema_configuration: ExternalSchemaConfiguration = None,
+        default_table_expiration_days: str = None,
+        default_partition_expiration_days: str = None,
     ):
         # Schema的资源全名：projects/{projectId}/schemas/{schemaName}。仅输出。
         self.name = name
@@ -1705,6 +1721,10 @@ class Schema(TeaModel):
         self.owner = owner
         # 外部schema配置
         self.external_schema_configuration = external_schema_configuration
+        # Schema 下表的默认过期天数
+        self.default_table_expiration_days = default_table_expiration_days
+        # Schema 下分区的默认过期天数
+        self.default_partition_expiration_days = default_partition_expiration_days
 
     def validate(self):
         if self.schema_name is not None:
@@ -1730,6 +1750,10 @@ class Schema(TeaModel):
             result['owner'] = self.owner
         if self.external_schema_configuration is not None:
             result['externalSchemaConfiguration'] = self.external_schema_configuration.to_map()
+        if self.default_table_expiration_days is not None:
+            result['defaultTableExpirationDays'] = self.default_table_expiration_days
+        if self.default_partition_expiration_days is not None:
+            result['defaultPartitionExpirationDays'] = self.default_partition_expiration_days
         return result
 
     def from_map(self, m: dict = None):
@@ -1747,6 +1771,10 @@ class Schema(TeaModel):
         if m.get('externalSchemaConfiguration') is not None:
             temp_model = ExternalSchemaConfiguration()
             self.external_schema_configuration = temp_model.from_map(m['externalSchemaConfiguration'])
+        if m.get('defaultTableExpirationDays') is not None:
+            self.default_table_expiration_days = m.get('defaultTableExpirationDays')
+        if m.get('defaultPartitionExpirationDays') is not None:
+            self.default_partition_expiration_days = m.get('defaultPartitionExpirationDays')
         return self
 
 
@@ -1840,9 +1868,18 @@ class Partition(TeaModel):
     def __init__(
         self,
         spec: str = None,
+        create_time: str = None,
+        last_modified_time: str = None,
+        last_access_time: str = None,
     ):
         # 分区spec，格式样例为 bu=tt/ds=20250515
         self.spec = spec
+        # 分区的创建时间（毫秒）。仅输出。
+        self.create_time = create_time
+        # 分区的修改时间（毫秒）。仅输出。
+        self.last_modified_time = last_modified_time
+        # 分区的最后访问时间（毫秒）。仅输出。
+        self.last_access_time = last_access_time
 
     def validate(self):
         pass
@@ -1855,12 +1892,24 @@ class Partition(TeaModel):
         result = dict()
         if self.spec is not None:
             result['spec'] = self.spec
+        if self.create_time is not None:
+            result['createTime'] = self.create_time
+        if self.last_modified_time is not None:
+            result['lastModifiedTime'] = self.last_modified_time
+        if self.last_access_time is not None:
+            result['lastAccessTime'] = self.last_access_time
         return result
 
     def from_map(self, m: dict = None):
         m = m or dict()
         if m.get('spec') is not None:
             self.spec = m.get('spec')
+        if m.get('createTime') is not None:
+            self.create_time = m.get('createTime')
+        if m.get('lastModifiedTime') is not None:
+            self.last_modified_time = m.get('lastModifiedTime')
+        if m.get('lastAccessTime') is not None:
+            self.last_access_time = m.get('lastAccessTime')
         return self
 
 
@@ -2450,6 +2499,7 @@ class ModelFieldSchema(TeaModel):
         precision: str = None,
         scale: str = None,
         default_value_expression: str = None,
+        dimension: str = None,
     ):
         # 列名或 struct 字段名
         self.field_name = field_name
@@ -2471,6 +2521,8 @@ class ModelFieldSchema(TeaModel):
         self.scale = scale
         # 默认值的表达式字符串
         self.default_value_expression = default_value_expression
+        # 如果是 VECTOR 类型，表示向量的维度
+        self.dimension = dimension
 
     def validate(self):
         if self.fields:
@@ -2506,6 +2558,8 @@ class ModelFieldSchema(TeaModel):
             result['scale'] = self.scale
         if self.default_value_expression is not None:
             result['defaultValueExpression'] = self.default_value_expression
+        if self.dimension is not None:
+            result['dimension'] = self.dimension
         return result
 
     def from_map(self, m: dict = None):
@@ -2533,6 +2587,8 @@ class ModelFieldSchema(TeaModel):
             self.scale = m.get('scale')
         if m.get('defaultValueExpression') is not None:
             self.default_value_expression = m.get('defaultValueExpression')
+        if m.get('dimension') is not None:
+            self.dimension = m.get('dimension')
         return self
 
 

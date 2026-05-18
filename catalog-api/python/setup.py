@@ -24,7 +24,7 @@ from setuptools import setup, find_packages
 """
 setup module for pyodps_catalog.
 
-Created on 08/04/2026
+Created on 18/05/2026
 
 @author: Alibaba Cloud SDK
 """
