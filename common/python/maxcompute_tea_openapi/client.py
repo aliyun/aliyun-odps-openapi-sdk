@@ -30,6 +30,7 @@ class Client:
     _headers: Dict[str, str] = None
     _suffix: str = None
     _global_parameters: openapi_models.GlobalParameters = None
+    _odps_endpoint: str = None
 
     def __init__(
         self, 
@@ -75,6 +76,7 @@ class Client:
         self._signature_version = config.signature_version
         self._global_parameters = config.global_parameters
         self._suffix = config.suffix
+        self._odps_endpoint = config.odps_endpoint
 
     def do_request(
         self,
@@ -123,12 +125,14 @@ class Client:
             _retry_times = _retry_times + 1
             try:
                 _request = TeaRequest()
-                _request.protocol = UtilClient.default_string(self._protocol, params.protocol)
+                _request.protocol = UtilClient.default_string(request.protocol_override, UtilClient.default_string(self._protocol, params.protocol))
                 _request.method = params.method
                 if not UtilClient.is_unset(self._suffix):
                     _request.pathname = f'/{self._suffix}{params.pathname}'
                 else:
                     _request.pathname = params.pathname
+                if not UtilClient.is_unset(request.pathname_prefix):
+                    _request.pathname = f'{request.pathname_prefix}{_request.pathname}'
                 global_queries = {}
                 global_headers = {}
                 if not UtilClient.is_unset(self._global_parameters):
@@ -150,7 +154,7 @@ class Client:
                     request.query)
                 # endpoint is setted in product client
                 _request.headers = TeaCore.merge({
-                    'host': self._endpoint,
+                    'host': UtilClient.default_string(request.endpoint_override, self._endpoint),
                     'user-agent': self.get_user_agent(),
                     'x-odps-user-agent': self.get_user_agent(),
                     'Date': McUtilClient.get_api_timestamp()
@@ -301,12 +305,14 @@ class Client:
             _retry_times = _retry_times + 1
             try:
                 _request = TeaRequest()
-                _request.protocol = UtilClient.default_string(self._protocol, params.protocol)
+                _request.protocol = UtilClient.default_string(request.protocol_override, UtilClient.default_string(self._protocol, params.protocol))
                 _request.method = params.method
                 if not UtilClient.is_unset(self._suffix):
                     _request.pathname = f'/{self._suffix}{params.pathname}'
                 else:
                     _request.pathname = params.pathname
+                if not UtilClient.is_unset(request.pathname_prefix):
+                    _request.pathname = f'{request.pathname_prefix}{_request.pathname}'
                 global_queries = {}
                 global_headers = {}
                 if not UtilClient.is_unset(self._global_parameters):
@@ -328,7 +334,7 @@ class Client:
                     request.query)
                 # endpoint is setted in product client
                 _request.headers = TeaCore.merge({
-                    'host': self._endpoint,
+                    'host': UtilClient.default_string(request.endpoint_override, self._endpoint),
                     'user-agent': self.get_user_agent(),
                     'x-odps-user-agent': self.get_user_agent(),
                     'Date': McUtilClient.get_api_timestamp()
@@ -512,6 +518,44 @@ class Client:
         )
         return await self.call_api_async(openapi_params, req, runtime)
 
+    def call_routing_api(self) -> openapi_models.RoutingResponse:
+        req = openapi_models.OpenApiRequest(
+            endpoint_override=self._odps_endpoint,
+            pathname_prefix='/api'
+        )
+        openapi_params = openapi_models.Params(
+            pathname='/catalogapi',
+            method='GET',
+            body_type='string'
+        )
+        return TeaCore.from_map(
+            openapi_models.RoutingResponse(),
+            self.do_request(openapi_params, req, util_models.RuntimeOptions())
+        )
+
+    async def call_routing_api_async(self) -> openapi_models.RoutingResponse:
+        req = openapi_models.OpenApiRequest(
+            endpoint_override=self._odps_endpoint,
+            pathname_prefix='/api'
+        )
+        openapi_params = openapi_models.Params(
+            pathname='/catalogapi',
+            method='GET',
+            body_type='string'
+        )
+        return TeaCore.from_map(
+            openapi_models.RoutingResponse(),
+            await self.do_request_async(openapi_params, req, util_models.RuntimeOptions())
+        )
+
+    def get_catalog_endpoint(self) -> str:
+        resp = self.call_routing_api()
+        return resp.body
+
+    async def get_catalog_endpoint_async(self) -> str:
+        resp = await self.call_routing_api_async()
+        return resp.body
+
     def call_api(
         self,
         params: openapi_models.Params,
@@ -523,6 +567,8 @@ class Client:
                 'code': 'ParameterMissing',
                 'message': "'params' can not be unset"
             })
+        if UtilClient.empty(self._endpoint) and not UtilClient.empty(self._odps_endpoint):
+            self._endpoint = self.get_catalog_endpoint()
         return self.do_request(params, request, runtime)
 
     async def call_api_async(
@@ -536,6 +582,8 @@ class Client:
                 'code': 'ParameterMissing',
                 'message': "'params' can not be unset"
             })
+        if UtilClient.empty(self._endpoint) and not UtilClient.empty(self._odps_endpoint):
+            self._endpoint = await self.get_catalog_endpoint_async()
         return await self.do_request_async(params, request, runtime)
 
     def get_user_agent(self) -> str:

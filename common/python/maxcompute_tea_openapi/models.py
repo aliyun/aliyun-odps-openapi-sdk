@@ -62,6 +62,7 @@ class Config(TeaModel):
         suffix: str = None,
         signature_version: str = None,
         global_parameters: GlobalParameters = None,
+        odps_endpoint: str = None,
     ):
         # project
         self.project = project
@@ -97,6 +98,8 @@ class Config(TeaModel):
         self.signature_version = signature_version
         # Global Parameters
         self.global_parameters = global_parameters
+        # ODPS endpoint, used to resolve catalog endpoint via routing API when endpoint is not set
+        self.odps_endpoint = odps_endpoint
 
     def validate(self):
         if self.global_parameters:
@@ -142,6 +145,8 @@ class Config(TeaModel):
             result['signatureVersion'] = self.signature_version
         if self.global_parameters is not None:
             result['globalParameters'] = self.global_parameters.to_map()
+        if self.odps_endpoint is not None:
+            result['odpsEndpoint'] = self.odps_endpoint
         return result
 
     def from_map(self, m: dict = None):
@@ -181,6 +186,8 @@ class Config(TeaModel):
         if m.get('globalParameters') is not None:
             temp_model = GlobalParameters()
             self.global_parameters = temp_model.from_map(m['globalParameters'])
+        if m.get('odpsEndpoint') is not None:
+            self.odps_endpoint = m.get('odpsEndpoint')
         return self
 
 
@@ -269,6 +276,8 @@ class OpenApiRequest(TeaModel):
         stream: BinaryIO = None,
         host_map: Dict[str, str] = None,
         endpoint_override: str = None,
+        pathname_prefix: str = None,
+        protocol_override: str = None,
     ):
         self.headers = headers
         self.query = query
@@ -276,6 +285,8 @@ class OpenApiRequest(TeaModel):
         self.stream = stream
         self.host_map = host_map
         self.endpoint_override = endpoint_override
+        self.pathname_prefix = pathname_prefix
+        self.protocol_override = protocol_override
 
     def validate(self):
         pass
@@ -298,6 +309,10 @@ class OpenApiRequest(TeaModel):
             result['hostMap'] = self.host_map
         if self.endpoint_override is not None:
             result['endpointOverride'] = self.endpoint_override
+        if self.pathname_prefix is not None:
+            result['pathnamePrefix'] = self.pathname_prefix
+        if self.protocol_override is not None:
+            result['protocolOverride'] = self.protocol_override
         return result
 
     def from_map(self, m: dict = None):
@@ -314,6 +329,49 @@ class OpenApiRequest(TeaModel):
             self.host_map = m.get('hostMap')
         if m.get('endpointOverride') is not None:
             self.endpoint_override = m.get('endpointOverride')
+        if m.get('pathnamePrefix') is not None:
+            self.pathname_prefix = m.get('pathnamePrefix')
+        if m.get('protocolOverride') is not None:
+            self.protocol_override = m.get('protocolOverride')
+        return self
+
+
+class RoutingResponse(TeaModel):
+    def __init__(
+        self,
+        body: str = None,
+        headers: Dict[str, str] = None,
+        status_code: int = None,
+    ):
+        self.body = body
+        self.headers = headers
+        self.status_code = status_code
+
+    def validate(self):
+        pass
+
+    def to_map(self):
+        _map = super().to_map()
+        if _map is not None:
+            return _map
+
+        result = dict()
+        if self.body is not None:
+            result['body'] = self.body
+        if self.headers is not None:
+            result['headers'] = self.headers
+        if self.status_code is not None:
+            result['statusCode'] = self.status_code
+        return result
+
+    def from_map(self, m: dict = None):
+        m = m or dict()
+        if m.get('body') is not None:
+            self.body = m.get('body')
+        if m.get('headers') is not None:
+            self.headers = m.get('headers')
+        if m.get('statusCode') is not None:
+            self.status_code = m.get('statusCode')
         return self
 
 

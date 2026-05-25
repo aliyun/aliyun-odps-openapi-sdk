@@ -146,6 +146,15 @@ public class Config extends TeaModel {
     @NameInMap("globalParameters")
     public GlobalParameters globalParameters;
 
+    /**
+     * <p>ODPS endpoint, used to resolve catalog endpoint via routing API when endpoint is not set</p>
+     * 
+     * <strong>example:</strong>
+     * <p>maxcompute.cn-hangzhou.aliyuncs.com</p>
+     */
+    @NameInMap("odpsEndpoint")
+    public String odpsEndpoint;
+
     public static Config build(java.util.Map<String, ?> map) throws Exception {
         Config self = new Config();
         return TeaModel.build(map, self);
@@ -285,6 +294,14 @@ public class Config extends TeaModel {
     }
     public GlobalParameters getGlobalParameters() {
         return this.globalParameters;
+    }
+
+    public Config setOdpsEndpoint(String odpsEndpoint) {
+        this.odpsEndpoint = odpsEndpoint;
+        return this;
+    }
+    public String getOdpsEndpoint() {
+        return this.odpsEndpoint;
     }
 
 }

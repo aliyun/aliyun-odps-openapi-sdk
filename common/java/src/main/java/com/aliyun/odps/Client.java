@@ -25,6 +25,7 @@ public class Client {
     public java.util.Map<String, String> _headers;
     public String _suffix;
     public GlobalParameters _globalParameters;
+    public String _odpsEndpoint;
     /**
      * <b>description</b> :
      * <p>Init client with Config</p>
@@ -74,6 +75,7 @@ public class Client {
         this._signatureVersion = config.signatureVersion;
         this._globalParameters = config.globalParameters;
         this._suffix = config.suffix;
+        this._odpsEndpoint = config.odpsEndpoint;
     }
 
     /**
@@ -122,12 +124,16 @@ public class Client {
             _retryTimes = _retryTimes + 1;
             try {
                 TeaRequest request_ = new TeaRequest();
-                request_.protocol = com.aliyun.teautil.Common.defaultString(_protocol, params.protocol);
+                request_.protocol = com.aliyun.teautil.Common.defaultString(request.protocolOverride, com.aliyun.teautil.Common.defaultString(_protocol, params.protocol));
                 request_.method = params.method;
                 if (!com.aliyun.teautil.Common.isUnset(_suffix)) {
                     request_.pathname = "/" + _suffix + "" + params.pathname + "";
                 } else {
                     request_.pathname = params.pathname;
+                }
+
+                if (!com.aliyun.teautil.Common.isUnset(request.pathnamePrefix)) {
+                    request_.pathname = "" + request.pathnamePrefix + "" + request_.pathname + "";
                 }
 
                 java.util.Map<String, String> globalQueries = new java.util.HashMap<>();
@@ -166,7 +172,7 @@ public class Client {
                 // endpoint is setted in product client
                 request_.headers = TeaConverter.merge(String.class,
                     TeaConverter.buildMap(
-                        new TeaPair("host", _endpoint),
+                        new TeaPair("host", com.aliyun.teautil.Common.defaultString(request.endpointOverride, _endpoint)),
                         new TeaPair("user-agent", this.getUserAgent()),
                         new TeaPair("x-odps-user-agent", this.getUserAgent()),
                         new TeaPair("Date", com.aliyun.odps.utils.TeaUtils.getApiTimestamp())
@@ -341,12 +347,34 @@ public class Client {
         return this.callApi(openapiParams, req, runtime);
     }
 
+    public RoutingResponse callRoutingApi() throws Exception {
+        OpenApiRequest req = OpenApiRequest.build(TeaConverter.buildMap(
+            new TeaPair("endpointOverride", _odpsEndpoint),
+            new TeaPair("pathnamePrefix", "/api")
+        ));
+        Params openapiParams = Params.build(TeaConverter.buildMap(
+            new TeaPair("pathname", "/catalogapi"),
+            new TeaPair("method", "GET"),
+            new TeaPair("bodyType", "string")
+        ));
+        return TeaModel.toModel(this.doRequest(openapiParams, req, new com.aliyun.teautil.models.RuntimeOptions()), new RoutingResponse());
+    }
+
+    public String getCatalogEndpoint() throws Exception {
+        RoutingResponse resp = this.callRoutingApi();
+        return resp.body;
+    }
+
     public java.util.Map<String, ?> callApi(Params params, OpenApiRequest request, com.aliyun.teautil.models.RuntimeOptions runtime) throws Exception {
         if (com.aliyun.teautil.Common.isUnset(params)) {
             throw new TeaException(TeaConverter.buildMap(
                 new TeaPair("code", "ParameterMissing"),
                 new TeaPair("message", "'params' can not be unset")
             ));
+        }
+
+        if (com.aliyun.teautil.Common.empty(_endpoint) && !com.aliyun.teautil.Common.empty(_odpsEndpoint)) {
+            this._endpoint = this.getCatalogEndpoint();
         }
 
         return this.doRequest(params, request, runtime);

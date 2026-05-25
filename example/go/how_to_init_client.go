@@ -64,3 +64,25 @@ func way_3() {
 	// do something
 	println(catalogClient.Endpoint)
 }
+
+// way_4 only sets the ODPS endpoint. The catalog API endpoint is resolved
+// lazily on the first request via the routing API.
+// odpsEndpoint should be like 'maxcompute.cn-hangzhou.aliyuncs.com'
+func way_4() {
+	var odpsEndpoint = ""
+	var accessId = ""
+	var accessKey = ""
+
+	config := new(openapi.Config).
+		SetOdpsEndpoint(odpsEndpoint).
+		SetAccessKeyId(accessId).
+		SetAccessKeySecret(accessKey)
+	catalogClient, err := client.NewClient(config)
+
+	if err != nil {
+		log.Fatal("get client error: ", err)
+	}
+
+	// Endpoint is empty until the first API call triggers routing resolution.
+	println(catalogClient.Endpoint)
+}

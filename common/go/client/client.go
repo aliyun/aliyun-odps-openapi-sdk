@@ -118,6 +118,12 @@ type Config struct {
   SignatureVersion *string `json:"signatureVersion,omitempty" xml:"signatureVersion,omitempty"`
   // Global Parameters
   GlobalParameters *GlobalParameters `json:"globalParameters,omitempty" xml:"globalParameters,omitempty"`
+  // ODPS endpoint, used to resolve catalog endpoint via routing API when endpoint is not set
+  // 
+  // example:
+  // 
+  // maxcompute.cn-hangzhou.aliyuncs.com
+  OdpsEndpoint *string `json:"odpsEndpoint,omitempty" xml:"odpsEndpoint,omitempty"`
 }
 
 func (s Config) String() string {
@@ -213,6 +219,11 @@ func (s *Config) SetGlobalParameters(v *GlobalParameters) *Config {
   return s
 }
 
+func (s *Config) SetOdpsEndpoint(v string) *Config {
+  s.OdpsEndpoint = &v
+  return s
+}
+
 type Params struct {
   Action *string `json:"action,omitempty" xml:"action,omitempty"`
   Version *string `json:"version,omitempty" xml:"version,omitempty"`
@@ -285,6 +296,8 @@ type OpenApiRequest struct {
   Stream io.Reader `json:"stream,omitempty" xml:"stream,omitempty"`
   HostMap map[string]*string `json:"hostMap,omitempty" xml:"hostMap,omitempty"`
   EndpointOverride *string `json:"endpointOverride,omitempty" xml:"endpointOverride,omitempty"`
+  PathnamePrefix *string `json:"pathnamePrefix,omitempty" xml:"pathnamePrefix,omitempty"`
+  ProtocolOverride *string `json:"protocolOverride,omitempty" xml:"protocolOverride,omitempty"`
 }
 
 func (s OpenApiRequest) String() string {
@@ -325,6 +338,45 @@ func (s *OpenApiRequest) SetEndpointOverride(v string) *OpenApiRequest {
   return s
 }
 
+func (s *OpenApiRequest) SetPathnamePrefix(v string) *OpenApiRequest {
+  s.PathnamePrefix = &v
+  return s
+}
+
+func (s *OpenApiRequest) SetProtocolOverride(v string) *OpenApiRequest {
+  s.ProtocolOverride = &v
+  return s
+}
+
+type RoutingResponse struct {
+  Body *string `json:"body,omitempty" xml:"body,omitempty"`
+  Headers map[string]*string `json:"headers,omitempty" xml:"headers,omitempty"`
+  StatusCode *int32 `json:"statusCode,omitempty" xml:"statusCode,omitempty"`
+}
+
+func (s RoutingResponse) String() string {
+  return tea.Prettify(s)
+}
+
+func (s RoutingResponse) GoString() string {
+  return s.String()
+}
+
+func (s *RoutingResponse) SetBody(v string) *RoutingResponse {
+  s.Body = &v
+  return s
+}
+
+func (s *RoutingResponse) SetHeaders(v map[string]*string) *RoutingResponse {
+  s.Headers = v
+  return s
+}
+
+func (s *RoutingResponse) SetStatusCode(v int32) *RoutingResponse {
+  s.StatusCode = &v
+  return s
+}
+
 type Client struct {
   Endpoint  *string
   Project  *string
@@ -339,6 +391,7 @@ type Client struct {
   Headers  map[string]*string
   Suffix  *string
   GlobalParameters  *GlobalParameters
+  OdpsEndpoint  *string
 }
 
 // Description:
@@ -404,6 +457,7 @@ func (client *Client)Init(config *Config)(_err error) {
   client.SignatureVersion = config.SignatureVersion
   client.GlobalParameters = config.GlobalParameters
   client.Suffix = config.Suffix
+  client.OdpsEndpoint = config.OdpsEndpoint
   return nil
 }
 
@@ -468,12 +522,16 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
 
     _resp, _err = func()(map[string]interface{}, error){
       request_ := tea.NewRequest()
-      request_.Protocol = util.DefaultString(client.Protocol, params.Protocol)
+      request_.Protocol = util.DefaultString(request.ProtocolOverride, util.DefaultString(client.Protocol, params.Protocol))
       request_.Method = params.Method
       if !tea.BoolValue(util.IsUnset(client.Suffix)) {
         request_.Pathname = tea.String("/" + tea.StringValue(client.Suffix) + tea.StringValue(params.Pathname))
       } else {
         request_.Pathname = params.Pathname
+      }
+
+      if !tea.BoolValue(util.IsUnset(request.PathnamePrefix)) {
+        request_.Pathname = tea.String(tea.StringValue(request.PathnamePrefix) + tea.StringValue(request_.Pathname))
       }
 
       globalQueries := make(map[string]*string)
@@ -509,7 +567,7 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
         request.Query)
       // endpoint is setted in product client
       request_.Headers = tea.Merge(map[string]*string{
-        "host": client.Endpoint,
+        "host": util.DefaultString(request.EndpointOverride, client.Endpoint),
         "user-agent": client.GetUserAgent(),
         "x-odps-user-agent": client.GetUserAgent(),
         "Date": mcutil.GetApiTimestamp(),
@@ -752,6 +810,35 @@ func (client *Client) RequestWithoutModel (model interface{}, method *string, pa
   return _result, _err
 }
 
+func (client *Client) CallRoutingApi () (_result *RoutingResponse, _err error) {
+  req := &OpenApiRequest{
+    EndpointOverride: client.OdpsEndpoint,
+    PathnamePrefix: tea.String("/api"),
+  }
+  openapiParams := &Params{
+    Pathname: tea.String("/catalogapi"),
+    Method: tea.String("GET"),
+    BodyType: tea.String("string"),
+  }
+  _result = &RoutingResponse{}
+  _body, _err := client.DoRequest(openapiParams, req, &util.RuntimeOptions{})
+  if _err != nil {
+    return _result, _err
+  }
+  _err = tea.Convert(_body, &_result)
+  return _result, _err
+}
+
+func (client *Client) GetCatalogEndpoint () (_result *string, _err error) {
+  resp, _err := client.CallRoutingApi()
+  if _err != nil {
+    return _result, _err
+  }
+
+  _result = resp.Body
+  return _result , _err
+}
+
 func (client *Client) CallApi (params *Params, request *OpenApiRequest, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
   if tea.BoolValue(util.IsUnset(params)) {
     _err = tea.NewSDKError(map[string]interface{}{
@@ -759,6 +846,14 @@ func (client *Client) CallApi (params *Params, request *OpenApiRequest, runtime 
       "message": "'params' can not be unset",
     })
     return _result, _err
+  }
+
+  if tea.BoolValue(util.Empty(client.Endpoint)) && !tea.BoolValue(util.Empty(client.OdpsEndpoint)) {
+    client.Endpoint, _err = client.GetCatalogEndpoint()
+    if _err != nil {
+      return _result, _err
+    }
+
   }
 
   _result = make(map[string]interface{})

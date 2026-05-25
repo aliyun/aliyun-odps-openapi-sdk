@@ -22,6 +22,12 @@ public class OpenApiRequest extends TeaModel {
     @NameInMap("endpointOverride")
     public String endpointOverride;
 
+    @NameInMap("pathnamePrefix")
+    public String pathnamePrefix;
+
+    @NameInMap("protocolOverride")
+    public String protocolOverride;
+
     public static OpenApiRequest build(java.util.Map<String, ?> map) throws Exception {
         OpenApiRequest self = new OpenApiRequest();
         return TeaModel.build(map, self);
@@ -73,6 +79,22 @@ public class OpenApiRequest extends TeaModel {
     }
     public String getEndpointOverride() {
         return this.endpointOverride;
+    }
+
+    public OpenApiRequest setPathnamePrefix(String pathnamePrefix) {
+        this.pathnamePrefix = pathnamePrefix;
+        return this;
+    }
+    public String getPathnamePrefix() {
+        return this.pathnamePrefix;
+    }
+
+    public OpenApiRequest setProtocolOverride(String protocolOverride) {
+        this.protocolOverride = protocolOverride;
+        return this;
+    }
+    public String getProtocolOverride() {
+        return this.protocolOverride;
     }
 
 }

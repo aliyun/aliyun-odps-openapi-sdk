@@ -16,6 +16,7 @@ type @signatureVersion = string
 type @headers = map[string]string
 type @suffix = string
 type @globalParameters = GlobalParameters
+type @odpsEndpoint = string
 
 model GlobalParameters {
   headers?: map[string]string,
@@ -42,6 +43,7 @@ model Config {
   suffix?: string(description='suffix for endpoint',example='aliyun',default=''),
   signatureVersion?: string(description='Signature Version',example='v2',default='v2'),
   globalParameters?: GlobalParameters(description='Global Parameters'),
+  odpsEndpoint?: string(description='ODPS endpoint, used to resolve catalog endpoint via routing API when endpoint is not set',example='maxcompute.cn-hangzhou.aliyuncs.com',default=''),
 }
 
 /**
@@ -89,6 +91,7 @@ init(config: Config) {
   @signatureVersion = config.signatureVersion;
   @globalParameters = config.globalParameters;
   @suffix = config.suffix;
+  @odpsEndpoint = config.odpsEndpoint;
 }
 
 
@@ -111,6 +114,8 @@ model OpenApiRequest {
   stream?: readable,
   hostMap?: map[string]string,
   endpointOverride?: string,
+  pathnamePrefix?: string,
+  protocolOverride?: string,
 }
 
 async function requestWithModel(model: $Model, method: string, path: string, params: map[string]string, runtime: Util.RuntimeOptions): object {
@@ -141,12 +146,39 @@ async function requestWithoutModel(model: $Model, method: string, path: string, 
   return callApi(openapiParams, req, runtime);
 }
 
+model RoutingResponse = {
+  body?: string,
+  headers?: map[string]string,
+  statusCode?: int32
+}
+
+async function callRoutingApi(): RoutingResponse {
+  var req = new OpenApiRequest{
+    endpointOverride = @odpsEndpoint,
+    pathnamePrefix = '/api',
+  };
+  var openapiParams = new Params{
+    pathname = '/catalogapi',
+    method = 'GET',
+    bodyType = 'string',
+  };
+  return doRequest(openapiParams, req, new Util.RuntimeOptions{});
+}
+
+async function getCatalogEndpoint(): string {
+  var resp = callRoutingApi();
+  return resp.body;
+}
+
 async function callApi(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOptions): object {
   if (Util.isUnset(params)) {
     throw {
       code = 'ParameterMissing',
       message = '\'params\' can not be unset'
     };
+  }
+  if (Util.empty(@endpoint) && !Util.empty(@odpsEndpoint)) {
+    @endpoint = getCatalogEndpoint();
   }
   return doRequest(params, request, runtime);
 }
@@ -164,12 +196,15 @@ async function callApi(params: Params, request: OpenApiRequest, runtime: Util.Ru
  * @return the response
  */
 api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOptions): object {
-  __request.protocol = Util.defaultString(@protocol, params.protocol);
+  __request.protocol = Util.defaultString(request.protocolOverride, Util.defaultString(@protocol, params.protocol));
   __request.method = params.method;
   if(!Util.isUnset(@suffix)) {
     __request.pathname = `/${@suffix}${params.pathname}`;
   } else {
     __request.pathname = params.pathname;
+  }
+  if (!Util.isUnset(request.pathnamePrefix)) {
+    __request.pathname = `${request.pathnamePrefix}${__request.pathname}`;
   }
   var globalQueries : map[string]string = {};
   var globalHeaders : map[string]string = {};
@@ -201,7 +236,7 @@ api doRequest(params: Params, request: OpenApiRequest, runtime: Util.RuntimeOpti
 
   // endpoint is setted in product client
   __request.headers = {
-    host = @endpoint,
+    host = Util.defaultString(request.endpointOverride, @endpoint),
     user-agent = getUserAgent(),
     x-odps-user-agent = getUserAgent(),
     Date = McUtil.getApiTimestamp(),
