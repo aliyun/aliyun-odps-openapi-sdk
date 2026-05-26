@@ -496,6 +496,91 @@ func (s *ExternalCatalogTableOptions) SetParameters(v map[string]*string) *Exter
   return s
 }
 
+type SnapshotDefinition struct {
+  // 源表所在的 project 名。
+  FromProjectName *string `json:"fromProjectName,omitempty" xml:"fromProjectName,omitempty"`
+  // 源表所在的 schema 名。
+  FromSchemaName *string `json:"fromSchemaName,omitempty" xml:"fromSchemaName,omitempty"`
+  // 源表名。
+  FromTableName *string `json:"fromTableName,omitempty" xml:"fromTableName,omitempty"`
+}
+
+func (s SnapshotDefinition) String() string {
+  return tea.Prettify(s)
+}
+
+func (s SnapshotDefinition) GoString() string {
+  return s.String()
+}
+
+func (s *SnapshotDefinition) SetFromProjectName(v string) *SnapshotDefinition {
+  s.FromProjectName = &v
+  return s
+}
+
+func (s *SnapshotDefinition) SetFromSchemaName(v string) *SnapshotDefinition {
+  s.FromSchemaName = &v
+  return s
+}
+
+func (s *SnapshotDefinition) SetFromTableName(v string) *SnapshotDefinition {
+  s.FromTableName = &v
+  return s
+}
+
+type BillStorageDetails struct {
+  // 参与计费的总存储字节数。
+  NumBillableStorageBytes *string `json:"numBillableStorageBytes,omitempty" xml:"numBillableStorageBytes,omitempty"`
+  // 参与计费的标准存储字节数。
+  NumBillableStandardStorageBytes *string `json:"numBillableStandardStorageBytes,omitempty" xml:"numBillableStandardStorageBytes,omitempty"`
+  // 参与计费的低频存储字节数。
+  NumBillableLowfrequencyStorageBytes *string `json:"numBillableLowfrequencyStorageBytes,omitempty" xml:"numBillableLowfrequencyStorageBytes,omitempty"`
+  // 参与计费的长期存储字节数。
+  NumBillableLongtermStorageBytes *string `json:"numBillableLongtermStorageBytes,omitempty" xml:"numBillableLongtermStorageBytes,omitempty"`
+  // 参与计费的冷归档存储字节数。
+  NumBillableColdStorageBytes *string `json:"numBillableColdStorageBytes,omitempty" xml:"numBillableColdStorageBytes,omitempty"`
+  // 参与计费的回收站存储字节数。
+  NumBillableRecycleBinStorageBytes *string `json:"numBillableRecycleBinStorageBytes,omitempty" xml:"numBillableRecycleBinStorageBytes,omitempty"`
+}
+
+func (s BillStorageDetails) String() string {
+  return tea.Prettify(s)
+}
+
+func (s BillStorageDetails) GoString() string {
+  return s.String()
+}
+
+func (s *BillStorageDetails) SetNumBillableStorageBytes(v string) *BillStorageDetails {
+  s.NumBillableStorageBytes = &v
+  return s
+}
+
+func (s *BillStorageDetails) SetNumBillableStandardStorageBytes(v string) *BillStorageDetails {
+  s.NumBillableStandardStorageBytes = &v
+  return s
+}
+
+func (s *BillStorageDetails) SetNumBillableLowfrequencyStorageBytes(v string) *BillStorageDetails {
+  s.NumBillableLowfrequencyStorageBytes = &v
+  return s
+}
+
+func (s *BillStorageDetails) SetNumBillableLongtermStorageBytes(v string) *BillStorageDetails {
+  s.NumBillableLongtermStorageBytes = &v
+  return s
+}
+
+func (s *BillStorageDetails) SetNumBillableColdStorageBytes(v string) *BillStorageDetails {
+  s.NumBillableColdStorageBytes = &v
+  return s
+}
+
+func (s *BillStorageDetails) SetNumBillableRecycleBinStorageBytes(v string) *BillStorageDetails {
+  s.NumBillableRecycleBinStorageBytes = &v
+  return s
+}
+
 type Table struct {
   // 用于 read-modify-write 一致性校验。
   Etag *string `json:"etag,omitempty" xml:"etag,omitempty"`
@@ -535,6 +620,22 @@ type Table struct {
   MaxLakeConfiguration *MaxLakeConfiguration `json:"maxLakeConfiguration,omitempty" xml:"maxLakeConfiguration,omitempty"`
   // external catalog 信息
   ExternalCatalogTableOptions *ExternalCatalogTableOptions `json:"externalCatalogTableOptions,omitempty" xml:"externalCatalogTableOptions,omitempty"`
+  // snapshot 表的定义，只有 snapshot 表才有。
+  SnapshotDefinition *SnapshotDefinition `json:"snapshotDefinition,omitempty" xml:"snapshotDefinition,omitempty"`
+  // 表是否已被删除。仅输出。
+  IsDeleted *bool `json:"isDeleted,omitempty" xml:"isDeleted,omitempty"`
+  // 表的删除时间（毫秒）。仅输出。
+  DeleteTime *string `json:"deleteTime,omitempty" xml:"deleteTime,omitempty"`
+  // 表的总存储字节数（含回收站）。仅输出。
+  NumTotalStorageBytes *string `json:"numTotalStorageBytes,omitempty" xml:"numTotalStorageBytes,omitempty"`
+  // 表的当前存储字节数（不含回收站）。仅输出。
+  NumCurrentStorageBytes *string `json:"numCurrentStorageBytes,omitempty" xml:"numCurrentStorageBytes,omitempty"`
+  // 表的回收站存储字节数。仅输出。
+  NumRecycleBinBytes *string `json:"numRecycleBinBytes,omitempty" xml:"numRecycleBinBytes,omitempty"`
+  // 表的计费存储明细。仅输出。
+  BillableStorageDetails *BillStorageDetails `json:"billableStorageDetails,omitempty" xml:"billableStorageDetails,omitempty"`
+  // 表的存储层级。仅输出。
+  StorageTier *string `json:"storageTier,omitempty" xml:"storageTier,omitempty"`
 }
 
 func (s Table) String() string {
@@ -637,6 +738,46 @@ func (s *Table) SetMaxLakeConfiguration(v *MaxLakeConfiguration) *Table {
 
 func (s *Table) SetExternalCatalogTableOptions(v *ExternalCatalogTableOptions) *Table {
   s.ExternalCatalogTableOptions = v
+  return s
+}
+
+func (s *Table) SetSnapshotDefinition(v *SnapshotDefinition) *Table {
+  s.SnapshotDefinition = v
+  return s
+}
+
+func (s *Table) SetIsDeleted(v bool) *Table {
+  s.IsDeleted = &v
+  return s
+}
+
+func (s *Table) SetDeleteTime(v string) *Table {
+  s.DeleteTime = &v
+  return s
+}
+
+func (s *Table) SetNumTotalStorageBytes(v string) *Table {
+  s.NumTotalStorageBytes = &v
+  return s
+}
+
+func (s *Table) SetNumCurrentStorageBytes(v string) *Table {
+  s.NumCurrentStorageBytes = &v
+  return s
+}
+
+func (s *Table) SetNumRecycleBinBytes(v string) *Table {
+  s.NumRecycleBinBytes = &v
+  return s
+}
+
+func (s *Table) SetBillableStorageDetails(v *BillStorageDetails) *Table {
+  s.BillableStorageDetails = v
+  return s
+}
+
+func (s *Table) SetStorageTier(v string) *Table {
+  s.StorageTier = &v
   return s
 }
 
@@ -1151,6 +1292,30 @@ type Project struct {
   Region *string `json:"region,omitempty" xml:"region,omitempty"`
   // 是否为外部 catalog project
   ExternalCatalog *bool `json:"externalCatalog,omitempty" xml:"externalCatalog,omitempty"`
+  // 是否开启同城容灾。
+  ZoneDisasterRecoveryEnabled *bool `json:"zoneDisasterRecoveryEnabled,omitempty" xml:"zoneDisasterRecoveryEnabled,omitempty"`
+  // Project 下普通表（含外表）的个数。仅输出。
+  NumTables *int32 `json:"numTables,omitempty" xml:"numTables,omitempty"`
+  // Project 下物化视图的个数。仅输出。
+  NumMaterializedViews *int32 `json:"numMaterializedViews,omitempty" xml:"numMaterializedViews,omitempty"`
+  // Project 下 snapshot 表的个数。仅输出。
+  NumSnapshots *int32 `json:"numSnapshots,omitempty" xml:"numSnapshots,omitempty"`
+  // Project 下资源的个数。仅输出。
+  NumResources *int32 `json:"numResources,omitempty" xml:"numResources,omitempty"`
+  // Project 的总存储字节数。仅输出。
+  NumStorageBytes *string `json:"numStorageBytes,omitempty" xml:"numStorageBytes,omitempty"`
+  // Project 下普通表的存储字节数。仅输出。
+  NumTablesBytes *string `json:"numTablesBytes,omitempty" xml:"numTablesBytes,omitempty"`
+  // Project 下 snapshot 表的存储字节数。仅输出。
+  NumSnapshotsBytes *string `json:"numSnapshotsBytes,omitempty" xml:"numSnapshotsBytes,omitempty"`
+  // Project 下物化视图的存储字节数。仅输出。
+  NumMaterializedViewsBytes *string `json:"numMaterializedViewsBytes,omitempty" xml:"numMaterializedViewsBytes,omitempty"`
+  // Project 下资源的存储字节数。仅输出。
+  NumResourcesBytes *string `json:"numResourcesBytes,omitempty" xml:"numResourcesBytes,omitempty"`
+  // Project 的回收站存储字节数。仅输出。
+  NumRecycleBinBytes *string `json:"numRecycleBinBytes,omitempty" xml:"numRecycleBinBytes,omitempty"`
+  // Project 的计费存储明细。仅输出。
+  BillableStorageDetails *BillStorageDetails `json:"billableStorageDetails,omitempty" xml:"billableStorageDetails,omitempty"`
 }
 
 func (s Project) String() string {
@@ -1206,6 +1371,66 @@ func (s *Project) SetExternalCatalog(v bool) *Project {
   return s
 }
 
+func (s *Project) SetZoneDisasterRecoveryEnabled(v bool) *Project {
+  s.ZoneDisasterRecoveryEnabled = &v
+  return s
+}
+
+func (s *Project) SetNumTables(v int32) *Project {
+  s.NumTables = &v
+  return s
+}
+
+func (s *Project) SetNumMaterializedViews(v int32) *Project {
+  s.NumMaterializedViews = &v
+  return s
+}
+
+func (s *Project) SetNumSnapshots(v int32) *Project {
+  s.NumSnapshots = &v
+  return s
+}
+
+func (s *Project) SetNumResources(v int32) *Project {
+  s.NumResources = &v
+  return s
+}
+
+func (s *Project) SetNumStorageBytes(v string) *Project {
+  s.NumStorageBytes = &v
+  return s
+}
+
+func (s *Project) SetNumTablesBytes(v string) *Project {
+  s.NumTablesBytes = &v
+  return s
+}
+
+func (s *Project) SetNumSnapshotsBytes(v string) *Project {
+  s.NumSnapshotsBytes = &v
+  return s
+}
+
+func (s *Project) SetNumMaterializedViewsBytes(v string) *Project {
+  s.NumMaterializedViewsBytes = &v
+  return s
+}
+
+func (s *Project) SetNumResourcesBytes(v string) *Project {
+  s.NumResourcesBytes = &v
+  return s
+}
+
+func (s *Project) SetNumRecycleBinBytes(v string) *Project {
+  s.NumRecycleBinBytes = &v
+  return s
+}
+
+func (s *Project) SetBillableStorageDetails(v *BillStorageDetails) *Project {
+  s.BillableStorageDetails = v
+  return s
+}
+
 type Schema struct {
   // Schema的资源全名：projects/{projectId}/schemas/{schemaName}。仅输出。
   Name *string `json:"name,omitempty" xml:"name,omitempty"`
@@ -1219,10 +1444,6 @@ type Schema struct {
   Owner *string `json:"owner,omitempty" xml:"owner,omitempty"`
   // 外部schema配置
   ExternalSchemaConfiguration *ExternalSchemaConfiguration `json:"externalSchemaConfiguration,omitempty" xml:"externalSchemaConfiguration,omitempty"`
-  // Schema 下表的默认过期天数
-  DefaultTableExpirationDays *string `json:"defaultTableExpirationDays,omitempty" xml:"defaultTableExpirationDays,omitempty"`
-  // Schema 下分区的默认过期天数
-  DefaultPartitionExpirationDays *string `json:"defaultPartitionExpirationDays,omitempty" xml:"defaultPartitionExpirationDays,omitempty"`
 }
 
 func (s Schema) String() string {
@@ -1260,16 +1481,6 @@ func (s *Schema) SetOwner(v string) *Schema {
 
 func (s *Schema) SetExternalSchemaConfiguration(v *ExternalSchemaConfiguration) *Schema {
   s.ExternalSchemaConfiguration = v
-  return s
-}
-
-func (s *Schema) SetDefaultTableExpirationDays(v string) *Schema {
-  s.DefaultTableExpirationDays = &v
-  return s
-}
-
-func (s *Schema) SetDefaultPartitionExpirationDays(v string) *Schema {
-  s.DefaultPartitionExpirationDays = &v
   return s
 }
 
@@ -1375,6 +1586,12 @@ type Partition struct {
   LastModifiedTime *string `json:"lastModifiedTime,omitempty" xml:"lastModifiedTime,omitempty"`
   // 分区的最后访问时间（毫秒）。仅输出。
   LastAccessTime *string `json:"lastAccessTime,omitempty" xml:"lastAccessTime,omitempty"`
+  // 分区的存储层级。仅输出。
+  StorageTier *string `json:"storageTier,omitempty" xml:"storageTier,omitempty"`
+  // 分区的存储字节数。仅输出。
+  NumStorageBytes *string `json:"numStorageBytes,omitempty" xml:"numStorageBytes,omitempty"`
+  // 分区的计费存储明细。仅输出。
+  BillableStorageDetails *BillStorageDetails `json:"billableStorageDetails,omitempty" xml:"billableStorageDetails,omitempty"`
 }
 
 func (s Partition) String() string {
@@ -1402,6 +1619,21 @@ func (s *Partition) SetLastModifiedTime(v string) *Partition {
 
 func (s *Partition) SetLastAccessTime(v string) *Partition {
   s.LastAccessTime = &v
+  return s
+}
+
+func (s *Partition) SetStorageTier(v string) *Partition {
+  s.StorageTier = &v
+  return s
+}
+
+func (s *Partition) SetNumStorageBytes(v string) *Partition {
+  s.NumStorageBytes = &v
+  return s
+}
+
+func (s *Partition) SetBillableStorageDetails(v *BillStorageDetails) *Partition {
+  s.BillableStorageDetails = v
   return s
 }
 
@@ -2380,20 +2612,32 @@ func (client *Client) GetTable (table *Table) (_result *Table, _err error) {
 }
 
 // 限流：每用户每秒最多 10 次请求
-func (client *Client) ListTables (projectId *string, schemaName *string, pageSize *int32, pageToken *string) (_result *ListTablesResponse, _err error) {
+func (client *Client) ListTables (projectId *string, schemaName *string, pageSize *int32, pageToken *string, view *string, query *string) (_result *ListTablesResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/tables")
-  query := make(map[string]*string)
+  param := make(map[string]*string)
   if !tea.BoolValue(util.IsUnset(pageSize)) {
-    query["pageSize"] = mcutil.ToString(pageSize)
+    param["pageSize"] = mcutil.ToString(pageSize)
   }
 
   if !tea.BoolValue(util.IsUnset(pageToken)) {
-    query["pageToken"] = pageToken
+    param["pageToken"] = pageToken
+  }
+
+  if !tea.BoolValue(util.IsUnset(view)) {
+    param["view"] = view
+    if !tea.BoolValue(util.EqualString(view, tea.String("BASIC"))) {
+      param["apiScope"] = tea.String("inner")
+    }
+
+  }
+
+  if !tea.BoolValue(util.IsUnset(query)) {
+    param["query"] = query
   }
 
   _result = &ListTablesResponse{}
-  _body, _err := client.RequestWithModel(&ListTablesResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.RequestWithModel(&ListTablesResponse{}, tea.String("GET"), path, param, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2596,16 +2840,11 @@ func (client *Client) DeleteRole (namespace *string, roleName *string) (_result 
 
 // Get role
 // 限流：每用户每秒最多 100 次请求
-func (client *Client) GetRole (namespace *string, roleName *string, view *string) (_result *Role, _err error) {
+func (client *Client) GetRole (namespace *string, roleName *string) (_result *Role, _err error) {
   runtime := &util.RuntimeOptions{}
   path := client.GetRolePath(namespace, roleName)
-  query := make(map[string]*string)
-  if !tea.BoolValue(util.IsUnset(view)) {
-    query["view"] = view
-  }
-
   _result = &Role{}
-  _body, _err := client.RequestWithModel(&Role{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.RequestWithModel(&Role{}, tea.String("GET"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3054,10 +3293,19 @@ func (client *Client) ListProjects (pageSize *int, pageToken *string) (_result *
 }
 
 // 限流：每用户每秒最多 100 次请求
-func (client *Client) GetProject (projectId *string) (_result *Project, _err error) {
+func (client *Client) GetProject (projectId *string, view *string) (_result *Project, _err error) {
   runtime := &util.RuntimeOptions{}
+  query := make(map[string]*string)
+  if !tea.BoolValue(util.IsUnset(view)) {
+    query["view"] = view
+    if !tea.BoolValue(util.EqualString(view, tea.String("BASIC"))) {
+      query["apiScope"] = tea.String("inner")
+    }
+
+  }
+
   _result = &Project{}
-  _body, _err := client.RequestWithModel(&Project{}, tea.String("GET"), client.GetProjectPath(projectId), nil, runtime)
+  _body, _err := client.RequestWithModel(&Project{}, tea.String("GET"), client.GetProjectPath(projectId), query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3194,7 +3442,7 @@ func (client *Client) ListPartitions (projectId *string, schemaName *string, tab
 
   if !tea.BoolValue(util.IsUnset(view)) {
     params["view"] = view
-    if tea.BoolValue(util.EqualString(view, tea.String("FULL"))) {
+    if !tea.BoolValue(util.EqualString(view, tea.String("BASIC"))) {
       params["apiScope"] = tea.String("inner")
     }
 

@@ -36,19 +36,31 @@ public class Client extends com.aliyun.odps.Client {
     }
 
     // 限流：每用户每秒最多 10 次请求
-    public ListTablesResponse listTables(String projectId, String schemaName, Integer pageSize, String pageToken) throws Exception {
+    public ListTablesResponse listTables(String projectId, String schemaName, Integer pageSize, String pageToken, String view, String query) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "/api/catalog/v1alpha/projects/" + projectId + "/schemas/" + schemaName + "/tables";
-        java.util.Map<String, String> query = new java.util.HashMap<>();
+        java.util.Map<String, String> param = new java.util.HashMap<>();
         if (!com.aliyun.teautil.Common.isUnset(pageSize)) {
-            query.put("pageSize", com.aliyun.odps.utils.TeaUtils.toString(pageSize));
+            param.put("pageSize", com.aliyun.odps.utils.TeaUtils.toString(pageSize));
         }
 
         if (!com.aliyun.teautil.Common.isUnset(pageToken)) {
-            query.put("pageToken", pageToken);
+            param.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListTablesResponse(), "GET", path, query, runtime), new ListTablesResponse());
+        if (!com.aliyun.teautil.Common.isUnset(view)) {
+            param.put("view", view);
+            if (!com.aliyun.teautil.Common.equalString(view, "BASIC")) {
+                param.put("apiScope", "inner");
+            }
+
+        }
+
+        if (!com.aliyun.teautil.Common.isUnset(query)) {
+            param.put("query", query);
+        }
+
+        return TeaModel.toModel(this.requestWithModel(new ListTablesResponse(), "GET", path, param, runtime), new ListTablesResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -174,15 +186,10 @@ public class Client extends com.aliyun.odps.Client {
 
     // Get role
     // 限流：每用户每秒最多 100 次请求
-    public Role getRole(String namespace, String roleName, String view) throws Exception {
+    public Role getRole(String namespace, String roleName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getRolePath(namespace, roleName);
-        java.util.Map<String, String> query = new java.util.HashMap<>();
-        if (!com.aliyun.teautil.Common.isUnset(view)) {
-            query.put("view", view);
-        }
-
-        return TeaModel.toModel(this.requestWithModel(new Role(), "GET", path, query, runtime), new Role());
+        return TeaModel.toModel(this.requestWithModel(new Role(), "GET", path, null, runtime), new Role());
     }
 
     // List roles
@@ -470,9 +477,18 @@ public class Client extends com.aliyun.odps.Client {
     }
 
     // 限流：每用户每秒最多 100 次请求
-    public Project getProject(String projectId) throws Exception {
+    public Project getProject(String projectId, String view) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        return TeaModel.toModel(this.requestWithModel(new Project(), "GET", this.getProjectPath(projectId), null, runtime), new Project());
+        java.util.Map<String, String> query = new java.util.HashMap<>();
+        if (!com.aliyun.teautil.Common.isUnset(view)) {
+            query.put("view", view);
+            if (!com.aliyun.teautil.Common.equalString(view, "BASIC")) {
+                query.put("apiScope", "inner");
+            }
+
+        }
+
+        return TeaModel.toModel(this.requestWithModel(new Project(), "GET", this.getProjectPath(projectId), query, runtime), new Project());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -561,7 +577,7 @@ public class Client extends com.aliyun.odps.Client {
 
         if (!com.aliyun.teautil.Common.isUnset(view)) {
             params.put("view", view);
-            if (com.aliyun.teautil.Common.equalString(view, "FULL")) {
+            if (!com.aliyun.teautil.Common.equalString(view, "BASIC")) {
                 params.put("apiScope", "inner");
             }
 

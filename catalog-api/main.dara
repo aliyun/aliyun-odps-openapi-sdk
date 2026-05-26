@@ -112,6 +112,21 @@ model ExternalCatalogTableOptions {
   parameters?: map[string]string(name='parameters', description='external catalog 属性')
 }
 
+model SnapshotDefinition {
+  fromProjectName?: string(name='fromProjectName', description='源表所在的 project 名。'),
+  fromSchemaName?: string(name='fromSchemaName', description='源表所在的 schema 名。'),
+  fromTableName?: string(name='fromTableName', description='源表名。')
+}
+
+model BillStorageDetails {
+  numBillableStorageBytes?: string(name='numBillableStorageBytes', description='参与计费的总存储字节数。'),
+  numBillableStandardStorageBytes?: string(name='numBillableStandardStorageBytes', description='参与计费的标准存储字节数。'),
+  numBillableLowfrequencyStorageBytes?: string(name='numBillableLowfrequencyStorageBytes', description='参与计费的低频存储字节数。'),
+  numBillableLongtermStorageBytes?: string(name='numBillableLongtermStorageBytes', description='参与计费的长期存储字节数。'),
+  numBillableColdStorageBytes?: string(name='numBillableColdStorageBytes', description='参与计费的冷归档存储字节数。'),
+  numBillableRecycleBinStorageBytes?: string(name='numBillableRecycleBinStorageBytes', description='参与计费的回收站存储字节数。')
+}
+
 
 model Table {
   etag?: string(name='etag', description='用于 read-modify-write 一致性校验。', example=''),
@@ -132,7 +147,15 @@ model Table {
   labels?: map[string]string(name='labels', description='可选。表上的标签。'),
   externalDataConfiguration?: ExternalDataConfiguration(name='externalDataConfiguration', description='外部表配置'),
   maxLakeConfiguration?: MaxLakeConfiguration(name='maxLakeConfiguration', description='managed lake table 配置'),
-  externalCatalogTableOptions?: ExternalCatalogTableOptions(name='externalCatalogTableOptions', description='external catalog 信息')
+  externalCatalogTableOptions?: ExternalCatalogTableOptions(name='externalCatalogTableOptions', description='external catalog 信息'),
+  snapshotDefinition?: SnapshotDefinition(name='snapshotDefinition', description='snapshot 表的定义，只有 snapshot 表才有。'),
+  isDeleted?: boolean(name='isDeleted', description='表是否已被删除。仅输出。'),
+  deleteTime?: string(name='deleteTime', description='表的删除时间（毫秒）。仅输出。'),
+  numTotalStorageBytes?: string(name='numTotalStorageBytes', description='表的总存储字节数（含回收站）。仅输出。'),
+  numCurrentStorageBytes?: string(name='numCurrentStorageBytes', description='表的当前存储字节数（不含回收站）。仅输出。'),
+  numRecycleBinBytes?: string(name='numRecycleBinBytes', description='表的回收站存储字节数。仅输出。'),
+  billableStorageDetails?: BillStorageDetails(name='billableStorageDetails', description='表的计费存储明细。仅输出。'),
+  storageTier?: string(name='storageTier', description='表的存储层级。仅输出。')
 }
 
 
@@ -166,17 +189,26 @@ model ListTablesResponse = {
 }
 
 // 限流：每用户每秒最多 10 次请求
-async function listTables(projectId: string, schemaName: string, pageSize: int32, pageToken: string): ListTablesResponse {
+async function listTables(projectId: string, schemaName: string, pageSize: int32, pageToken: string, view: string, query: string): ListTablesResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/tables`;
-  var query : map[string]string = {};
+  var param : map[string]string = {};
   if (!Util.isUnset(pageSize)) {
-    query["pageSize"] = McUtil.toString(pageSize);
+    param["pageSize"] = McUtil.toString(pageSize);
   }
   if (!Util.isUnset(pageToken)) {
-    query["pageToken"] = pageToken;
+    param["pageToken"] = pageToken;
   }
-  return requestWithModel(new ListTablesResponse{}, 'GET', path, query, runtime);
+  if (!Util.isUnset(view)) {
+    param["view"] = view;
+    if (!Util.equalString(view, "BASIC")) {
+      param["apiScope"] = "inner";
+    }
+  }
+  if (!Util.isUnset(query)) {
+    param["query"] = query;
+  }
+  return requestWithModel(new ListTablesResponse{}, 'GET', path, param, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -344,14 +376,10 @@ async function deleteRole(namespace: string, roleName: string): HttpResponse {
 
 // Get role
 // 限流：每用户每秒最多 100 次请求
-async function getRole(namespace: string, roleName: string, view: string): Role {
+async function getRole(namespace: string, roleName: string): Role {
   var runtime = new Util.RuntimeOptions{};
   var path = getRolePath(namespace, roleName);
-  var query: map[string]string = {};
-  if (!Util.isUnset(view)) {
-    query["view"] = view;
-  }
-  return requestWithModel(new Role{}, 'GET', path, query, runtime);
+  return requestWithModel(new Role{}, 'GET', path, null, runtime);
 }
 
 // List roles
@@ -673,7 +701,19 @@ model Project {
   lastModifiedTime?: string(name='lastModifiedTime', description='最后修改时间戳（UTC毫秒）', format='int64'),
   schemaEnabled?: boolean(name='schemaEnabled', description='是否开启三层模型'),
   region?: string(name='region', description='所属region'),
-  externalCatalog?: boolean(name='externalCatalog', description='是否为外部 catalog project')
+  externalCatalog?: boolean(name='externalCatalog', description='是否为外部 catalog project'),
+  zoneDisasterRecoveryEnabled?: boolean(name='zoneDisasterRecoveryEnabled', description='是否开启同城容灾。'),
+  numTables?: int32(name='numTables', description='Project 下普通表（含外表）的个数。仅输出。'),
+  numMaterializedViews?: int32(name='numMaterializedViews', description='Project 下物化视图的个数。仅输出。'),
+  numSnapshots?: int32(name='numSnapshots', description='Project 下 snapshot 表的个数。仅输出。'),
+  numResources?: int32(name='numResources', description='Project 下资源的个数。仅输出。'),
+  numStorageBytes?: string(name='numStorageBytes', description='Project 的总存储字节数。仅输出。'),
+  numTablesBytes?: string(name='numTablesBytes', description='Project 下普通表的存储字节数。仅输出。'),
+  numSnapshotsBytes?: string(name='numSnapshotsBytes', description='Project 下 snapshot 表的存储字节数。仅输出。'),
+  numMaterializedViewsBytes?: string(name='numMaterializedViewsBytes', description='Project 下物化视图的存储字节数。仅输出。'),
+  numResourcesBytes?: string(name='numResourcesBytes', description='Project 下资源的存储字节数。仅输出。'),
+  numRecycleBinBytes?: string(name='numRecycleBinBytes', description='Project 的回收站存储字节数。仅输出。'),
+  billableStorageDetails?: BillStorageDetails(name='billableStorageDetails', description='Project 的计费存储明细。仅输出。')
 }
 
 model Schema {
@@ -682,9 +722,7 @@ model Schema {
   description?: string(name='description', description='可选描述，不超过xxKB'),
   type?: string(name='type', description='Schema类型：DEFAULT/EXTERNAL'),
   owner?: string(name='owner', description='Schema拥有者'),
-  externalSchemaConfiguration?: ExternalSchemaConfiguration(name='externalSchemaConfiguration', description='外部schema配置'),
-  defaultTableExpirationDays?: string(name='defaultTableExpirationDays', description='Schema 下表的默认过期天数'),
-  defaultPartitionExpirationDays?: string(name='defaultPartitionExpirationDays', description='Schema 下分区的默认过期天数')
+  externalSchemaConfiguration?: ExternalSchemaConfiguration(name='externalSchemaConfiguration', description='外部schema配置')
 }
 
 model ExternalSchemaConfiguration {
@@ -730,9 +768,16 @@ async function listProjects(pageSize: integer, pageToken: string): ListProjectsR
 }
 
 // 限流：每用户每秒最多 100 次请求
-async function getProject(projectId: string): Project {
+async function getProject(projectId: string, view: string): Project {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithModel(new Project{}, 'GET', getProjectPath(projectId), null, runtime);
+  var query: map[string]string = {};
+  if (!Util.isUnset(view)) {
+    query["view"] = view;
+    if (!Util.equalString(view, "BASIC")) {
+      query["apiScope"] = "inner";
+    }
+  }
+  return requestWithModel(new Project{}, 'GET', getProjectPath(projectId), query, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -804,7 +849,10 @@ model Partition {
   spec?: string(name='spec', description='分区spec，格式样例为 bu=tt/ds=20250515'),
   createTime?: string(name='createTime', description='分区的创建时间（毫秒）。仅输出。'),
   lastModifiedTime?: string(name='lastModifiedTime', description='分区的修改时间（毫秒）。仅输出。'),
-  lastAccessTime?: string(name='lastAccessTime', description='分区的最后访问时间（毫秒）。仅输出。')
+  lastAccessTime?: string(name='lastAccessTime', description='分区的最后访问时间（毫秒）。仅输出。'),
+  storageTier?: string(name='storageTier', description='分区的存储层级。仅输出。'),
+  numStorageBytes?: string(name='numStorageBytes', description='分区的存储字节数。仅输出。'),
+  billableStorageDetails?: BillStorageDetails(name='billableStorageDetails', description='分区的计费存储明细。仅输出。')
 }
 
 model ListPartitionsResponse {
@@ -847,7 +895,7 @@ async function listPartitions(
 
   if (!Util.isUnset(view)) {
     params["view"] = view;
-    if (Util.equalString(view, "FULL")) {
+    if (!Util.equalString(view, "BASIC")) {
       params["apiScope"] = "inner";
     }
   }

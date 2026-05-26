@@ -118,6 +118,54 @@ public class Table extends TeaModel {
     @NameInMap("externalCatalogTableOptions")
     public ExternalCatalogTableOptions externalCatalogTableOptions;
 
+    /**
+     * <p>snapshot 表的定义，只有 snapshot 表才有。</p>
+     */
+    @NameInMap("snapshotDefinition")
+    public SnapshotDefinition snapshotDefinition;
+
+    /**
+     * <p>表是否已被删除。仅输出。</p>
+     */
+    @NameInMap("isDeleted")
+    public Boolean isDeleted;
+
+    /**
+     * <p>表的删除时间（毫秒）。仅输出。</p>
+     */
+    @NameInMap("deleteTime")
+    public String deleteTime;
+
+    /**
+     * <p>表的总存储字节数（含回收站）。仅输出。</p>
+     */
+    @NameInMap("numTotalStorageBytes")
+    public String numTotalStorageBytes;
+
+    /**
+     * <p>表的当前存储字节数（不含回收站）。仅输出。</p>
+     */
+    @NameInMap("numCurrentStorageBytes")
+    public String numCurrentStorageBytes;
+
+    /**
+     * <p>表的回收站存储字节数。仅输出。</p>
+     */
+    @NameInMap("numRecycleBinBytes")
+    public String numRecycleBinBytes;
+
+    /**
+     * <p>表的计费存储明细。仅输出。</p>
+     */
+    @NameInMap("billableStorageDetails")
+    public BillStorageDetails billableStorageDetails;
+
+    /**
+     * <p>表的存储层级。仅输出。</p>
+     */
+    @NameInMap("storageTier")
+    public String storageTier;
+
     public static Table build(java.util.Map<String, ?> map) throws Exception {
         Table self = new Table();
         return TeaModel.build(map, self);
@@ -273,6 +321,70 @@ public class Table extends TeaModel {
     }
     public ExternalCatalogTableOptions getExternalCatalogTableOptions() {
         return this.externalCatalogTableOptions;
+    }
+
+    public Table setSnapshotDefinition(SnapshotDefinition snapshotDefinition) {
+        this.snapshotDefinition = snapshotDefinition;
+        return this;
+    }
+    public SnapshotDefinition getSnapshotDefinition() {
+        return this.snapshotDefinition;
+    }
+
+    public Table setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+        return this;
+    }
+    public Boolean getIsDeleted() {
+        return this.isDeleted;
+    }
+
+    public Table setDeleteTime(String deleteTime) {
+        this.deleteTime = deleteTime;
+        return this;
+    }
+    public String getDeleteTime() {
+        return this.deleteTime;
+    }
+
+    public Table setNumTotalStorageBytes(String numTotalStorageBytes) {
+        this.numTotalStorageBytes = numTotalStorageBytes;
+        return this;
+    }
+    public String getNumTotalStorageBytes() {
+        return this.numTotalStorageBytes;
+    }
+
+    public Table setNumCurrentStorageBytes(String numCurrentStorageBytes) {
+        this.numCurrentStorageBytes = numCurrentStorageBytes;
+        return this;
+    }
+    public String getNumCurrentStorageBytes() {
+        return this.numCurrentStorageBytes;
+    }
+
+    public Table setNumRecycleBinBytes(String numRecycleBinBytes) {
+        this.numRecycleBinBytes = numRecycleBinBytes;
+        return this;
+    }
+    public String getNumRecycleBinBytes() {
+        return this.numRecycleBinBytes;
+    }
+
+    public Table setBillableStorageDetails(BillStorageDetails billableStorageDetails) {
+        this.billableStorageDetails = billableStorageDetails;
+        return this;
+    }
+    public BillStorageDetails getBillableStorageDetails() {
+        return this.billableStorageDetails;
+    }
+
+    public Table setStorageTier(String storageTier) {
+        this.storageTier = storageTier;
+        return this;
+    }
+    public String getStorageTier() {
+        return this.storageTier;
     }
 
 }

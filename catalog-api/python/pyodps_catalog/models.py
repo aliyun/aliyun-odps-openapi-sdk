@@ -699,6 +699,111 @@ class ExternalCatalogTableOptions(TeaModel):
         return self
 
 
+class SnapshotDefinition(TeaModel):
+    def __init__(
+        self,
+        from_project_name: str = None,
+        from_schema_name: str = None,
+        from_table_name: str = None,
+    ):
+        # 源表所在的 project 名。
+        self.from_project_name = from_project_name
+        # 源表所在的 schema 名。
+        self.from_schema_name = from_schema_name
+        # 源表名。
+        self.from_table_name = from_table_name
+
+    def validate(self):
+        pass
+
+    def to_map(self):
+        _map = super().to_map()
+        if _map is not None:
+            return _map
+
+        result = dict()
+        if self.from_project_name is not None:
+            result['fromProjectName'] = self.from_project_name
+        if self.from_schema_name is not None:
+            result['fromSchemaName'] = self.from_schema_name
+        if self.from_table_name is not None:
+            result['fromTableName'] = self.from_table_name
+        return result
+
+    def from_map(self, m: dict = None):
+        m = m or dict()
+        if m.get('fromProjectName') is not None:
+            self.from_project_name = m.get('fromProjectName')
+        if m.get('fromSchemaName') is not None:
+            self.from_schema_name = m.get('fromSchemaName')
+        if m.get('fromTableName') is not None:
+            self.from_table_name = m.get('fromTableName')
+        return self
+
+
+class BillStorageDetails(TeaModel):
+    def __init__(
+        self,
+        num_billable_storage_bytes: str = None,
+        num_billable_standard_storage_bytes: str = None,
+        num_billable_lowfrequency_storage_bytes: str = None,
+        num_billable_longterm_storage_bytes: str = None,
+        num_billable_cold_storage_bytes: str = None,
+        num_billable_recycle_bin_storage_bytes: str = None,
+    ):
+        # 参与计费的总存储字节数。
+        self.num_billable_storage_bytes = num_billable_storage_bytes
+        # 参与计费的标准存储字节数。
+        self.num_billable_standard_storage_bytes = num_billable_standard_storage_bytes
+        # 参与计费的低频存储字节数。
+        self.num_billable_lowfrequency_storage_bytes = num_billable_lowfrequency_storage_bytes
+        # 参与计费的长期存储字节数。
+        self.num_billable_longterm_storage_bytes = num_billable_longterm_storage_bytes
+        # 参与计费的冷归档存储字节数。
+        self.num_billable_cold_storage_bytes = num_billable_cold_storage_bytes
+        # 参与计费的回收站存储字节数。
+        self.num_billable_recycle_bin_storage_bytes = num_billable_recycle_bin_storage_bytes
+
+    def validate(self):
+        pass
+
+    def to_map(self):
+        _map = super().to_map()
+        if _map is not None:
+            return _map
+
+        result = dict()
+        if self.num_billable_storage_bytes is not None:
+            result['numBillableStorageBytes'] = self.num_billable_storage_bytes
+        if self.num_billable_standard_storage_bytes is not None:
+            result['numBillableStandardStorageBytes'] = self.num_billable_standard_storage_bytes
+        if self.num_billable_lowfrequency_storage_bytes is not None:
+            result['numBillableLowfrequencyStorageBytes'] = self.num_billable_lowfrequency_storage_bytes
+        if self.num_billable_longterm_storage_bytes is not None:
+            result['numBillableLongtermStorageBytes'] = self.num_billable_longterm_storage_bytes
+        if self.num_billable_cold_storage_bytes is not None:
+            result['numBillableColdStorageBytes'] = self.num_billable_cold_storage_bytes
+        if self.num_billable_recycle_bin_storage_bytes is not None:
+            result['numBillableRecycleBinStorageBytes'] = self.num_billable_recycle_bin_storage_bytes
+        return result
+
+    def from_map(self, m: dict = None):
+        m = m or dict()
+        if m.get('numBillableStorageBytes') is not None:
+            self.num_billable_storage_bytes = m.get('numBillableStorageBytes')
+        if m.get('numBillableStandardStorageBytes') is not None:
+            self.num_billable_standard_storage_bytes = m.get('numBillableStandardStorageBytes')
+        if m.get('numBillableLowfrequencyStorageBytes') is not None:
+            self.num_billable_lowfrequency_storage_bytes = m.get('numBillableLowfrequencyStorageBytes')
+        if m.get('numBillableLongtermStorageBytes') is not None:
+            self.num_billable_longterm_storage_bytes = m.get('numBillableLongtermStorageBytes')
+        if m.get('numBillableColdStorageBytes') is not None:
+            self.num_billable_cold_storage_bytes = m.get('numBillableColdStorageBytes')
+        if m.get('numBillableRecycleBinStorageBytes') is not None:
+            self.num_billable_recycle_bin_storage_bytes = m.get('numBillableRecycleBinStorageBytes')
+        return self
+
+
 class Table(TeaModel):
     def __init__(
         self,
@@ -721,6 +826,14 @@ class Table(TeaModel):
         external_data_configuration: ExternalDataConfiguration = None,
         max_lake_configuration: MaxLakeConfiguration = None,
         external_catalog_table_options: ExternalCatalogTableOptions = None,
+        snapshot_definition: SnapshotDefinition = None,
+        is_deleted: bool = None,
+        delete_time: str = None,
+        num_total_storage_bytes: str = None,
+        num_current_storage_bytes: str = None,
+        num_recycle_bin_bytes: str = None,
+        billable_storage_details: BillStorageDetails = None,
+        storage_tier: str = None,
     ):
         # 用于 read-modify-write 一致性校验。
         self.etag = etag
@@ -760,6 +873,22 @@ class Table(TeaModel):
         self.max_lake_configuration = max_lake_configuration
         # external catalog 信息
         self.external_catalog_table_options = external_catalog_table_options
+        # snapshot 表的定义，只有 snapshot 表才有。
+        self.snapshot_definition = snapshot_definition
+        # 表是否已被删除。仅输出。
+        self.is_deleted = is_deleted
+        # 表的删除时间（毫秒）。仅输出。
+        self.delete_time = delete_time
+        # 表的总存储字节数（含回收站）。仅输出。
+        self.num_total_storage_bytes = num_total_storage_bytes
+        # 表的当前存储字节数（不含回收站）。仅输出。
+        self.num_current_storage_bytes = num_current_storage_bytes
+        # 表的回收站存储字节数。仅输出。
+        self.num_recycle_bin_bytes = num_recycle_bin_bytes
+        # 表的计费存储明细。仅输出。
+        self.billable_storage_details = billable_storage_details
+        # 表的存储层级。仅输出。
+        self.storage_tier = storage_tier
         # 限流：每用户每秒最多 10 次请求
 
     def validate(self):
@@ -781,6 +910,10 @@ class Table(TeaModel):
             self.max_lake_configuration.validate()
         if self.external_catalog_table_options:
             self.external_catalog_table_options.validate()
+        if self.snapshot_definition:
+            self.snapshot_definition.validate()
+        if self.billable_storage_details:
+            self.billable_storage_details.validate()
 
     def to_map(self):
         _map = super().to_map()
@@ -826,6 +959,22 @@ class Table(TeaModel):
             result['maxLakeConfiguration'] = self.max_lake_configuration.to_map()
         if self.external_catalog_table_options is not None:
             result['externalCatalogTableOptions'] = self.external_catalog_table_options.to_map()
+        if self.snapshot_definition is not None:
+            result['snapshotDefinition'] = self.snapshot_definition.to_map()
+        if self.is_deleted is not None:
+            result['isDeleted'] = self.is_deleted
+        if self.delete_time is not None:
+            result['deleteTime'] = self.delete_time
+        if self.num_total_storage_bytes is not None:
+            result['numTotalStorageBytes'] = self.num_total_storage_bytes
+        if self.num_current_storage_bytes is not None:
+            result['numCurrentStorageBytes'] = self.num_current_storage_bytes
+        if self.num_recycle_bin_bytes is not None:
+            result['numRecycleBinBytes'] = self.num_recycle_bin_bytes
+        if self.billable_storage_details is not None:
+            result['billableStorageDetails'] = self.billable_storage_details.to_map()
+        if self.storage_tier is not None:
+            result['storageTier'] = self.storage_tier
         return result
 
     def from_map(self, m: dict = None):
@@ -877,6 +1026,24 @@ class Table(TeaModel):
         if m.get('externalCatalogTableOptions') is not None:
             temp_model = ExternalCatalogTableOptions()
             self.external_catalog_table_options = temp_model.from_map(m['externalCatalogTableOptions'])
+        if m.get('snapshotDefinition') is not None:
+            temp_model = SnapshotDefinition()
+            self.snapshot_definition = temp_model.from_map(m['snapshotDefinition'])
+        if m.get('isDeleted') is not None:
+            self.is_deleted = m.get('isDeleted')
+        if m.get('deleteTime') is not None:
+            self.delete_time = m.get('deleteTime')
+        if m.get('numTotalStorageBytes') is not None:
+            self.num_total_storage_bytes = m.get('numTotalStorageBytes')
+        if m.get('numCurrentStorageBytes') is not None:
+            self.num_current_storage_bytes = m.get('numCurrentStorageBytes')
+        if m.get('numRecycleBinBytes') is not None:
+            self.num_recycle_bin_bytes = m.get('numRecycleBinBytes')
+        if m.get('billableStorageDetails') is not None:
+            temp_model = BillStorageDetails()
+            self.billable_storage_details = temp_model.from_map(m['billableStorageDetails'])
+        if m.get('storageTier') is not None:
+            self.storage_tier = m.get('storageTier')
         return self
 
 
@@ -1564,6 +1731,18 @@ class Project(TeaModel):
         schema_enabled: bool = None,
         region: str = None,
         external_catalog: bool = None,
+        zone_disaster_recovery_enabled: bool = None,
+        num_tables: int = None,
+        num_materialized_views: int = None,
+        num_snapshots: int = None,
+        num_resources: int = None,
+        num_storage_bytes: str = None,
+        num_tables_bytes: str = None,
+        num_snapshots_bytes: str = None,
+        num_materialized_views_bytes: str = None,
+        num_resources_bytes: str = None,
+        num_recycle_bin_bytes: str = None,
+        billable_storage_details: BillStorageDetails = None,
     ):
         # Project的资源全名：projects/{projectId}。仅输出。
         self.name = name
@@ -1583,9 +1762,34 @@ class Project(TeaModel):
         self.region = region
         # 是否为外部 catalog project
         self.external_catalog = external_catalog
+        # 是否开启同城容灾。
+        self.zone_disaster_recovery_enabled = zone_disaster_recovery_enabled
+        # Project 下普通表（含外表）的个数。仅输出。
+        self.num_tables = num_tables
+        # Project 下物化视图的个数。仅输出。
+        self.num_materialized_views = num_materialized_views
+        # Project 下 snapshot 表的个数。仅输出。
+        self.num_snapshots = num_snapshots
+        # Project 下资源的个数。仅输出。
+        self.num_resources = num_resources
+        # Project 的总存储字节数。仅输出。
+        self.num_storage_bytes = num_storage_bytes
+        # Project 下普通表的存储字节数。仅输出。
+        self.num_tables_bytes = num_tables_bytes
+        # Project 下 snapshot 表的存储字节数。仅输出。
+        self.num_snapshots_bytes = num_snapshots_bytes
+        # Project 下物化视图的存储字节数。仅输出。
+        self.num_materialized_views_bytes = num_materialized_views_bytes
+        # Project 下资源的存储字节数。仅输出。
+        self.num_resources_bytes = num_resources_bytes
+        # Project 的回收站存储字节数。仅输出。
+        self.num_recycle_bin_bytes = num_recycle_bin_bytes
+        # Project 的计费存储明细。仅输出。
+        self.billable_storage_details = billable_storage_details
 
     def validate(self):
-        pass
+        if self.billable_storage_details:
+            self.billable_storage_details.validate()
 
     def to_map(self):
         _map = super().to_map()
@@ -1611,6 +1815,30 @@ class Project(TeaModel):
             result['region'] = self.region
         if self.external_catalog is not None:
             result['externalCatalog'] = self.external_catalog
+        if self.zone_disaster_recovery_enabled is not None:
+            result['zoneDisasterRecoveryEnabled'] = self.zone_disaster_recovery_enabled
+        if self.num_tables is not None:
+            result['numTables'] = self.num_tables
+        if self.num_materialized_views is not None:
+            result['numMaterializedViews'] = self.num_materialized_views
+        if self.num_snapshots is not None:
+            result['numSnapshots'] = self.num_snapshots
+        if self.num_resources is not None:
+            result['numResources'] = self.num_resources
+        if self.num_storage_bytes is not None:
+            result['numStorageBytes'] = self.num_storage_bytes
+        if self.num_tables_bytes is not None:
+            result['numTablesBytes'] = self.num_tables_bytes
+        if self.num_snapshots_bytes is not None:
+            result['numSnapshotsBytes'] = self.num_snapshots_bytes
+        if self.num_materialized_views_bytes is not None:
+            result['numMaterializedViewsBytes'] = self.num_materialized_views_bytes
+        if self.num_resources_bytes is not None:
+            result['numResourcesBytes'] = self.num_resources_bytes
+        if self.num_recycle_bin_bytes is not None:
+            result['numRecycleBinBytes'] = self.num_recycle_bin_bytes
+        if self.billable_storage_details is not None:
+            result['billableStorageDetails'] = self.billable_storage_details.to_map()
         return result
 
     def from_map(self, m: dict = None):
@@ -1633,6 +1861,31 @@ class Project(TeaModel):
             self.region = m.get('region')
         if m.get('externalCatalog') is not None:
             self.external_catalog = m.get('externalCatalog')
+        if m.get('zoneDisasterRecoveryEnabled') is not None:
+            self.zone_disaster_recovery_enabled = m.get('zoneDisasterRecoveryEnabled')
+        if m.get('numTables') is not None:
+            self.num_tables = m.get('numTables')
+        if m.get('numMaterializedViews') is not None:
+            self.num_materialized_views = m.get('numMaterializedViews')
+        if m.get('numSnapshots') is not None:
+            self.num_snapshots = m.get('numSnapshots')
+        if m.get('numResources') is not None:
+            self.num_resources = m.get('numResources')
+        if m.get('numStorageBytes') is not None:
+            self.num_storage_bytes = m.get('numStorageBytes')
+        if m.get('numTablesBytes') is not None:
+            self.num_tables_bytes = m.get('numTablesBytes')
+        if m.get('numSnapshotsBytes') is not None:
+            self.num_snapshots_bytes = m.get('numSnapshotsBytes')
+        if m.get('numMaterializedViewsBytes') is not None:
+            self.num_materialized_views_bytes = m.get('numMaterializedViewsBytes')
+        if m.get('numResourcesBytes') is not None:
+            self.num_resources_bytes = m.get('numResourcesBytes')
+        if m.get('numRecycleBinBytes') is not None:
+            self.num_recycle_bin_bytes = m.get('numRecycleBinBytes')
+        if m.get('billableStorageDetails') is not None:
+            temp_model = BillStorageDetails()
+            self.billable_storage_details = temp_model.from_map(m['billableStorageDetails'])
         return self
 
 
@@ -1710,8 +1963,6 @@ class Schema(TeaModel):
         type: str = None,
         owner: str = None,
         external_schema_configuration: ExternalSchemaConfiguration = None,
-        default_table_expiration_days: str = None,
-        default_partition_expiration_days: str = None,
     ):
         # Schema的资源全名：projects/{projectId}/schemas/{schemaName}。仅输出。
         self.name = name
@@ -1725,10 +1976,6 @@ class Schema(TeaModel):
         self.owner = owner
         # 外部schema配置
         self.external_schema_configuration = external_schema_configuration
-        # Schema 下表的默认过期天数
-        self.default_table_expiration_days = default_table_expiration_days
-        # Schema 下分区的默认过期天数
-        self.default_partition_expiration_days = default_partition_expiration_days
 
     def validate(self):
         if self.schema_name is not None:
@@ -1754,10 +2001,6 @@ class Schema(TeaModel):
             result['owner'] = self.owner
         if self.external_schema_configuration is not None:
             result['externalSchemaConfiguration'] = self.external_schema_configuration.to_map()
-        if self.default_table_expiration_days is not None:
-            result['defaultTableExpirationDays'] = self.default_table_expiration_days
-        if self.default_partition_expiration_days is not None:
-            result['defaultPartitionExpirationDays'] = self.default_partition_expiration_days
         return result
 
     def from_map(self, m: dict = None):
@@ -1775,10 +2018,6 @@ class Schema(TeaModel):
         if m.get('externalSchemaConfiguration') is not None:
             temp_model = ExternalSchemaConfiguration()
             self.external_schema_configuration = temp_model.from_map(m['externalSchemaConfiguration'])
-        if m.get('defaultTableExpirationDays') is not None:
-            self.default_table_expiration_days = m.get('defaultTableExpirationDays')
-        if m.get('defaultPartitionExpirationDays') is not None:
-            self.default_partition_expiration_days = m.get('defaultPartitionExpirationDays')
         return self
 
 
@@ -1875,6 +2114,9 @@ class Partition(TeaModel):
         create_time: str = None,
         last_modified_time: str = None,
         last_access_time: str = None,
+        storage_tier: str = None,
+        num_storage_bytes: str = None,
+        billable_storage_details: BillStorageDetails = None,
     ):
         # 分区spec，格式样例为 bu=tt/ds=20250515
         self.spec = spec
@@ -1884,9 +2126,16 @@ class Partition(TeaModel):
         self.last_modified_time = last_modified_time
         # 分区的最后访问时间（毫秒）。仅输出。
         self.last_access_time = last_access_time
+        # 分区的存储层级。仅输出。
+        self.storage_tier = storage_tier
+        # 分区的存储字节数。仅输出。
+        self.num_storage_bytes = num_storage_bytes
+        # 分区的计费存储明细。仅输出。
+        self.billable_storage_details = billable_storage_details
 
     def validate(self):
-        pass
+        if self.billable_storage_details:
+            self.billable_storage_details.validate()
 
     def to_map(self):
         _map = super().to_map()
@@ -1902,6 +2151,12 @@ class Partition(TeaModel):
             result['lastModifiedTime'] = self.last_modified_time
         if self.last_access_time is not None:
             result['lastAccessTime'] = self.last_access_time
+        if self.storage_tier is not None:
+            result['storageTier'] = self.storage_tier
+        if self.num_storage_bytes is not None:
+            result['numStorageBytes'] = self.num_storage_bytes
+        if self.billable_storage_details is not None:
+            result['billableStorageDetails'] = self.billable_storage_details.to_map()
         return result
 
     def from_map(self, m: dict = None):
@@ -1914,6 +2169,13 @@ class Partition(TeaModel):
             self.last_modified_time = m.get('lastModifiedTime')
         if m.get('lastAccessTime') is not None:
             self.last_access_time = m.get('lastAccessTime')
+        if m.get('storageTier') is not None:
+            self.storage_tier = m.get('storageTier')
+        if m.get('numStorageBytes') is not None:
+            self.num_storage_bytes = m.get('numStorageBytes')
+        if m.get('billableStorageDetails') is not None:
+            temp_model = BillStorageDetails()
+            self.billable_storage_details = temp_model.from_map(m['billableStorageDetails'])
         return self
 
 

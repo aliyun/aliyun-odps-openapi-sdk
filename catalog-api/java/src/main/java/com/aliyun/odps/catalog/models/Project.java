@@ -62,6 +62,78 @@ public class Project extends TeaModel {
     @NameInMap("externalCatalog")
     public Boolean externalCatalog;
 
+    /**
+     * <p>是否开启同城容灾。</p>
+     */
+    @NameInMap("zoneDisasterRecoveryEnabled")
+    public Boolean zoneDisasterRecoveryEnabled;
+
+    /**
+     * <p>Project 下普通表（含外表）的个数。仅输出。</p>
+     */
+    @NameInMap("numTables")
+    public Integer numTables;
+
+    /**
+     * <p>Project 下物化视图的个数。仅输出。</p>
+     */
+    @NameInMap("numMaterializedViews")
+    public Integer numMaterializedViews;
+
+    /**
+     * <p>Project 下 snapshot 表的个数。仅输出。</p>
+     */
+    @NameInMap("numSnapshots")
+    public Integer numSnapshots;
+
+    /**
+     * <p>Project 下资源的个数。仅输出。</p>
+     */
+    @NameInMap("numResources")
+    public Integer numResources;
+
+    /**
+     * <p>Project 的总存储字节数。仅输出。</p>
+     */
+    @NameInMap("numStorageBytes")
+    public String numStorageBytes;
+
+    /**
+     * <p>Project 下普通表的存储字节数。仅输出。</p>
+     */
+    @NameInMap("numTablesBytes")
+    public String numTablesBytes;
+
+    /**
+     * <p>Project 下 snapshot 表的存储字节数。仅输出。</p>
+     */
+    @NameInMap("numSnapshotsBytes")
+    public String numSnapshotsBytes;
+
+    /**
+     * <p>Project 下物化视图的存储字节数。仅输出。</p>
+     */
+    @NameInMap("numMaterializedViewsBytes")
+    public String numMaterializedViewsBytes;
+
+    /**
+     * <p>Project 下资源的存储字节数。仅输出。</p>
+     */
+    @NameInMap("numResourcesBytes")
+    public String numResourcesBytes;
+
+    /**
+     * <p>Project 的回收站存储字节数。仅输出。</p>
+     */
+    @NameInMap("numRecycleBinBytes")
+    public String numRecycleBinBytes;
+
+    /**
+     * <p>Project 的计费存储明细。仅输出。</p>
+     */
+    @NameInMap("billableStorageDetails")
+    public BillStorageDetails billableStorageDetails;
+
     public static Project build(java.util.Map<String, ?> map) throws Exception {
         Project self = new Project();
         return TeaModel.build(map, self);
@@ -137,6 +209,102 @@ public class Project extends TeaModel {
     }
     public Boolean getExternalCatalog() {
         return this.externalCatalog;
+    }
+
+    public Project setZoneDisasterRecoveryEnabled(Boolean zoneDisasterRecoveryEnabled) {
+        this.zoneDisasterRecoveryEnabled = zoneDisasterRecoveryEnabled;
+        return this;
+    }
+    public Boolean getZoneDisasterRecoveryEnabled() {
+        return this.zoneDisasterRecoveryEnabled;
+    }
+
+    public Project setNumTables(Integer numTables) {
+        this.numTables = numTables;
+        return this;
+    }
+    public Integer getNumTables() {
+        return this.numTables;
+    }
+
+    public Project setNumMaterializedViews(Integer numMaterializedViews) {
+        this.numMaterializedViews = numMaterializedViews;
+        return this;
+    }
+    public Integer getNumMaterializedViews() {
+        return this.numMaterializedViews;
+    }
+
+    public Project setNumSnapshots(Integer numSnapshots) {
+        this.numSnapshots = numSnapshots;
+        return this;
+    }
+    public Integer getNumSnapshots() {
+        return this.numSnapshots;
+    }
+
+    public Project setNumResources(Integer numResources) {
+        this.numResources = numResources;
+        return this;
+    }
+    public Integer getNumResources() {
+        return this.numResources;
+    }
+
+    public Project setNumStorageBytes(String numStorageBytes) {
+        this.numStorageBytes = numStorageBytes;
+        return this;
+    }
+    public String getNumStorageBytes() {
+        return this.numStorageBytes;
+    }
+
+    public Project setNumTablesBytes(String numTablesBytes) {
+        this.numTablesBytes = numTablesBytes;
+        return this;
+    }
+    public String getNumTablesBytes() {
+        return this.numTablesBytes;
+    }
+
+    public Project setNumSnapshotsBytes(String numSnapshotsBytes) {
+        this.numSnapshotsBytes = numSnapshotsBytes;
+        return this;
+    }
+    public String getNumSnapshotsBytes() {
+        return this.numSnapshotsBytes;
+    }
+
+    public Project setNumMaterializedViewsBytes(String numMaterializedViewsBytes) {
+        this.numMaterializedViewsBytes = numMaterializedViewsBytes;
+        return this;
+    }
+    public String getNumMaterializedViewsBytes() {
+        return this.numMaterializedViewsBytes;
+    }
+
+    public Project setNumResourcesBytes(String numResourcesBytes) {
+        this.numResourcesBytes = numResourcesBytes;
+        return this;
+    }
+    public String getNumResourcesBytes() {
+        return this.numResourcesBytes;
+    }
+
+    public Project setNumRecycleBinBytes(String numRecycleBinBytes) {
+        this.numRecycleBinBytes = numRecycleBinBytes;
+        return this;
+    }
+    public String getNumRecycleBinBytes() {
+        return this.numRecycleBinBytes;
+    }
+
+    public Project setBillableStorageDetails(BillStorageDetails billableStorageDetails) {
+        this.billableStorageDetails = billableStorageDetails;
+        return this;
+    }
+    public BillStorageDetails getBillableStorageDetails() {
+        return this.billableStorageDetails;
     }
 
 }

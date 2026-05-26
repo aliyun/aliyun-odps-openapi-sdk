@@ -32,6 +32,24 @@ public class Partition extends TeaModel {
     @NameInMap("lastAccessTime")
     public String lastAccessTime;
 
+    /**
+     * <p>分区的存储层级。仅输出。</p>
+     */
+    @NameInMap("storageTier")
+    public String storageTier;
+
+    /**
+     * <p>分区的存储字节数。仅输出。</p>
+     */
+    @NameInMap("numStorageBytes")
+    public String numStorageBytes;
+
+    /**
+     * <p>分区的计费存储明细。仅输出。</p>
+     */
+    @NameInMap("billableStorageDetails")
+    public BillStorageDetails billableStorageDetails;
+
     public static Partition build(java.util.Map<String, ?> map) throws Exception {
         Partition self = new Partition();
         return TeaModel.build(map, self);
@@ -67,6 +85,30 @@ public class Partition extends TeaModel {
     }
     public String getLastAccessTime() {
         return this.lastAccessTime;
+    }
+
+    public Partition setStorageTier(String storageTier) {
+        this.storageTier = storageTier;
+        return this;
+    }
+    public String getStorageTier() {
+        return this.storageTier;
+    }
+
+    public Partition setNumStorageBytes(String numStorageBytes) {
+        this.numStorageBytes = numStorageBytes;
+        return this;
+    }
+    public String getNumStorageBytes() {
+        return this.numStorageBytes;
+    }
+
+    public Partition setBillableStorageDetails(BillStorageDetails billableStorageDetails) {
+        this.billableStorageDetails = billableStorageDetails;
+        return this;
+    }
+    public BillStorageDetails getBillableStorageDetails() {
+        return this.billableStorageDetails;
     }
 
 }

@@ -41,18 +41,6 @@ public class Schema extends TeaModel {
     @NameInMap("externalSchemaConfiguration")
     public ExternalSchemaConfiguration externalSchemaConfiguration;
 
-    /**
-     * <p>Schema 下表的默认过期天数</p>
-     */
-    @NameInMap("defaultTableExpirationDays")
-    public String defaultTableExpirationDays;
-
-    /**
-     * <p>Schema 下分区的默认过期天数</p>
-     */
-    @NameInMap("defaultPartitionExpirationDays")
-    public String defaultPartitionExpirationDays;
-
     public static Schema build(java.util.Map<String, ?> map) throws Exception {
         Schema self = new Schema();
         return TeaModel.build(map, self);
@@ -104,22 +92,6 @@ public class Schema extends TeaModel {
     }
     public ExternalSchemaConfiguration getExternalSchemaConfiguration() {
         return this.externalSchemaConfiguration;
-    }
-
-    public Schema setDefaultTableExpirationDays(String defaultTableExpirationDays) {
-        this.defaultTableExpirationDays = defaultTableExpirationDays;
-        return this;
-    }
-    public String getDefaultTableExpirationDays() {
-        return this.defaultTableExpirationDays;
-    }
-
-    public Schema setDefaultPartitionExpirationDays(String defaultPartitionExpirationDays) {
-        this.defaultPartitionExpirationDays = defaultPartitionExpirationDays;
-        return this;
-    }
-    public String getDefaultPartitionExpirationDays() {
-        return this.defaultPartitionExpirationDays;
     }
 
 }

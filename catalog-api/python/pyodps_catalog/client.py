@@ -127,20 +127,28 @@ class Client(OpenApiClient):
         schema_name: str,
         page_size: int,
         page_token: str,
+        view: str,
+        query: str,
     ) -> catalog_api_models.ListTablesResponse:
         """
         限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/tables'
-        query = {}
+        param = {}
         if not UtilClient.is_unset(page_size):
-            query['pageSize'] = McUtilClient.to_string(page_size)
+            param['pageSize'] = McUtilClient.to_string(page_size)
         if not UtilClient.is_unset(page_token):
-            query['pageToken'] = page_token
+            param['pageToken'] = page_token
+        if not UtilClient.is_unset(view):
+            param['view'] = view
+            if not UtilClient.equal_string(view, 'BASIC'):
+                param['apiScope'] = 'inner'
+        if not UtilClient.is_unset(query):
+            param['query'] = query
         return TeaCore.from_map(
             catalog_api_models.ListTablesResponse(),
-            self.request_with_model(catalog_api_models.ListTablesResponse(), 'GET', path, query, runtime)
+            self.request_with_model(catalog_api_models.ListTablesResponse(), 'GET', path, param, runtime)
         )
 
     async def list_tables_async(
@@ -149,20 +157,28 @@ class Client(OpenApiClient):
         schema_name: str,
         page_size: int,
         page_token: str,
+        view: str,
+        query: str,
     ) -> catalog_api_models.ListTablesResponse:
         """
         限流：每用户每秒最多 10 次请求
         """
         runtime = util_models.RuntimeOptions()
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/tables'
-        query = {}
+        param = {}
         if not UtilClient.is_unset(page_size):
-            query['pageSize'] = McUtilClient.to_string(page_size)
+            param['pageSize'] = McUtilClient.to_string(page_size)
         if not UtilClient.is_unset(page_token):
-            query['pageToken'] = page_token
+            param['pageToken'] = page_token
+        if not UtilClient.is_unset(view):
+            param['view'] = view
+            if not UtilClient.equal_string(view, 'BASIC'):
+                param['apiScope'] = 'inner'
+        if not UtilClient.is_unset(query):
+            param['query'] = query
         return TeaCore.from_map(
             catalog_api_models.ListTablesResponse(),
-            await self.request_with_model_async(catalog_api_models.ListTablesResponse(), 'GET', path, query, runtime)
+            await self.request_with_model_async(catalog_api_models.ListTablesResponse(), 'GET', path, param, runtime)
         )
 
     def set_table_policy(
@@ -566,7 +582,6 @@ class Client(OpenApiClient):
         self,
         namespace: str,
         role_name: str,
-        view: str,
     ) -> catalog_api_models.Role:
         """
         Get role
@@ -574,19 +589,15 @@ class Client(OpenApiClient):
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_role_path(namespace, role_name)
-        query = {}
-        if not UtilClient.is_unset(view):
-            query['view'] = view
         return TeaCore.from_map(
             catalog_api_models.Role(),
-            self.request_with_model(catalog_api_models.Role(), 'GET', path, query, runtime)
+            self.request_with_model(catalog_api_models.Role(), 'GET', path, None, runtime)
         )
 
     async def get_role_async(
         self,
         namespace: str,
         role_name: str,
-        view: str,
     ) -> catalog_api_models.Role:
         """
         Get role
@@ -594,12 +605,9 @@ class Client(OpenApiClient):
         """
         runtime = util_models.RuntimeOptions()
         path = self.get_role_path(namespace, role_name)
-        query = {}
-        if not UtilClient.is_unset(view):
-            query['view'] = view
         return TeaCore.from_map(
             catalog_api_models.Role(),
-            await self.request_with_model_async(catalog_api_models.Role(), 'GET', path, query, runtime)
+            await self.request_with_model_async(catalog_api_models.Role(), 'GET', path, None, runtime)
         )
 
     def list_roles(
@@ -1554,27 +1562,39 @@ class Client(OpenApiClient):
     def get_project(
         self,
         project_id: str,
+        view: str,
     ) -> catalog_api_models.Project:
         """
         限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
+        query = {}
+        if not UtilClient.is_unset(view):
+            query['view'] = view
+            if not UtilClient.equal_string(view, 'BASIC'):
+                query['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.Project(),
-            self.request_with_model(catalog_api_models.Project(), 'GET', self.get_project_path(project_id), None, runtime)
+            self.request_with_model(catalog_api_models.Project(), 'GET', self.get_project_path(project_id), query, runtime)
         )
 
     async def get_project_async(
         self,
         project_id: str,
+        view: str,
     ) -> catalog_api_models.Project:
         """
         限流：每用户每秒最多 100 次请求
         """
         runtime = util_models.RuntimeOptions()
+        query = {}
+        if not UtilClient.is_unset(view):
+            query['view'] = view
+            if not UtilClient.equal_string(view, 'BASIC'):
+                query['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.Project(),
-            await self.request_with_model_async(catalog_api_models.Project(), 'GET', self.get_project_path(project_id), None, runtime)
+            await self.request_with_model_async(catalog_api_models.Project(), 'GET', self.get_project_path(project_id), query, runtime)
         )
 
     def create_schema(
@@ -1847,7 +1867,7 @@ class Client(OpenApiClient):
             params['query'] = query
         if not UtilClient.is_unset(view):
             params['view'] = view
-            if UtilClient.equal_string(view, 'FULL'):
+            if not UtilClient.equal_string(view, 'BASIC'):
                 params['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.ListPartitionsResponse(),
@@ -1879,7 +1899,7 @@ class Client(OpenApiClient):
             params['query'] = query
         if not UtilClient.is_unset(view):
             params['view'] = view
-            if UtilClient.equal_string(view, 'FULL'):
+            if not UtilClient.equal_string(view, 'BASIC'):
                 params['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.ListPartitionsResponse(),
