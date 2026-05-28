@@ -1,0 +1,47 @@
+name: Publish Catalog API Python
+
+on:
+  push:
+    tags:
+      - "catalog-py-v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Extract Version from Tag
+        id: extract_version
+        run: |
+          tag_name="${GITHUB_REF##*/}"
+          version="${tag_name#catalog-py-v}"
+          echo "Extracted version: $version"
+          echo "NEW_VERSION=$version" >> $GITHUB_ENV
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install build tools
+        run: pip install build twine
+
+      - name: Set version
+        run: |
+          cd catalog-api/python
+          sed -i "s/__version__ = .*/__version__ = \"${{ env.NEW_VERSION }}\"/" pyodps_catalog/__init__.py
+
+      - name: Build package
+        run: |
+          cd catalog-api/python
+          python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: catalog-api/python/dist/
+          password: ${{ secrets.PYPI_API_TOKEN }}

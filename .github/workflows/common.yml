@@ -6,7 +6,7 @@ name: Publish Common
 on:
   push:
     tags:
-      - "v*-SNAPSHOT"
+      - "common-v*-SNAPSHOT"
   release:
     types: [ created ]
   workflow_dispatch:
@@ -24,7 +24,7 @@ jobs:
         run: |
           # 提取tag名称并去除前缀'v'
           tag_name="${GITHUB_REF##*/}"
-          version="${tag_name#v}"
+          version="${tag_name#common-v}"
           echo "Extracted version: $version"
           echo "NEW_VERSION=$version" >> $GITHUB_ENV
 
