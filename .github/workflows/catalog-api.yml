@@ -6,7 +6,7 @@ name: Publish Catalog API
 on:
   push:
     tags:
-      - "catalog-v*-SNAPSHOT"
+      - "catalog-v*"
   release:
     types: [ created ]
   workflow_dispatch:
