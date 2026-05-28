@@ -1,7 +1,7 @@
 {
   "scope": "maxcompute",
   "name": "catalog-api",
-  "version": "v0.2.2",
+  "version": "v0.3.1",
   "main": "./main.dara",
   "libraries": {
     "McUtil": "maxcompute:Util:v0.1.1",
@@ -11,7 +11,7 @@
   "java": {
     "package": "com.aliyun.odps.catalog",
     "packageInfo": {
-      "version": "0.2.2",
+      "version": "0.3.1",
       "groupId": "com.aliyun.odps",
       "artifactId": "catalog-api",
       "name": "catalog-api",
@@ -42,7 +42,7 @@
     }
   },
   "releases": {
-    "java": "com.aliyun.odps:catalog-api:0.2.2",
+    "java": "com.aliyun.odps:catalog-api:0.3.1",
     "go": "github.com/aliyun/aliyun-odps-openapi-sdk/catalog-api/go/client",
     "python": "pyodps_catalog:1.0.0"
   }
