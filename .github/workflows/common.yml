@@ -4,6 +4,11 @@
 name: Publish Common
 
 on:
+  push:
+    tags:
+      - "v*-SNAPSHOT"
+  release:
+    types: [ created ]
   workflow_dispatch:
 
 jobs:
@@ -31,10 +36,17 @@ jobs:
       - name: Setup gpg
         run: |
           mkdir ~/.gnupg
+          chmod 700 ~/.gnupg
           echo use-agent >> ~/.gnupg/gpg.conf
           echo pinentry-mode loopback >> ~/.gnupg/gpg.conf
           echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
-          
+
+      - name: Set Version for Common Package
+        run: |
+          cd common/java
+          mvn versions:set -DnewVersion=${{ env.NEW_VERSION }} -DallowSnapshots=true
+        shell: bash
+
       - name: Publish Common Package
         uses: samuelmeuli/action-maven-publish@v1
         with:

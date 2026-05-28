@@ -50,10 +50,10 @@ handle_directory() {
 
     # 如果构建 Java
     if [ "$build_java" = true ]; then
-        # 删除旧的 java 目录
+        # 清理旧生成物，但保留 pom.xml（含 javadoc/source 等插件配置）
         if [ -d "java" ]; then
-            echo "Removing existing java directory..."
-            rm -r java || { echo "Failed to remove java directory in $dir_path."; exit 1; }
+            echo "Cleaning generated java sources (preserving pom.xml)..."
+            find java -mindepth 1 -maxdepth 1 -not -name 'pom.xml' -exec rm -rf {} + || { echo "Failed to clean java directory in $dir_path."; exit 1; }
         fi
 
         # 生成 Java 代码
@@ -94,10 +94,10 @@ handle_directory() {
 
     # 如果构建 Python
     if [ "$build_python" = true ]; then
-        # 删除旧的 python 目录
+        # 清理旧生成物，但保留 setup.py
         if [ -d "python" ]; then
-            echo "Removing existing python directory..."
-            rm -r python || { echo "Failed to remove python directory in $dir_path."; exit 1; }
+            echo "Cleaning generated python sources (preserving setup.py)..."
+            find python -mindepth 1 -maxdepth 1 -not -name 'setup.py' -exec rm -rf {} + || { echo "Failed to clean python directory in $dir_path."; exit 1; }
         fi
 
         # 生成 python 代码
