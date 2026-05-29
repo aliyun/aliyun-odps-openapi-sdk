@@ -18,7 +18,12 @@
         <dependency>
             <groupId>com.aliyun.odps</groupId>
             <artifactId>catalog-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun.odps</groupId>
+            <artifactId>openapi</artifactId>
+            <version>0.0.4</version>
         </dependency>
 
         <dependency>
