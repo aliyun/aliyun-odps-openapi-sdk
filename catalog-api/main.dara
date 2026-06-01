@@ -168,7 +168,7 @@ async function updateTable(table: Table): Table {
 // 限流：每用户每秒最多 10 次请求
 async function deleteTable(table: Table): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithoutModel(table, 'DELETE', getTablePath(table), null, runtime);
+  return requestVoid('DELETE', getTablePath(table), null, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -180,7 +180,7 @@ async function createTable(table: Table): Table {
 // 限流：每用户每秒最多 100 次请求
 async function getTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithModel(table, 'GET', getTablePath(table), null, runtime);
+  return request('GET', getTablePath(table), null, runtime);
 }
 
 model ListTablesResponse = {
@@ -208,7 +208,7 @@ async function listTables(projectId: string, schemaName: string, pageSize: int32
   if (!Util.isUnset(query)) {
     param["query"] = query;
   }
-  return requestWithModel(new ListTablesResponse{}, 'GET', path, param, runtime);
+  return request('GET', path, param, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -224,7 +224,7 @@ async function getTablePolicy(table: Table): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getTablePath(table)}:getPolicy`;
   var query : map[string]string = {};
-  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+  return request('POST', path, query, runtime);
 }
 
 function getTablePath(table: Table): string {
@@ -282,14 +282,14 @@ async function listConnections(namespace: string, pageSize: integer, pageToken: 
   if (!Util.isUnset(pageToken)) {
     query["pageToken"] = pageToken;
   }
-  return requestWithModel(new ListConnectionsResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 // 限流：每用户每秒最多 100 次请求
 async function getConnection(namespace: string, connectionName: string): Connection {
   var runtime = new Util.RuntimeOptions{};
   var path = getConnectionPath(namespace, connectionName);
-  return requestWithModel(new Connection{}, 'GET', path, null, runtime);
+  return request('GET', path, null, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -305,7 +305,7 @@ async function updateConnection(namespace: string, connectionName: string, conne
 async function deleteConnection(namespace: string, connectionName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getConnectionPath(namespace, connectionName);
-  return requestWithoutModel(new Connection{}, 'DELETE', path, null, runtime);
+  return requestVoid('DELETE', path, null, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -321,7 +321,7 @@ async function getConnectionPolicy(namespace: string, connectionName: string): P
   var runtime = new Util.RuntimeOptions{};
   var path = `${getConnectionPath(namespace, connectionName)}:getPolicy`;
   var query: map[string]string = {};
-  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+  return request('POST', path, query, runtime);
 }
 
 function getConnectionPath(namespace: string, connectionName: string): string {
@@ -371,7 +371,7 @@ async function createRole(namespace: string, role: Role): Role {
 async function deleteRole(namespace: string, roleName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getRolePath(namespace, roleName);
-  return requestWithoutModel(new Role{}, 'DELETE', path, null, runtime);
+  return requestVoid('DELETE', path, null, runtime);
 }
 
 // Get role
@@ -379,7 +379,7 @@ async function deleteRole(namespace: string, roleName: string): HttpResponse {
 async function getRole(namespace: string, roleName: string): Role {
   var runtime = new Util.RuntimeOptions{};
   var path = getRolePath(namespace, roleName);
-  return requestWithModel(new Role{}, 'GET', path, null, runtime);
+  return request('GET', path, null, runtime);
 }
 
 // List roles
@@ -400,7 +400,7 @@ async function listRoles(namespace: string, pageSize: integer, pageToken: string
   if (!Util.isUnset(showDeleted)) {
     query["showDeleted"] = McUtil.toString(showDeleted);
   }
-  return requestWithModel(new ListRolesResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 // Update role
@@ -430,7 +430,7 @@ async function getRolePolicy(namespace: string, roleName: string): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getRolePath(namespace, roleName)}:getPolicy`;
   var query: map[string]string = {};
-  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+  return request('POST', path, query, runtime);
 }
 
 /**
@@ -490,14 +490,14 @@ async function createTaxonomy(namespace: string, taxonomy: Taxonomy): Taxonomy {
 async function deleteTaxonomy(namespace: string, taxonomyId: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getTaxonomyPath(namespace, taxonomyId);
-  return requestWithoutModel(new Taxonomy{}, 'DELETE', path, null, runtime);
+  return requestVoid('DELETE', path, null, runtime);
 }
 
 // 限流：每用户每秒最多 100 次请求
 async function getTaxonomy(namespace: string, taxonomyId: string): Taxonomy {
   var runtime = new Util.RuntimeOptions{};
   var path = getTaxonomyPath(namespace, taxonomyId);
-  return requestWithModel(new Taxonomy{}, 'GET', path, null, runtime);
+  return request('GET', path, null, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -511,7 +511,7 @@ async function listTaxonomies(namespace: string, pageSize: integer, pageToken: s
   if (!Util.isUnset(pageToken)) {
     query["pageToken"] = pageToken;
   }
-  return requestWithModel(new ListTaxonomiesResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -539,7 +539,7 @@ async function getTaxonomyPolicy(namespace: string, taxonomyId: string): Policy 
   var runtime = new Util.RuntimeOptions{};
   var path = `${getTaxonomyPath(namespace, taxonomyId)}:getPolicy`;
   var query: map[string]string = {};
-  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+  return request('POST', path, query, runtime);
 }
 
 // PolicyTag operations
@@ -554,14 +554,14 @@ async function createPolicyTag(namespace: string, taxonomyId: string, policyTag:
 async function deletePolicyTag(namespace: string, taxonomyId: string, policyTagId: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
-  return requestWithoutModel(new PolicyTag{}, 'DELETE', path, null, runtime);
+  return requestVoid('DELETE', path, null, runtime);
 }
 
 // 限流：每用户每秒最多 100 次请求
 async function getPolicyTag(namespace: string, taxonomyId: string, policyTagId: string): PolicyTag {
   var runtime = new Util.RuntimeOptions{};
   var path = getPolicyTagPath(namespace, taxonomyId, policyTagId);
-  return requestWithModel(new PolicyTag{}, 'GET', path, null, runtime);
+  return request('GET', path, null, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -575,7 +575,7 @@ async function listPolicyTags(namespace: string, taxonomyId: string, pageSize: i
   if (!Util.isUnset(pageToken)) {
     query["pageToken"] = pageToken;
   }
-  return requestWithModel(new ListPolicyTagsResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -602,7 +602,7 @@ async function getPolicyTagPolicy(namespace: string, taxonomyId: string, policyT
   var runtime = new Util.RuntimeOptions{};
   var path = `${getPolicyTagPath(namespace, taxonomyId, policyTagId)}:getPolicy`;
   var query: map[string]string = {};
-  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+  return request('POST', path, query, runtime);
 }
 
 
@@ -638,14 +638,14 @@ async function createDataPolicy(namespace: string, dataPolicy: DataPolicy): Data
 async function deleteDataPolicy(namespace: string, dataPolicyName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getDataPolicyPath(namespace, dataPolicyName);
-  return requestWithoutModel(new DataPolicy{}, 'DELETE', path, null, runtime);
+  return requestVoid('DELETE', path, null, runtime);
 }
 
 // 限流：每用户每秒最多 100 次请求
 async function getDataPolicy(namespace: string, dataPolicyName: string): DataPolicy {
   var runtime = new Util.RuntimeOptions{};
   var path = getDataPolicyPath(namespace, dataPolicyName);
-  return requestWithModel(new DataPolicy{}, 'GET', path, null, runtime);
+  return request('GET', path, null, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -659,7 +659,7 @@ async function listDataPolicies(namespace: string, pageSize: integer, pageToken:
   if (!Util.isUnset(pageToken)) {
     query["pageToken"] = pageToken;
   }
-  return requestWithModel(new ListDataPoliciesResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -675,7 +675,7 @@ async function getDataPolicyPolicy(namespace: string, dataPolicyName: string): P
   var runtime = new Util.RuntimeOptions{};
   var path = `${getDataPolicyPath(namespace, dataPolicyName)}:getPolicy`;
   var query: map[string]string = {};
-  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+  return request('POST', path, query, runtime);
 }
 
 function getDataPolicyPath(namespace: string, dataPolicyName: string): string {
@@ -764,7 +764,7 @@ async function listProjects(pageSize: integer, pageToken: string): ListProjectsR
   if (!Util.isUnset(pageToken)) {
     query["pageToken"] = pageToken;
   }
-  return requestWithModel(new ListProjectsResponse{}, 'GET', '/api/catalog/v1alpha/projects', query, runtime);
+  return request('GET', '/api/catalog/v1alpha/projects', query, runtime);
 }
 
 // 限流：每用户每秒最多 100 次请求
@@ -777,7 +777,7 @@ async function getProject(projectId: string, view: string): Project {
       query["apiScope"] = "inner";
     }
   }
-  return requestWithModel(new Project{}, 'GET', getProjectPath(projectId), query, runtime);
+  return request('GET', getProjectPath(projectId), query, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -798,13 +798,13 @@ async function listSchemas(projectId: string, pageSize: integer, pageToken: stri
   if (!Util.isUnset(pageToken)) {
     query["pageToken"] = pageToken;
   }
-  return requestWithModel(new ListSchemasResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 // 限流：每用户每秒最多 100 次请求
 async function getSchema(projectId: string, schemaName: string): Schema {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithModel(new Schema{}, 'GET', getSchemaPath(projectId, schemaName), null, runtime);
+  return request('GET', getSchemaPath(projectId, schemaName), null, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -820,7 +820,7 @@ async function updateSchema(projectId: string, schemaName: string, updateMask: s
 async function deleteSchema(projectId: string, schemaName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getSchemaPath(projectId, schemaName);
-  return requestWithoutModel(new Schema{}, 'DELETE', path, null, runtime);
+  return requestVoid('DELETE', path, null, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -836,7 +836,7 @@ async function getSchemaPolicy(projectId: string, schemaName: string): Policy {
   var runtime = new Util.RuntimeOptions{};
   var path = `${getSchemaPath(projectId, schemaName)}:getPolicy`;
   var query: map[string]string = {};
-  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+  return request('POST', path, query, runtime);
 }
 
 
@@ -900,7 +900,7 @@ async function listPartitions(
     }
   }
   
-  return requestWithModel(new ListPartitionsResponse{}, 'GET', path, params, runtime);
+  return request('GET', path, params, runtime);
 }
 
 
@@ -985,7 +985,7 @@ function getTriggerDataScanPath(namespace: string, dataScanName: string): string
 
 // 限流：每用户每秒最多 10 次请求
 async function triggerDataScan(namespace: string, dataScanName: string): HttpResponse{
-    return requestWithoutModel(new ScanJob{}, 'POST', getTriggerDataScanPath(namespace, dataScanName), null, new Util.RuntimeOptions{});
+    return requestVoid('POST', getTriggerDataScanPath(namespace, dataScanName), null, new Util.RuntimeOptions{});
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -999,7 +999,7 @@ async function updateDataScan(namespace: string, dataScan: DataScan, updateMask:
 // 限流：每用户每秒最多 10 次请求
 async function deleteDataScan(namespace: string, dataScanName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithoutModel(new DataScan{}, 'DELETE', getDataScanPath(namespace, dataScanName), null, runtime);
+  return requestVoid('DELETE', getDataScanPath(namespace, dataScanName), null, runtime);
 }
 
 // 限流：每用户每秒最多 10 次请求
@@ -1011,7 +1011,7 @@ async function createDataScan(namespace:string, dataScan: DataScan): DataScan {
 // 限流：每用户每秒最多 100 次请求
 async function getDataScan(namespace:string, dataScanName: string): DataScan {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithModel(new DataScan{}, 'GET', getDataScanPath(namespace, dataScanName), null, runtime);
+  return request('GET', getDataScanPath(namespace, dataScanName), null, runtime);
 }
 
 model ListDataScansResponse {
@@ -1030,7 +1030,7 @@ async function listDataScans(namespace: string, pageSize: int32, pageToken: stri
   if (!Util.isUnset(pageToken)) {
     query["pageToken"] = pageToken;
   }
-  return requestWithModel(new ListDataScansResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 // DataScanJob
@@ -1054,7 +1054,7 @@ async function listDataScanJobs(namespace: string, dataScanName: string, pageSiz
   if (!Util.isUnset(pageToken)) {
     query["pageToken"] = pageToken;
   }
-  return requestWithModel(new ListDataScanJobsResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 /**
@@ -1144,7 +1144,7 @@ async function listModels(projectId: string, schemaName: string, pageSize: integ
     query["pageToken"] = pageToken;
   }
   
-  return requestWithModel(new ListModelsResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 // 获取模型
@@ -1152,7 +1152,7 @@ async function listModels(projectId: string, schemaName: string, pageSize: integ
 async function getModel(projectId: string, schemaName: string, modelName: string, versionName: string): Model {
   var runtime = new Util.RuntimeOptions{};
   var path = getModelPath(projectId, schemaName, modelName, versionName);
-  return requestWithModel(new Model{}, 'GET', path, null, runtime);
+  return request('GET', path, null, runtime);
 }
 
 // 更新模型
@@ -1175,7 +1175,7 @@ async function updateModel(projectId: string, schemaName: string, modelName: str
 async function deleteModel(projectId: string, schemaName: string, modelName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getModelPath(projectId, schemaName, modelName, null);
-  return requestWithoutModel(null, 'DELETE', path, null, runtime);
+  return requestVoid('DELETE', path, null, runtime);
 }
 
 // 创建模型版本
@@ -1191,7 +1191,7 @@ async function createModelVersion(projectId: string, schemaName: string, modelNa
 async function deleteModelVersion(projectId: string, schemaName: string, modelName: string, versionName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = `/api/catalog/v1alpha/projects/${projectId}/schemas/${schemaName}/models/${modelName}@${versionName}:deleteVersion`;
-  return requestWithoutModel(null, 'DELETE', path, null, runtime);
+  return requestVoid('DELETE', path, null, runtime);
 }
 
 
@@ -1211,7 +1211,7 @@ async function listModelVersions(projectId: string, schemaName: string, modelNam
     query["pageToken"] = pageToken;
   }
   
-  return requestWithModel(new ListModelVersionsResponse{}, 'GET', path, query, runtime);
+  return request('GET', path, query, runtime);
 }
 
 // 获取模型策略
@@ -1220,7 +1220,7 @@ async function getModelPolicy(projectId: string, schemaName: string, modelName: 
   var runtime = new Util.RuntimeOptions{};
   var path = `${getModelPath(projectId, schemaName, modelName, null)}:getPolicy`;
   var query: map[string]string = {};
-  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+  return request('POST', path, query, runtime);
 }
 
 // 设置模型策略
@@ -1278,7 +1278,7 @@ async function search(namespaceId: string, query: string, pageSize: integer, pag
     params["orderBy"] = McUtil.toString(orderBy);
   }
 
-  return requestWithModel(new SearchResponse{}, 'POST', path, params, runtime);
+  return request('POST', path, params, runtime);
 }
 
 model DataToken = {
@@ -1297,5 +1297,5 @@ async function getDataToken(table: Table, duration: integer): DataToken {
   if (!Util.isUnset(duration)) {
     params["duration"] = McUtil.toString(duration);
   }
-  return requestWithModel(new Policy{}, 'POST', fullPath, params, runtime);
+  return request('POST', fullPath, params, runtime);
 }

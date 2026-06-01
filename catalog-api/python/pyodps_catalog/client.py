@@ -53,7 +53,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(table, 'DELETE', self.get_table_path(table), None, runtime)
+            self.request_void('DELETE', self.get_table_path(table), None, runtime)
         )
 
     async def delete_table_async(
@@ -66,7 +66,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(table, 'DELETE', self.get_table_path(table), None, runtime)
+            await self.request_void_async('DELETE', self.get_table_path(table), None, runtime)
         )
 
     def create_table(
@@ -105,7 +105,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Table(),
-            self.request_with_model(table, 'GET', self.get_table_path(table), None, runtime)
+            self.request('GET', self.get_table_path(table), None, runtime)
         )
 
     async def get_table_async(
@@ -118,7 +118,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Table(),
-            await self.request_with_model_async(table, 'GET', self.get_table_path(table), None, runtime)
+            await self.request_async('GET', self.get_table_path(table), None, runtime)
         )
 
     def list_tables(
@@ -148,7 +148,7 @@ class Client(OpenApiClient):
             param['query'] = query
         return TeaCore.from_map(
             catalog_api_models.ListTablesResponse(),
-            self.request_with_model(catalog_api_models.ListTablesResponse(), 'GET', path, param, runtime)
+            self.request('GET', path, param, runtime)
         )
 
     async def list_tables_async(
@@ -178,7 +178,7 @@ class Client(OpenApiClient):
             param['query'] = query
         return TeaCore.from_map(
             catalog_api_models.ListTablesResponse(),
-            await self.request_with_model_async(catalog_api_models.ListTablesResponse(), 'GET', path, param, runtime)
+            await self.request_async('GET', path, param, runtime)
         )
 
     def set_table_policy(
@@ -225,7 +225,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            self.request('POST', path, query, runtime)
         )
 
     async def get_table_policy_async(
@@ -240,7 +240,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            await self.request_async('POST', path, query, runtime)
         )
 
     def get_table_path(
@@ -309,7 +309,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListConnectionsResponse(),
-            self.request_with_model(catalog_api_models.ListConnectionsResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_connections_async(
@@ -330,7 +330,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListConnectionsResponse(),
-            await self.request_with_model_async(catalog_api_models.ListConnectionsResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def get_connection(
@@ -345,7 +345,7 @@ class Client(OpenApiClient):
         path = self.get_connection_path(namespace, connection_name)
         return TeaCore.from_map(
             catalog_api_models.Connection(),
-            self.request_with_model(catalog_api_models.Connection(), 'GET', path, None, runtime)
+            self.request('GET', path, None, runtime)
         )
 
     async def get_connection_async(
@@ -360,7 +360,7 @@ class Client(OpenApiClient):
         path = self.get_connection_path(namespace, connection_name)
         return TeaCore.from_map(
             catalog_api_models.Connection(),
-            await self.request_with_model_async(catalog_api_models.Connection(), 'GET', path, None, runtime)
+            await self.request_async('GET', path, None, runtime)
         )
 
     def update_connection(
@@ -413,7 +413,7 @@ class Client(OpenApiClient):
         path = self.get_connection_path(namespace, connection_name)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(catalog_api_models.Connection(), 'DELETE', path, None, runtime)
+            self.request_void('DELETE', path, None, runtime)
         )
 
     async def delete_connection_async(
@@ -428,7 +428,7 @@ class Client(OpenApiClient):
         path = self.get_connection_path(namespace, connection_name)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(catalog_api_models.Connection(), 'DELETE', path, None, runtime)
+            await self.request_void_async('DELETE', path, None, runtime)
         )
 
     def set_connection_policy(
@@ -478,7 +478,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            self.request('POST', path, query, runtime)
         )
 
     async def get_connection_policy_async(
@@ -494,7 +494,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            await self.request_async('POST', path, query, runtime)
         )
 
     def get_connection_path(
@@ -559,7 +559,7 @@ class Client(OpenApiClient):
         path = self.get_role_path(namespace, role_name)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(catalog_api_models.Role(), 'DELETE', path, None, runtime)
+            self.request_void('DELETE', path, None, runtime)
         )
 
     async def delete_role_async(
@@ -575,7 +575,7 @@ class Client(OpenApiClient):
         path = self.get_role_path(namespace, role_name)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(catalog_api_models.Role(), 'DELETE', path, None, runtime)
+            await self.request_void_async('DELETE', path, None, runtime)
         )
 
     def get_role(
@@ -591,7 +591,7 @@ class Client(OpenApiClient):
         path = self.get_role_path(namespace, role_name)
         return TeaCore.from_map(
             catalog_api_models.Role(),
-            self.request_with_model(catalog_api_models.Role(), 'GET', path, None, runtime)
+            self.request('GET', path, None, runtime)
         )
 
     async def get_role_async(
@@ -607,7 +607,7 @@ class Client(OpenApiClient):
         path = self.get_role_path(namespace, role_name)
         return TeaCore.from_map(
             catalog_api_models.Role(),
-            await self.request_with_model_async(catalog_api_models.Role(), 'GET', path, None, runtime)
+            await self.request_async('GET', path, None, runtime)
         )
 
     def list_roles(
@@ -635,7 +635,7 @@ class Client(OpenApiClient):
             query['showDeleted'] = McUtilClient.to_string(show_deleted)
         return TeaCore.from_map(
             catalog_api_models.ListRolesResponse(),
-            self.request_with_model(catalog_api_models.ListRolesResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_roles_async(
@@ -663,7 +663,7 @@ class Client(OpenApiClient):
             query['showDeleted'] = McUtilClient.to_string(show_deleted)
         return TeaCore.from_map(
             catalog_api_models.ListRolesResponse(),
-            await self.request_with_model_async(catalog_api_models.ListRolesResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def update_role(
@@ -758,7 +758,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            self.request('POST', path, query, runtime)
         )
 
     async def get_role_policy_async(
@@ -775,7 +775,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            await self.request_async('POST', path, query, runtime)
         )
 
     def get_taxonomy_path(
@@ -840,7 +840,7 @@ class Client(OpenApiClient):
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(catalog_api_models.Taxonomy(), 'DELETE', path, None, runtime)
+            self.request_void('DELETE', path, None, runtime)
         )
 
     async def delete_taxonomy_async(
@@ -855,7 +855,7 @@ class Client(OpenApiClient):
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(catalog_api_models.Taxonomy(), 'DELETE', path, None, runtime)
+            await self.request_void_async('DELETE', path, None, runtime)
         )
 
     def get_taxonomy(
@@ -870,7 +870,7 @@ class Client(OpenApiClient):
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         return TeaCore.from_map(
             catalog_api_models.Taxonomy(),
-            self.request_with_model(catalog_api_models.Taxonomy(), 'GET', path, None, runtime)
+            self.request('GET', path, None, runtime)
         )
 
     async def get_taxonomy_async(
@@ -885,7 +885,7 @@ class Client(OpenApiClient):
         path = self.get_taxonomy_path(namespace, taxonomy_id)
         return TeaCore.from_map(
             catalog_api_models.Taxonomy(),
-            await self.request_with_model_async(catalog_api_models.Taxonomy(), 'GET', path, None, runtime)
+            await self.request_async('GET', path, None, runtime)
         )
 
     def list_taxonomies(
@@ -906,7 +906,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListTaxonomiesResponse(),
-            self.request_with_model(catalog_api_models.ListTaxonomiesResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_taxonomies_async(
@@ -927,7 +927,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListTaxonomiesResponse(),
-            await self.request_with_model_async(catalog_api_models.ListTaxonomiesResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def update_taxonomy(
@@ -1019,7 +1019,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            self.request('POST', path, query, runtime)
         )
 
     async def get_taxonomy_policy_async(
@@ -1035,7 +1035,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            await self.request_async('POST', path, query, runtime)
         )
 
     def create_policy_tag(
@@ -1085,7 +1085,7 @@ class Client(OpenApiClient):
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(catalog_api_models.PolicyTag(), 'DELETE', path, None, runtime)
+            self.request_void('DELETE', path, None, runtime)
         )
 
     async def delete_policy_tag_async(
@@ -1101,7 +1101,7 @@ class Client(OpenApiClient):
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(catalog_api_models.PolicyTag(), 'DELETE', path, None, runtime)
+            await self.request_void_async('DELETE', path, None, runtime)
         )
 
     def get_policy_tag(
@@ -1117,7 +1117,7 @@ class Client(OpenApiClient):
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         return TeaCore.from_map(
             catalog_api_models.PolicyTag(),
-            self.request_with_model(catalog_api_models.PolicyTag(), 'GET', path, None, runtime)
+            self.request('GET', path, None, runtime)
         )
 
     async def get_policy_tag_async(
@@ -1133,7 +1133,7 @@ class Client(OpenApiClient):
         path = self.get_policy_tag_path(namespace, taxonomy_id, policy_tag_id)
         return TeaCore.from_map(
             catalog_api_models.PolicyTag(),
-            await self.request_with_model_async(catalog_api_models.PolicyTag(), 'GET', path, None, runtime)
+            await self.request_async('GET', path, None, runtime)
         )
 
     def list_policy_tags(
@@ -1155,7 +1155,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListPolicyTagsResponse(),
-            self.request_with_model(catalog_api_models.ListPolicyTagsResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_policy_tags_async(
@@ -1177,7 +1177,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListPolicyTagsResponse(),
-            await self.request_with_model_async(catalog_api_models.ListPolicyTagsResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def update_policy_tag(
@@ -1272,7 +1272,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            self.request('POST', path, query, runtime)
         )
 
     async def get_policy_tag_policy_async(
@@ -1289,7 +1289,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            await self.request_async('POST', path, query, runtime)
         )
 
     def create_data_policy(
@@ -1334,7 +1334,7 @@ class Client(OpenApiClient):
         path = self.get_data_policy_path(namespace, data_policy_name)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(catalog_api_models.DataPolicy(), 'DELETE', path, None, runtime)
+            self.request_void('DELETE', path, None, runtime)
         )
 
     async def delete_data_policy_async(
@@ -1349,7 +1349,7 @@ class Client(OpenApiClient):
         path = self.get_data_policy_path(namespace, data_policy_name)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(catalog_api_models.DataPolicy(), 'DELETE', path, None, runtime)
+            await self.request_void_async('DELETE', path, None, runtime)
         )
 
     def get_data_policy(
@@ -1364,7 +1364,7 @@ class Client(OpenApiClient):
         path = self.get_data_policy_path(namespace, data_policy_name)
         return TeaCore.from_map(
             catalog_api_models.DataPolicy(),
-            self.request_with_model(catalog_api_models.DataPolicy(), 'GET', path, None, runtime)
+            self.request('GET', path, None, runtime)
         )
 
     async def get_data_policy_async(
@@ -1379,7 +1379,7 @@ class Client(OpenApiClient):
         path = self.get_data_policy_path(namespace, data_policy_name)
         return TeaCore.from_map(
             catalog_api_models.DataPolicy(),
-            await self.request_with_model_async(catalog_api_models.DataPolicy(), 'GET', path, None, runtime)
+            await self.request_async('GET', path, None, runtime)
         )
 
     def list_data_policies(
@@ -1400,7 +1400,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListDataPoliciesResponse(),
-            self.request_with_model(catalog_api_models.ListDataPoliciesResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_data_policies_async(
@@ -1421,7 +1421,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListDataPoliciesResponse(),
-            await self.request_with_model_async(catalog_api_models.ListDataPoliciesResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def set_data_policy_policy(
@@ -1471,7 +1471,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            self.request('POST', path, query, runtime)
         )
 
     async def get_data_policy_policy_async(
@@ -1487,7 +1487,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            await self.request_async('POST', path, query, runtime)
         )
 
     def get_data_policy_path(
@@ -1536,7 +1536,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListProjectsResponse(),
-            self.request_with_model(catalog_api_models.ListProjectsResponse(), 'GET', '/api/catalog/v1alpha/projects', query, runtime)
+            self.request('GET', '/api/catalog/v1alpha/projects', query, runtime)
         )
 
     async def list_projects_async(
@@ -1556,7 +1556,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListProjectsResponse(),
-            await self.request_with_model_async(catalog_api_models.ListProjectsResponse(), 'GET', '/api/catalog/v1alpha/projects', query, runtime)
+            await self.request_async('GET', '/api/catalog/v1alpha/projects', query, runtime)
         )
 
     def get_project(
@@ -1575,7 +1575,7 @@ class Client(OpenApiClient):
                 query['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.Project(),
-            self.request_with_model(catalog_api_models.Project(), 'GET', self.get_project_path(project_id), query, runtime)
+            self.request('GET', self.get_project_path(project_id), query, runtime)
         )
 
     async def get_project_async(
@@ -1594,7 +1594,7 @@ class Client(OpenApiClient):
                 query['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.Project(),
-            await self.request_with_model_async(catalog_api_models.Project(), 'GET', self.get_project_path(project_id), query, runtime)
+            await self.request_async('GET', self.get_project_path(project_id), query, runtime)
         )
 
     def create_schema(
@@ -1645,7 +1645,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListSchemasResponse(),
-            self.request_with_model(catalog_api_models.ListSchemasResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_schemas_async(
@@ -1666,7 +1666,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListSchemasResponse(),
-            await self.request_with_model_async(catalog_api_models.ListSchemasResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def get_schema(
@@ -1680,7 +1680,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Schema(),
-            self.request_with_model(catalog_api_models.Schema(), 'GET', self.get_schema_path(project_id, schema_name), None, runtime)
+            self.request('GET', self.get_schema_path(project_id, schema_name), None, runtime)
         )
 
     async def get_schema_async(
@@ -1694,7 +1694,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.Schema(),
-            await self.request_with_model_async(catalog_api_models.Schema(), 'GET', self.get_schema_path(project_id, schema_name), None, runtime)
+            await self.request_async('GET', self.get_schema_path(project_id, schema_name), None, runtime)
         )
 
     def update_schema(
@@ -1747,7 +1747,7 @@ class Client(OpenApiClient):
         path = self.get_schema_path(project_id, schema_name)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(catalog_api_models.Schema(), 'DELETE', path, None, runtime)
+            self.request_void('DELETE', path, None, runtime)
         )
 
     async def delete_schema_async(
@@ -1762,7 +1762,7 @@ class Client(OpenApiClient):
         path = self.get_schema_path(project_id, schema_name)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(catalog_api_models.Schema(), 'DELETE', path, None, runtime)
+            await self.request_void_async('DELETE', path, None, runtime)
         )
 
     def set_schema_policy(
@@ -1812,7 +1812,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            self.request('POST', path, query, runtime)
         )
 
     async def get_schema_policy_async(
@@ -1828,7 +1828,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            await self.request_async('POST', path, query, runtime)
         )
 
     def get_table_partitions_path(
@@ -1871,7 +1871,7 @@ class Client(OpenApiClient):
                 params['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.ListPartitionsResponse(),
-            self.request_with_model(catalog_api_models.ListPartitionsResponse(), 'GET', path, params, runtime)
+            self.request('GET', path, params, runtime)
         )
 
     async def list_partitions_async(
@@ -1903,7 +1903,7 @@ class Client(OpenApiClient):
                 params['apiScope'] = 'inner'
         return TeaCore.from_map(
             catalog_api_models.ListPartitionsResponse(),
-            await self.request_with_model_async(catalog_api_models.ListPartitionsResponse(), 'GET', path, params, runtime)
+            await self.request_async('GET', path, params, runtime)
         )
 
     def get_data_scan_path(
@@ -1936,7 +1936,7 @@ class Client(OpenApiClient):
         """
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(catalog_api_models.ScanJob(), 'POST', self.get_trigger_data_scan_path(namespace, data_scan_name), None, util_models.RuntimeOptions())
+            self.request_void('POST', self.get_trigger_data_scan_path(namespace, data_scan_name), None, util_models.RuntimeOptions())
         )
 
     async def trigger_data_scan_async(
@@ -1949,7 +1949,7 @@ class Client(OpenApiClient):
         """
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(catalog_api_models.ScanJob(), 'POST', self.get_trigger_data_scan_path(namespace, data_scan_name), None, util_models.RuntimeOptions())
+            await self.request_void_async('POST', self.get_trigger_data_scan_path(namespace, data_scan_name), None, util_models.RuntimeOptions())
         )
 
     def update_data_scan(
@@ -1997,7 +1997,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(catalog_api_models.DataScan(), 'DELETE', self.get_data_scan_path(namespace, data_scan_name), None, runtime)
+            self.request_void('DELETE', self.get_data_scan_path(namespace, data_scan_name), None, runtime)
         )
 
     async def delete_data_scan_async(
@@ -2011,7 +2011,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(catalog_api_models.DataScan(), 'DELETE', self.get_data_scan_path(namespace, data_scan_name), None, runtime)
+            await self.request_void_async('DELETE', self.get_data_scan_path(namespace, data_scan_name), None, runtime)
         )
 
     def create_data_scan(
@@ -2053,7 +2053,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.DataScan(),
-            self.request_with_model(catalog_api_models.DataScan(), 'GET', self.get_data_scan_path(namespace, data_scan_name), None, runtime)
+            self.request('GET', self.get_data_scan_path(namespace, data_scan_name), None, runtime)
         )
 
     async def get_data_scan_async(
@@ -2067,7 +2067,7 @@ class Client(OpenApiClient):
         runtime = util_models.RuntimeOptions()
         return TeaCore.from_map(
             catalog_api_models.DataScan(),
-            await self.request_with_model_async(catalog_api_models.DataScan(), 'GET', self.get_data_scan_path(namespace, data_scan_name), None, runtime)
+            await self.request_async('GET', self.get_data_scan_path(namespace, data_scan_name), None, runtime)
         )
 
     def list_data_scans(
@@ -2088,7 +2088,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListDataScansResponse(),
-            self.request_with_model(catalog_api_models.ListDataScansResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_data_scans_async(
@@ -2109,7 +2109,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListDataScansResponse(),
-            await self.request_with_model_async(catalog_api_models.ListDataScansResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def get_data_scan_jobs_path(
@@ -2138,7 +2138,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListDataScanJobsResponse(),
-            self.request_with_model(catalog_api_models.ListDataScanJobsResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_data_scan_jobs_async(
@@ -2160,7 +2160,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListDataScanJobsResponse(),
-            await self.request_with_model_async(catalog_api_models.ListDataScanJobsResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def get_model_path(
@@ -2232,7 +2232,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListModelsResponse(),
-            self.request_with_model(catalog_api_models.ListModelsResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_models_async(
@@ -2255,7 +2255,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListModelsResponse(),
-            await self.request_with_model_async(catalog_api_models.ListModelsResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def get_model(
@@ -2273,7 +2273,7 @@ class Client(OpenApiClient):
         path = self.get_model_path(project_id, schema_name, model_name, version_name)
         return TeaCore.from_map(
             catalog_api_models.Model(),
-            self.request_with_model(catalog_api_models.Model(), 'GET', path, None, runtime)
+            self.request('GET', path, None, runtime)
         )
 
     async def get_model_async(
@@ -2291,7 +2291,7 @@ class Client(OpenApiClient):
         path = self.get_model_path(project_id, schema_name, model_name, version_name)
         return TeaCore.from_map(
             catalog_api_models.Model(),
-            await self.request_with_model_async(catalog_api_models.Model(), 'GET', path, None, runtime)
+            await self.request_async('GET', path, None, runtime)
         )
 
     def update_model(
@@ -2354,7 +2354,7 @@ class Client(OpenApiClient):
         path = self.get_model_path(project_id, schema_name, model_name, None)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(None, 'DELETE', path, None, runtime)
+            self.request_void('DELETE', path, None, runtime)
         )
 
     async def delete_model_async(
@@ -2371,7 +2371,7 @@ class Client(OpenApiClient):
         path = self.get_model_path(project_id, schema_name, model_name, None)
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(None, 'DELETE', path, None, runtime)
+            await self.request_void_async('DELETE', path, None, runtime)
         )
 
     def create_model_version(
@@ -2425,7 +2425,7 @@ class Client(OpenApiClient):
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}@{version_name}:deleteVersion'
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            self.request_without_model(None, 'DELETE', path, None, runtime)
+            self.request_void('DELETE', path, None, runtime)
         )
 
     async def delete_model_version_async(
@@ -2443,7 +2443,7 @@ class Client(OpenApiClient):
         path = f'/api/catalog/v1alpha/projects/{project_id}/schemas/{schema_name}/models/{model_name}@{version_name}:deleteVersion'
         return TeaCore.from_map(
             catalog_api_models.HttpResponse(),
-            await self.request_without_model_async(None, 'DELETE', path, None, runtime)
+            await self.request_void_async('DELETE', path, None, runtime)
         )
 
     def list_model_versions(
@@ -2467,7 +2467,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListModelVersionsResponse(),
-            self.request_with_model(catalog_api_models.ListModelVersionsResponse(), 'GET', path, query, runtime)
+            self.request('GET', path, query, runtime)
         )
 
     async def list_model_versions_async(
@@ -2491,7 +2491,7 @@ class Client(OpenApiClient):
             query['pageToken'] = page_token
         return TeaCore.from_map(
             catalog_api_models.ListModelVersionsResponse(),
-            await self.request_with_model_async(catalog_api_models.ListModelVersionsResponse(), 'GET', path, query, runtime)
+            await self.request_async('GET', path, query, runtime)
         )
 
     def get_model_policy(
@@ -2509,7 +2509,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            self.request_with_model(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            self.request('POST', path, query, runtime)
         )
 
     async def get_model_policy_async(
@@ -2527,7 +2527,7 @@ class Client(OpenApiClient):
         query = {}
         return TeaCore.from_map(
             catalog_api_models.Policy(),
-            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', path, query, runtime)
+            await self.request_async('POST', path, query, runtime)
         )
 
     def set_model_policy(
@@ -2598,7 +2598,7 @@ class Client(OpenApiClient):
             params['orderBy'] = McUtilClient.to_string(order_by)
         return TeaCore.from_map(
             catalog_api_models.SearchResponse(),
-            self.request_with_model(catalog_api_models.SearchResponse(), 'POST', path, params, runtime)
+            self.request('POST', path, params, runtime)
         )
 
     async def search_async(
@@ -2631,7 +2631,7 @@ class Client(OpenApiClient):
             params['orderBy'] = McUtilClient.to_string(order_by)
         return TeaCore.from_map(
             catalog_api_models.SearchResponse(),
-            await self.request_with_model_async(catalog_api_models.SearchResponse(), 'POST', path, params, runtime)
+            await self.request_async('POST', path, params, runtime)
         )
 
     def get_data_token(
@@ -2650,7 +2650,7 @@ class Client(OpenApiClient):
             params['duration'] = McUtilClient.to_string(duration)
         return TeaCore.from_map(
             catalog_api_models.DataToken(),
-            self.request_with_model(catalog_api_models.Policy(), 'POST', full_path, params, runtime)
+            self.request('POST', full_path, params, runtime)
         )
 
     async def get_data_token_async(
@@ -2669,5 +2669,5 @@ class Client(OpenApiClient):
             params['duration'] = McUtilClient.to_string(duration)
         return TeaCore.from_map(
             catalog_api_models.DataToken(),
-            await self.request_with_model_async(catalog_api_models.Policy(), 'POST', full_path, params, runtime)
+            await self.request_async('POST', full_path, params, runtime)
         )

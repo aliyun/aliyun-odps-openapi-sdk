@@ -118,6 +118,30 @@ model OpenApiRequest {
   protocolOverride?: string,
 }
 
+async function request(method: string, path: string, params: map[string]string, runtime: Util.RuntimeOptions): object {
+  var req = new OpenApiRequest{
+    query = params,
+  };
+  var openapiParams = new Params{
+    pathname = path,
+    method = method,
+    bodyType = "json",
+  };
+  return callApi(openapiParams, req, runtime);
+}
+
+async function requestVoid(method: string, path: string, params: map[string]string, runtime: Util.RuntimeOptions): object {
+  var req = new OpenApiRequest{
+    query = params,
+  };
+  var openapiParams = new Params{
+    pathname = path,
+    method = method,
+    bodyType = "none",
+  };
+  return callApi(openapiParams, req, runtime);
+}
+
 async function requestWithModel(model: $Model, method: string, path: string, params: map[string]string, runtime: Util.RuntimeOptions): object {
   Util.validateModel(model);
   var req = new OpenApiRequest{

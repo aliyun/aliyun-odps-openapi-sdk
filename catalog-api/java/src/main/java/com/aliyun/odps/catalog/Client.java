@@ -20,7 +20,7 @@ public class Client extends com.aliyun.odps.Client {
     // 限流：每用户每秒最多 10 次请求
     public HttpResponse deleteTable(Table table) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        return TeaModel.toModel(this.requestWithoutModel(table, "DELETE", this.getTablePath(table), null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", this.getTablePath(table), null, runtime), new HttpResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -32,7 +32,7 @@ public class Client extends com.aliyun.odps.Client {
     // 限流：每用户每秒最多 100 次请求
     public Table getTable(Table table) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        return TeaModel.toModel(this.requestWithModel(table, "GET", this.getTablePath(table), null, runtime), new Table());
+        return TeaModel.toModel(this.request("GET", this.getTablePath(table), null, runtime), new Table());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -60,7 +60,7 @@ public class Client extends com.aliyun.odps.Client {
             param.put("query", query);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListTablesResponse(), "GET", path, param, runtime), new ListTablesResponse());
+        return TeaModel.toModel(this.request("GET", path, param, runtime), new ListTablesResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -76,7 +76,7 @@ public class Client extends com.aliyun.odps.Client {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "" + this.getTablePath(table) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
+        return TeaModel.toModel(this.request("POST", path, query, runtime), new Policy());
     }
 
     public String getTablePath(Table table) throws Exception {
@@ -117,14 +117,14 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListConnectionsResponse(), "GET", path, query, runtime), new ListConnectionsResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListConnectionsResponse());
     }
 
     // 限流：每用户每秒最多 100 次请求
     public Connection getConnection(String namespace, String connectionName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getConnectionPath(namespace, connectionName);
-        return TeaModel.toModel(this.requestWithModel(new Connection(), "GET", path, null, runtime), new Connection());
+        return TeaModel.toModel(this.request("GET", path, null, runtime), new Connection());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -140,7 +140,7 @@ public class Client extends com.aliyun.odps.Client {
     public HttpResponse deleteConnection(String namespace, String connectionName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getConnectionPath(namespace, connectionName);
-        return TeaModel.toModel(this.requestWithoutModel(new Connection(), "DELETE", path, null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", path, null, runtime), new HttpResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -156,7 +156,7 @@ public class Client extends com.aliyun.odps.Client {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "" + this.getConnectionPath(namespace, connectionName) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
+        return TeaModel.toModel(this.request("POST", path, query, runtime), new Policy());
     }
 
     public String getConnectionPath(String namespace, String connectionName) throws Exception {
@@ -181,7 +181,7 @@ public class Client extends com.aliyun.odps.Client {
     public HttpResponse deleteRole(String namespace, String roleName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getRolePath(namespace, roleName);
-        return TeaModel.toModel(this.requestWithoutModel(new Role(), "DELETE", path, null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", path, null, runtime), new HttpResponse());
     }
 
     // Get role
@@ -189,7 +189,7 @@ public class Client extends com.aliyun.odps.Client {
     public Role getRole(String namespace, String roleName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getRolePath(namespace, roleName);
-        return TeaModel.toModel(this.requestWithModel(new Role(), "GET", path, null, runtime), new Role());
+        return TeaModel.toModel(this.request("GET", path, null, runtime), new Role());
     }
 
     // List roles
@@ -214,7 +214,7 @@ public class Client extends com.aliyun.odps.Client {
             query.put("showDeleted", com.aliyun.odps.utils.TeaUtils.toString(showDeleted));
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListRolesResponse(), "GET", path, query, runtime), new ListRolesResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListRolesResponse());
     }
 
     // Update role
@@ -245,7 +245,7 @@ public class Client extends com.aliyun.odps.Client {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "" + this.getRolePath(namespace, roleName) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
+        return TeaModel.toModel(this.request("POST", path, query, runtime), new Policy());
     }
 
     // Path generation helpers
@@ -269,14 +269,14 @@ public class Client extends com.aliyun.odps.Client {
     public HttpResponse deleteTaxonomy(String namespace, String taxonomyId) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getTaxonomyPath(namespace, taxonomyId);
-        return TeaModel.toModel(this.requestWithoutModel(new Taxonomy(), "DELETE", path, null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", path, null, runtime), new HttpResponse());
     }
 
     // 限流：每用户每秒最多 100 次请求
     public Taxonomy getTaxonomy(String namespace, String taxonomyId) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getTaxonomyPath(namespace, taxonomyId);
-        return TeaModel.toModel(this.requestWithModel(new Taxonomy(), "GET", path, null, runtime), new Taxonomy());
+        return TeaModel.toModel(this.request("GET", path, null, runtime), new Taxonomy());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -292,7 +292,7 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListTaxonomiesResponse(), "GET", path, query, runtime), new ListTaxonomiesResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListTaxonomiesResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -321,7 +321,7 @@ public class Client extends com.aliyun.odps.Client {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "" + this.getTaxonomyPath(namespace, taxonomyId) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
+        return TeaModel.toModel(this.request("POST", path, query, runtime), new Policy());
     }
 
     // PolicyTag operations
@@ -336,14 +336,14 @@ public class Client extends com.aliyun.odps.Client {
     public HttpResponse deletePolicyTag(String namespace, String taxonomyId, String policyTagId) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getPolicyTagPath(namespace, taxonomyId, policyTagId);
-        return TeaModel.toModel(this.requestWithoutModel(new PolicyTag(), "DELETE", path, null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", path, null, runtime), new HttpResponse());
     }
 
     // 限流：每用户每秒最多 100 次请求
     public PolicyTag getPolicyTag(String namespace, String taxonomyId, String policyTagId) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getPolicyTagPath(namespace, taxonomyId, policyTagId);
-        return TeaModel.toModel(this.requestWithModel(new PolicyTag(), "GET", path, null, runtime), new PolicyTag());
+        return TeaModel.toModel(this.request("GET", path, null, runtime), new PolicyTag());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -359,7 +359,7 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListPolicyTagsResponse(), "GET", path, query, runtime), new ListPolicyTagsResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListPolicyTagsResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -387,7 +387,7 @@ public class Client extends com.aliyun.odps.Client {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "" + this.getPolicyTagPath(namespace, taxonomyId, policyTagId) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
+        return TeaModel.toModel(this.request("POST", path, query, runtime), new Policy());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -401,14 +401,14 @@ public class Client extends com.aliyun.odps.Client {
     public HttpResponse deleteDataPolicy(String namespace, String dataPolicyName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getDataPolicyPath(namespace, dataPolicyName);
-        return TeaModel.toModel(this.requestWithoutModel(new DataPolicy(), "DELETE", path, null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", path, null, runtime), new HttpResponse());
     }
 
     // 限流：每用户每秒最多 100 次请求
     public DataPolicy getDataPolicy(String namespace, String dataPolicyName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getDataPolicyPath(namespace, dataPolicyName);
-        return TeaModel.toModel(this.requestWithModel(new DataPolicy(), "GET", path, null, runtime), new DataPolicy());
+        return TeaModel.toModel(this.request("GET", path, null, runtime), new DataPolicy());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -424,7 +424,7 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListDataPoliciesResponse(), "GET", path, query, runtime), new ListDataPoliciesResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListDataPoliciesResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -440,7 +440,7 @@ public class Client extends com.aliyun.odps.Client {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "" + this.getDataPolicyPath(namespace, dataPolicyName) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
+        return TeaModel.toModel(this.request("POST", path, query, runtime), new Policy());
     }
 
     public String getDataPolicyPath(String namespace, String dataPolicyName) throws Exception {
@@ -473,7 +473,7 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListProjectsResponse(), "GET", "/api/catalog/v1alpha/projects", query, runtime), new ListProjectsResponse());
+        return TeaModel.toModel(this.request("GET", "/api/catalog/v1alpha/projects", query, runtime), new ListProjectsResponse());
     }
 
     // 限流：每用户每秒最多 100 次请求
@@ -488,7 +488,7 @@ public class Client extends com.aliyun.odps.Client {
 
         }
 
-        return TeaModel.toModel(this.requestWithModel(new Project(), "GET", this.getProjectPath(projectId), query, runtime), new Project());
+        return TeaModel.toModel(this.request("GET", this.getProjectPath(projectId), query, runtime), new Project());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -511,13 +511,13 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListSchemasResponse(), "GET", path, query, runtime), new ListSchemasResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListSchemasResponse());
     }
 
     // 限流：每用户每秒最多 100 次请求
     public Schema getSchema(String projectId, String schemaName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        return TeaModel.toModel(this.requestWithModel(new Schema(), "GET", this.getSchemaPath(projectId, schemaName), null, runtime), new Schema());
+        return TeaModel.toModel(this.request("GET", this.getSchemaPath(projectId, schemaName), null, runtime), new Schema());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -533,7 +533,7 @@ public class Client extends com.aliyun.odps.Client {
     public HttpResponse deleteSchema(String projectId, String schemaName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getSchemaPath(projectId, schemaName);
-        return TeaModel.toModel(this.requestWithoutModel(new Schema(), "DELETE", path, null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", path, null, runtime), new HttpResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -549,7 +549,7 @@ public class Client extends com.aliyun.odps.Client {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "" + this.getSchemaPath(projectId, schemaName) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
+        return TeaModel.toModel(this.request("POST", path, query, runtime), new Policy());
     }
 
     // Path Functions
@@ -583,7 +583,7 @@ public class Client extends com.aliyun.odps.Client {
 
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListPartitionsResponse(), "GET", path, params, runtime), new ListPartitionsResponse());
+        return TeaModel.toModel(this.request("GET", path, params, runtime), new ListPartitionsResponse());
     }
 
     public String getDataScanPath(String namespace, String dataScanName) throws Exception {
@@ -600,7 +600,7 @@ public class Client extends com.aliyun.odps.Client {
 
     // 限流：每用户每秒最多 10 次请求
     public HttpResponse triggerDataScan(String namespace, String dataScanName) throws Exception {
-        return TeaModel.toModel(this.requestWithoutModel(new ScanJob(), "POST", this.getTriggerDataScanPath(namespace, dataScanName), null, new com.aliyun.teautil.models.RuntimeOptions()), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("POST", this.getTriggerDataScanPath(namespace, dataScanName), null, new com.aliyun.teautil.models.RuntimeOptions()), new HttpResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -614,7 +614,7 @@ public class Client extends com.aliyun.odps.Client {
     // 限流：每用户每秒最多 10 次请求
     public HttpResponse deleteDataScan(String namespace, String dataScanName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        return TeaModel.toModel(this.requestWithoutModel(new DataScan(), "DELETE", this.getDataScanPath(namespace, dataScanName), null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", this.getDataScanPath(namespace, dataScanName), null, runtime), new HttpResponse());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -626,7 +626,7 @@ public class Client extends com.aliyun.odps.Client {
     // 限流：每用户每秒最多 100 次请求
     public DataScan getDataScan(String namespace, String dataScanName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-        return TeaModel.toModel(this.requestWithModel(new DataScan(), "GET", this.getDataScanPath(namespace, dataScanName), null, runtime), new DataScan());
+        return TeaModel.toModel(this.request("GET", this.getDataScanPath(namespace, dataScanName), null, runtime), new DataScan());
     }
 
     // 限流：每用户每秒最多 10 次请求
@@ -642,7 +642,7 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListDataScansResponse(), "GET", path, query, runtime), new ListDataScansResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListDataScansResponse());
     }
 
     public String getDataScanJobsPath(String namespace, String dataScanName) throws Exception {
@@ -662,7 +662,7 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListDataScanJobsResponse(), "GET", path, query, runtime), new ListDataScanJobsResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListDataScanJobsResponse());
     }
 
     // 路径生成函数
@@ -697,7 +697,7 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListModelsResponse(), "GET", path, query, runtime), new ListModelsResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListModelsResponse());
     }
 
     // 获取模型
@@ -705,7 +705,7 @@ public class Client extends com.aliyun.odps.Client {
     public Model getModel(String projectId, String schemaName, String modelName, String versionName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getModelPath(projectId, schemaName, modelName, versionName);
-        return TeaModel.toModel(this.requestWithModel(new Model(), "GET", path, null, runtime), new Model());
+        return TeaModel.toModel(this.request("GET", path, null, runtime), new Model());
     }
 
     // 更新模型
@@ -726,7 +726,7 @@ public class Client extends com.aliyun.odps.Client {
     public HttpResponse deleteModel(String projectId, String schemaName, String modelName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = this.getModelPath(projectId, schemaName, modelName, null);
-        return TeaModel.toModel(this.requestWithoutModel(null, "DELETE", path, null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", path, null, runtime), new HttpResponse());
     }
 
     // 创建模型版本
@@ -742,7 +742,7 @@ public class Client extends com.aliyun.odps.Client {
     public HttpResponse deleteModelVersion(String projectId, String schemaName, String modelName, String versionName) throws Exception {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "/api/catalog/v1alpha/projects/" + projectId + "/schemas/" + schemaName + "/models/" + modelName + "@" + versionName + ":deleteVersion";
-        return TeaModel.toModel(this.requestWithoutModel(null, "DELETE", path, null, runtime), new HttpResponse());
+        return TeaModel.toModel(this.requestVoid("DELETE", path, null, runtime), new HttpResponse());
     }
 
     // 列出模型版本
@@ -759,7 +759,7 @@ public class Client extends com.aliyun.odps.Client {
             query.put("pageToken", pageToken);
         }
 
-        return TeaModel.toModel(this.requestWithModel(new ListModelVersionsResponse(), "GET", path, query, runtime), new ListModelVersionsResponse());
+        return TeaModel.toModel(this.request("GET", path, query, runtime), new ListModelVersionsResponse());
     }
 
     // 获取模型策略
@@ -768,7 +768,7 @@ public class Client extends com.aliyun.odps.Client {
         com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
         String path = "" + this.getModelPath(projectId, schemaName, modelName, null) + ":getPolicy";
         java.util.Map<String, String> query = new java.util.HashMap<>();
-        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", path, query, runtime), new Policy());
+        return TeaModel.toModel(this.request("POST", path, query, runtime), new Policy());
     }
 
     // 设置模型策略
@@ -811,7 +811,7 @@ public class Client extends com.aliyun.odps.Client {
             params.put("orderBy", com.aliyun.odps.utils.TeaUtils.toString(orderBy));
         }
 
-        return TeaModel.toModel(this.requestWithModel(new SearchResponse(), "POST", path, params, runtime), new SearchResponse());
+        return TeaModel.toModel(this.request("POST", path, params, runtime), new SearchResponse());
     }
 
     // 限流：每用户每秒最多 100 次请求
@@ -824,6 +824,6 @@ public class Client extends com.aliyun.odps.Client {
             params.put("duration", com.aliyun.odps.utils.TeaUtils.toString(duration));
         }
 
-        return TeaModel.toModel(this.requestWithModel(new Policy(), "POST", fullPath, params, runtime), new DataToken());
+        return TeaModel.toModel(this.request("POST", fullPath, params, runtime), new DataToken());
     }
 }

@@ -438,6 +438,74 @@ class Client:
                 raise e
         raise UnretryableException(_last_request, _last_exception)
 
+    def request(
+        self,
+        method: str,
+        path: str,
+        params: Dict[str, str],
+        runtime: util_models.RuntimeOptions,
+    ) -> dict:
+        req = openapi_models.OpenApiRequest(
+            query=params
+        )
+        openapi_params = openapi_models.Params(
+            pathname=path,
+            method=method,
+            body_type='json'
+        )
+        return self.call_api(openapi_params, req, runtime)
+
+    async def request_async(
+        self,
+        method: str,
+        path: str,
+        params: Dict[str, str],
+        runtime: util_models.RuntimeOptions,
+    ) -> dict:
+        req = openapi_models.OpenApiRequest(
+            query=params
+        )
+        openapi_params = openapi_models.Params(
+            pathname=path,
+            method=method,
+            body_type='json'
+        )
+        return await self.call_api_async(openapi_params, req, runtime)
+
+    def request_void(
+        self,
+        method: str,
+        path: str,
+        params: Dict[str, str],
+        runtime: util_models.RuntimeOptions,
+    ) -> dict:
+        req = openapi_models.OpenApiRequest(
+            query=params
+        )
+        openapi_params = openapi_models.Params(
+            pathname=path,
+            method=method,
+            body_type='none'
+        )
+        return self.call_api(openapi_params, req, runtime)
+
+    async def request_void_async(
+        self,
+        method: str,
+        path: str,
+        params: Dict[str, str],
+        runtime: util_models.RuntimeOptions,
+    ) -> dict:
+        req = openapi_models.OpenApiRequest(
+            query=params
+        )
+        openapi_params = openapi_models.Params(
+            pathname=path,
+            method=method,
+            body_type='none'
+        )
+        return await self.call_api_async(openapi_params, req, runtime)
+
     def request_with_model(
         self,
         model: TeaModel,

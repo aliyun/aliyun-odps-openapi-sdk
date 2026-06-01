@@ -56,9 +56,9 @@ model Table {
   /api/catalog/v1alpha/
   ```
 - 统一使用已有工具方法：
-  - **requestWithModel**：对于 `GET` / `POST` / `PATCH` 等需要 body 的
-  - **requestWithoutModel**：对于 `DELETE`
-- 即便 `requestWithoutModel` 不需要请求体，也必须传入一个 `new Model{}`
+  - **request**：无 body 请求，期望 JSON 响应。用于 `GET`、`list`、以及无 body 的 `POST`（如 `:getPolicy`、`:search`）
+  - **requestVoid**：无 body 请求，不期望响应体。用于 `DELETE`、trigger 类操作
+  - **requestWithModel**：有 body 请求（model 序列化为 JSON），期望 JSON 响应。用于 `POST` 创建、`PUT`/`PATCH` 更新、`setPolicy`
 - 可复用已有 `<resource>Path` 辅助函数生成路径
 
 ### 2.2 query 参数处理
@@ -97,7 +97,7 @@ Response body: Table
 ```ts
 async function getTable(table: Table): Table {
   var runtime = new Util.RuntimeOptions{};
-  return requestWithModel(table, 'GET', getTablePath(table), null, runtime);
+  return request('GET', getTablePath(table), null, runtime);
 }
 
 function getTablePath(table: Table): string {
@@ -109,7 +109,7 @@ function getTablePath(table: Table): string {
 }
 ```
 
-#### 示例 B: POST 动作方法
+#### 示例 B: POST 动作方法（无 body 的读操作）
 可读文本：
 ```
 projects.schemas.tables.getPolicy
@@ -122,10 +122,9 @@ Response: Policy
 ```ts
 async function getTablePolicy(table: Table): Policy {
   var runtime = new Util.RuntimeOptions{};
-  var path = getTablePath(table);
+  var path = `${getTablePath(table)}:getPolicy`;
   var query : map[string]string = {};
-  query["method"] = "getPolicy";
-  return requestWithModel(new Policy{}, 'POST', path, query, runtime);
+  return request('POST', path, query, runtime);
 }
 ```
 
@@ -134,7 +133,7 @@ async function getTablePolicy(table: Table): Policy {
 async function deleteDataPolicy(namespace: string, dataPolicyName: string): HttpResponse {
   var runtime = new Util.RuntimeOptions{};
   var path = getDataPolicyPath(namespace, dataPolicyName);
-  return requestWithoutModel(new DataPolicy{}, 'DELETE', path, null, runtime);
+  return requestVoid('DELETE', path, null, runtime);
 }
 ```
 
@@ -193,7 +192,7 @@ function getConnectionPath(namespace: string, connectionName: string): string {
 4. 分页参数命名统一为：`pageSize` / `pageToken`
 5. 所有 query 参数检查 `!Util.isUnset(param)` 后再加入
 6. 所有需要转换为字符串的值通过 `McUtil.toString` 完成
-7. DELETE 请求体即使为空也要 `new Model{}`（遵循现有 requestWithoutModel 用法）
+7. DELETE 请求使用 `requestVoid`，不传 model
 
 ---
 

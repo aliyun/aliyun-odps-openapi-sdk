@@ -764,6 +764,42 @@ func (client *Client) DoRequest(params *Params, request *OpenApiRequest, runtime
 }
 
 
+func (client *Client) Request (method *string, path *string, params map[string]*string, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
+  req := &OpenApiRequest{
+    Query: params,
+  }
+  openapiParams := &Params{
+    Pathname: path,
+    Method: method,
+    BodyType: tea.String("json"),
+  }
+  _result = make(map[string]interface{})
+  _body, _err := client.CallApi(openapiParams, req, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _result = _body
+  return _result, _err
+}
+
+func (client *Client) RequestVoid (method *string, path *string, params map[string]*string, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
+  req := &OpenApiRequest{
+    Query: params,
+  }
+  openapiParams := &Params{
+    Pathname: path,
+    Method: method,
+    BodyType: tea.String("none"),
+  }
+  _result = make(map[string]interface{})
+  _body, _err := client.CallApi(openapiParams, req, runtime)
+  if _err != nil {
+    return _result, _err
+  }
+  _result = _body
+  return _result, _err
+}
+
 func (client *Client) RequestWithModel (model interface{}, method *string, path *string, params map[string]*string, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
   _err = util.ValidateModel(model)
   if _err != nil {

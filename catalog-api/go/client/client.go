@@ -2579,7 +2579,7 @@ func (client *Client) UpdateTable (table *Table) (_result *Table, _err error) {
 func (client *Client) DeleteTable (table *Table) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(table, tea.String("DELETE"), client.GetTablePath(table), nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), client.GetTablePath(table), nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2603,7 +2603,7 @@ func (client *Client) CreateTable (table *Table) (_result *Table, _err error) {
 func (client *Client) GetTable (table *Table) (_result *Table, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &Table{}
-  _body, _err := client.RequestWithModel(table, tea.String("GET"), client.GetTablePath(table), nil, runtime)
+  _body, _err := client.Request(tea.String("GET"), client.GetTablePath(table), nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2637,7 +2637,7 @@ func (client *Client) ListTables (projectId *string, schemaName *string, pageSiz
   }
 
   _result = &ListTablesResponse{}
-  _body, _err := client.RequestWithModel(&ListTablesResponse{}, tea.String("GET"), path, param, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, param, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2665,7 +2665,7 @@ func (client *Client) GetTablePolicy (table *Table) (_result *Policy, _err error
   path := tea.String(tea.StringValue(client.GetTablePath(table)) + ":getPolicy")
   query := make(map[string]*string)
   _result = &Policy{}
-  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
+  _body, _err := client.Request(tea.String("POST"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2722,7 +2722,7 @@ func (client *Client) ListConnections (namespace *string, pageSize *int, pageTok
   }
 
   _result = &ListConnectionsResponse{}
-  _body, _err := client.RequestWithModel(&ListConnectionsResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2735,7 +2735,7 @@ func (client *Client) GetConnection (namespace *string, connectionName *string) 
   runtime := &util.RuntimeOptions{}
   path := client.GetConnectionPath(namespace, connectionName)
   _result = &Connection{}
-  _body, _err := client.RequestWithModel(&Connection{}, tea.String("GET"), path, nil, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2763,7 +2763,7 @@ func (client *Client) DeleteConnection (namespace *string, connectionName *strin
   runtime := &util.RuntimeOptions{}
   path := client.GetConnectionPath(namespace, connectionName)
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(&Connection{}, tea.String("DELETE"), path, nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2791,7 +2791,7 @@ func (client *Client) GetConnectionPolicy (namespace *string, connectionName *st
   path := tea.String(tea.StringValue(client.GetConnectionPath(namespace, connectionName)) + ":getPolicy")
   query := make(map[string]*string)
   _result = &Policy{}
-  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
+  _body, _err := client.Request(tea.String("POST"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2830,7 +2830,7 @@ func (client *Client) DeleteRole (namespace *string, roleName *string) (_result 
   runtime := &util.RuntimeOptions{}
   path := client.GetRolePath(namespace, roleName)
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(&Role{}, tea.String("DELETE"), path, nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2844,7 +2844,7 @@ func (client *Client) GetRole (namespace *string, roleName *string) (_result *Ro
   runtime := &util.RuntimeOptions{}
   path := client.GetRolePath(namespace, roleName)
   _result = &Role{}
-  _body, _err := client.RequestWithModel(&Role{}, tea.String("GET"), path, nil, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2875,7 +2875,7 @@ func (client *Client) ListRoles (namespace *string, pageSize *int, pageToken *st
   }
 
   _result = &ListRolesResponse{}
-  _body, _err := client.RequestWithModel(&ListRolesResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2924,7 +2924,7 @@ func (client *Client) GetRolePolicy (namespace *string, roleName *string) (_resu
   path := tea.String(tea.StringValue(client.GetRolePath(namespace, roleName)) + ":getPolicy")
   query := make(map[string]*string)
   _result = &Policy{}
-  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
+  _body, _err := client.Request(tea.String("POST"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2962,7 +2962,7 @@ func (client *Client) DeleteTaxonomy (namespace *string, taxonomyId *string) (_r
   runtime := &util.RuntimeOptions{}
   path := client.GetTaxonomyPath(namespace, taxonomyId)
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(&Taxonomy{}, tea.String("DELETE"), path, nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2975,7 +2975,7 @@ func (client *Client) GetTaxonomy (namespace *string, taxonomyId *string) (_resu
   runtime := &util.RuntimeOptions{}
   path := client.GetTaxonomyPath(namespace, taxonomyId)
   _result = &Taxonomy{}
-  _body, _err := client.RequestWithModel(&Taxonomy{}, tea.String("GET"), path, nil, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -2997,7 +2997,7 @@ func (client *Client) ListTaxonomies (namespace *string, pageSize *int, pageToke
   }
 
   _result = &ListTaxonomiesResponse{}
-  _body, _err := client.RequestWithModel(&ListTaxonomiesResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3044,7 +3044,7 @@ func (client *Client) GetTaxonomyPolicy (namespace *string, taxonomyId *string) 
   path := tea.String(tea.StringValue(client.GetTaxonomyPath(namespace, taxonomyId)) + ":getPolicy")
   query := make(map[string]*string)
   _result = &Policy{}
-  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
+  _body, _err := client.Request(tea.String("POST"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3071,7 +3071,7 @@ func (client *Client) DeletePolicyTag (namespace *string, taxonomyId *string, po
   runtime := &util.RuntimeOptions{}
   path := client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(&PolicyTag{}, tea.String("DELETE"), path, nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3084,7 +3084,7 @@ func (client *Client) GetPolicyTag (namespace *string, taxonomyId *string, polic
   runtime := &util.RuntimeOptions{}
   path := client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)
   _result = &PolicyTag{}
-  _body, _err := client.RequestWithModel(&PolicyTag{}, tea.String("GET"), path, nil, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3106,7 +3106,7 @@ func (client *Client) ListPolicyTags (namespace *string, taxonomyId *string, pag
   }
 
   _result = &ListPolicyTagsResponse{}
-  _body, _err := client.RequestWithModel(&ListPolicyTagsResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3152,7 +3152,7 @@ func (client *Client) GetPolicyTagPolicy (namespace *string, taxonomyId *string,
   path := tea.String(tea.StringValue(client.GetPolicyTagPath(namespace, taxonomyId, policyTagId)) + ":getPolicy")
   query := make(map[string]*string)
   _result = &Policy{}
-  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
+  _body, _err := client.Request(tea.String("POST"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3178,7 +3178,7 @@ func (client *Client) DeleteDataPolicy (namespace *string, dataPolicyName *strin
   runtime := &util.RuntimeOptions{}
   path := client.GetDataPolicyPath(namespace, dataPolicyName)
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(&DataPolicy{}, tea.String("DELETE"), path, nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3191,7 +3191,7 @@ func (client *Client) GetDataPolicy (namespace *string, dataPolicyName *string) 
   runtime := &util.RuntimeOptions{}
   path := client.GetDataPolicyPath(namespace, dataPolicyName)
   _result = &DataPolicy{}
-  _body, _err := client.RequestWithModel(&DataPolicy{}, tea.String("GET"), path, nil, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3213,7 +3213,7 @@ func (client *Client) ListDataPolicies (namespace *string, pageSize *int, pageTo
   }
 
   _result = &ListDataPoliciesResponse{}
-  _body, _err := client.RequestWithModel(&ListDataPoliciesResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3241,7 +3241,7 @@ func (client *Client) GetDataPolicyPolicy (namespace *string, dataPolicyName *st
   path := tea.String(tea.StringValue(client.GetDataPolicyPath(namespace, dataPolicyName)) + ":getPolicy")
   query := make(map[string]*string)
   _result = &Policy{}
-  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
+  _body, _err := client.Request(tea.String("POST"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3284,7 +3284,7 @@ func (client *Client) ListProjects (pageSize *int, pageToken *string) (_result *
   }
 
   _result = &ListProjectsResponse{}
-  _body, _err := client.RequestWithModel(&ListProjectsResponse{}, tea.String("GET"), tea.String("/api/catalog/v1alpha/projects"), query, runtime)
+  _body, _err := client.Request(tea.String("GET"), tea.String("/api/catalog/v1alpha/projects"), query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3305,7 +3305,7 @@ func (client *Client) GetProject (projectId *string, view *string) (_result *Pro
   }
 
   _result = &Project{}
-  _body, _err := client.RequestWithModel(&Project{}, tea.String("GET"), client.GetProjectPath(projectId), query, runtime)
+  _body, _err := client.Request(tea.String("GET"), client.GetProjectPath(projectId), query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3340,7 +3340,7 @@ func (client *Client) ListSchemas (projectId *string, pageSize *int, pageToken *
   }
 
   _result = &ListSchemasResponse{}
-  _body, _err := client.RequestWithModel(&ListSchemasResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3352,7 +3352,7 @@ func (client *Client) ListSchemas (projectId *string, pageSize *int, pageToken *
 func (client *Client) GetSchema (projectId *string, schemaName *string) (_result *Schema, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &Schema{}
-  _body, _err := client.RequestWithModel(&Schema{}, tea.String("GET"), client.GetSchemaPath(projectId, schemaName), nil, runtime)
+  _body, _err := client.Request(tea.String("GET"), client.GetSchemaPath(projectId, schemaName), nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3380,7 +3380,7 @@ func (client *Client) DeleteSchema (projectId *string, schemaName *string) (_res
   runtime := &util.RuntimeOptions{}
   path := client.GetSchemaPath(projectId, schemaName)
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(&Schema{}, tea.String("DELETE"), path, nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3408,7 +3408,7 @@ func (client *Client) GetSchemaPolicy (projectId *string, schemaName *string) (_
   path := tea.String(tea.StringValue(client.GetSchemaPath(projectId, schemaName)) + ":getPolicy")
   query := make(map[string]*string)
   _result = &Policy{}
-  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
+  _body, _err := client.Request(tea.String("POST"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3449,7 +3449,7 @@ func (client *Client) ListPartitions (projectId *string, schemaName *string, tab
   }
 
   _result = &ListPartitionsResponse{}
-  _body, _err := client.RequestWithModel(&ListPartitionsResponse{}, tea.String("GET"), path, params, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, params, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3475,7 +3475,7 @@ func (client *Client) GetTriggerDataScanPath (namespace *string, dataScanName *s
 // 限流：每用户每秒最多 10 次请求
 func (client *Client) TriggerDataScan (namespace *string, dataScanName *string) (_result *HttpResponse, _err error) {
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(&ScanJob{}, tea.String("POST"), client.GetTriggerDataScanPath(namespace, dataScanName), nil, &util.RuntimeOptions{})
+  _body, _err := client.RequestVoid(tea.String("POST"), client.GetTriggerDataScanPath(namespace, dataScanName), nil, &util.RuntimeOptions{})
   if _err != nil {
     return _result, _err
   }
@@ -3501,7 +3501,7 @@ func (client *Client) UpdateDataScan (namespace *string, dataScan *DataScan, upd
 func (client *Client) DeleteDataScan (namespace *string, dataScanName *string) (_result *HttpResponse, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(&DataScan{}, tea.String("DELETE"), client.GetDataScanPath(namespace, dataScanName), nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), client.GetDataScanPath(namespace, dataScanName), nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3525,7 +3525,7 @@ func (client *Client) CreateDataScan (namespace *string, dataScan *DataScan) (_r
 func (client *Client) GetDataScan (namespace *string, dataScanName *string) (_result *DataScan, _err error) {
   runtime := &util.RuntimeOptions{}
   _result = &DataScan{}
-  _body, _err := client.RequestWithModel(&DataScan{}, tea.String("GET"), client.GetDataScanPath(namespace, dataScanName), nil, runtime)
+  _body, _err := client.Request(tea.String("GET"), client.GetDataScanPath(namespace, dataScanName), nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3547,7 +3547,7 @@ func (client *Client) ListDataScans (namespace *string, pageSize *int32, pageTok
   }
 
   _result = &ListDataScansResponse{}
-  _body, _err := client.RequestWithModel(&ListDataScansResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3574,7 +3574,7 @@ func (client *Client) ListDataScanJobs (namespace *string, dataScanName *string,
   }
 
   _result = &ListDataScanJobsResponse{}
-  _body, _err := client.RequestWithModel(&ListDataScanJobsResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3623,7 +3623,7 @@ func (client *Client) ListModels (projectId *string, schemaName *string, pageSiz
   }
 
   _result = &ListModelsResponse{}
-  _body, _err := client.RequestWithModel(&ListModelsResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3637,7 +3637,7 @@ func (client *Client) GetModel (projectId *string, schemaName *string, modelName
   runtime := &util.RuntimeOptions{}
   path := client.GetModelPath(projectId, schemaName, modelName, versionName)
   _result = &Model{}
-  _body, _err := client.RequestWithModel(&Model{}, tea.String("GET"), path, nil, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3670,7 +3670,7 @@ func (client *Client) DeleteModel (projectId *string, schemaName *string, modelN
   runtime := &util.RuntimeOptions{}
   path := client.GetModelPath(projectId, schemaName, modelName, nil)
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(nil, tea.String("DELETE"), path, nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3698,7 +3698,7 @@ func (client *Client) DeleteModelVersion (projectId *string, schemaName *string,
   runtime := &util.RuntimeOptions{}
   path := tea.String("/api/catalog/v1alpha/projects/" + tea.StringValue(projectId) + "/schemas/" + tea.StringValue(schemaName) + "/models/" + tea.StringValue(modelName) + "@" + tea.StringValue(versionName) + ":deleteVersion")
   _result = &HttpResponse{}
-  _body, _err := client.RequestWithoutModel(nil, tea.String("DELETE"), path, nil, runtime)
+  _body, _err := client.RequestVoid(tea.String("DELETE"), path, nil, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3721,7 +3721,7 @@ func (client *Client) ListModelVersions (projectId *string, schemaName *string, 
   }
 
   _result = &ListModelVersionsResponse{}
-  _body, _err := client.RequestWithModel(&ListModelVersionsResponse{}, tea.String("GET"), path, query, runtime)
+  _body, _err := client.Request(tea.String("GET"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3736,7 +3736,7 @@ func (client *Client) GetModelPolicy (projectId *string, schemaName *string, mod
   path := tea.String(tea.StringValue(client.GetModelPath(projectId, schemaName, modelName, nil)) + ":getPolicy")
   query := make(map[string]*string)
   _result = &Policy{}
-  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), path, query, runtime)
+  _body, _err := client.Request(tea.String("POST"), path, query, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3794,7 +3794,7 @@ func (client *Client) Search (namespaceId *string, query *string, pageSize *int,
   }
 
   _result = &SearchResponse{}
-  _body, _err := client.RequestWithModel(&SearchResponse{}, tea.String("POST"), path, params, runtime)
+  _body, _err := client.Request(tea.String("POST"), path, params, runtime)
   if _err != nil {
     return _result, _err
   }
@@ -3813,7 +3813,7 @@ func (client *Client) GetDataToken (table *Table, duration *int) (_result *DataT
   }
 
   _result = &DataToken{}
-  _body, _err := client.RequestWithModel(&Policy{}, tea.String("POST"), fullPath, params, runtime)
+  _body, _err := client.Request(tea.String("POST"), fullPath, params, runtime)
   if _err != nil {
     return _result, _err
   }

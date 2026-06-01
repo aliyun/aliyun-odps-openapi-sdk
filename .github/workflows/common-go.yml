@@ -1,0 +1,32 @@
+name: Publish Common Go
+
+on:
+  push:
+    tags:
+      - "common/go/v*"
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Verify build
+        run: |
+          cd common/go
+          go mod tidy
+          go build ./...
+
+      - name: Notify
+        run: |
+          tag_name="${GITHUB_REF##*/}"
+          echo "Tag $tag_name published successfully."
+          echo "Go module proxy will index: github.com/aliyun/aliyun-odps-openapi-sdk/common/go@${tag_name}"
