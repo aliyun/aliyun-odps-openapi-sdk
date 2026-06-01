@@ -60,6 +60,14 @@ handle_directory() {
         echo "Generating Java code..."
         dara codegen java ./java || { echo "Failed to generate Java code in $dir_path."; exit 1; }
 
+        # 从 Darafile 读取版本号，修正 pom.xml 中的项目 version（2空格缩进的那行）
+        local java_version
+        java_version=$(grep '"version"' Darafile | head -1 | sed -E 's/.*"version": "v?([^"]+)".*/\1/')
+        if [ -n "$java_version" ] && [ -f "java/pom.xml" ]; then
+            sed -i '' "s|^  <version>[^<]*</version>|  <version>${java_version}</version>|" java/pom.xml
+            echo "Set Java version to $java_version"
+        fi
+
         # 进入到生成的 java 目录
         cd java || { echo "Failed to change directory to java in $dir_path."; exit 1; }
 
@@ -104,12 +112,17 @@ handle_directory() {
         echo "Generating python code..."
         dara codegen python ./python || { echo "Failed to generate python code in $dir_path."; exit 1; }
 
-        # 进入到生成的 python 目录
-        cd python || { echo "Failed to change directory to python in $dir_path."; exit 1; }
-
-        # pip install .
-        echo "Cleaning and installing the Go project..."
-        # pip install . || { echo "Python build failed in $dir_path."; exit 1; }
+        # 从 Darafile 读取版本号，修正 codegen 生成的 __version__
+        local py_version
+        py_version=$(grep '"version"' Darafile | head -1 | sed -E 's/.*"version": "v?([^"]+)".*/\1/')
+        if [ -n "$py_version" ]; then
+            local init_file
+            init_file=$(find python -name '__init__.py' -path '*/__init__.py' | head -1)
+            if [ -n "$init_file" ]; then
+                sed -i '' "s/__version__ = .*/__version__ = \"$py_version\"/" "$init_file"
+                echo "Set Python __version__ to $py_version"
+            fi
+        fi
 
         cd .. || exit 1
     fi

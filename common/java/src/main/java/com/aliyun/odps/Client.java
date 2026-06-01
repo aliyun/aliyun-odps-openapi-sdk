@@ -319,6 +319,30 @@ public class Client {
         interceptorChain.addResponseInterceptor(interceptor);
     }
 
+    public java.util.Map<String, ?> request(String method, String path, java.util.Map<String, String> params, com.aliyun.teautil.models.RuntimeOptions runtime) throws Exception {
+        OpenApiRequest req = OpenApiRequest.build(TeaConverter.buildMap(
+            new TeaPair("query", params)
+        ));
+        Params openapiParams = Params.build(TeaConverter.buildMap(
+            new TeaPair("pathname", path),
+            new TeaPair("method", method),
+            new TeaPair("bodyType", "json")
+        ));
+        return this.callApi(openapiParams, req, runtime);
+    }
+
+    public java.util.Map<String, ?> requestVoid(String method, String path, java.util.Map<String, String> params, com.aliyun.teautil.models.RuntimeOptions runtime) throws Exception {
+        OpenApiRequest req = OpenApiRequest.build(TeaConverter.buildMap(
+            new TeaPair("query", params)
+        ));
+        Params openapiParams = Params.build(TeaConverter.buildMap(
+            new TeaPair("pathname", path),
+            new TeaPair("method", method),
+            new TeaPair("bodyType", "none")
+        ));
+        return this.callApi(openapiParams, req, runtime);
+    }
+
     public java.util.Map<String, ?> requestWithModel(TeaModel model, String method, String path, java.util.Map<String, String> params, com.aliyun.teautil.models.RuntimeOptions runtime) throws Exception {
         com.aliyun.teautil.Common.validateModel(model);
         OpenApiRequest req = OpenApiRequest.build(TeaConverter.buildMap(
