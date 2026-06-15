@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.2 (2026-06-15)
+
+### Bug Fix
+
+- **修复 Go SDK 分页签名错误导致的 401。**
+  - `common/go` 依赖的 `tea/utils.buildCanonicalString` 在构造待签名串时对 query 值做了 `url.QueryEscape`，而 ODPS 服务端使用原始（解码后）的 query 值重建规范资源，二者不一致。
+  - 当服务端返回的 opaque `pageToken` 含 `!` 等保留字符时（例如 `ListTables` 翻页），签名不匹配，第二页请求返回 `401 Unauthorized`。
+  - 修复方式：签名串改用原始 query 值（与 Java、Python SDK 行为一致），实际请求 URL 的编码仍由请求层负责。
+  - 对应上游修复：`aliyun/aliyun-odps-go-sdk#73`（`tea/v0.1.0`）。
+  - 仅影响 Go；Java 与 Python 的签名实现本就使用原始值，不受影响。
+
+---
+
 ## 1.3.1 (2026-06-01)
 
 ### Bug Fix
