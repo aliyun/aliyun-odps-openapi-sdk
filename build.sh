@@ -123,8 +123,8 @@ handle_directory() {
                 echo "Set Python __version__ to $py_version"
             fi
         fi
-
-        cd .. || exit 1
+        # Python 分支不进 ./python 目录：codegen 产物就地生成、没有构建步骤，
+        # 因此这里不配 cd ..，退出模块目录由函数末尾那句统一负责。
     fi
 
     echo "Project built successfully in $dir_path."
