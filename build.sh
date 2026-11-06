@@ -34,6 +34,18 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+# sed -i 的参数形态在 GNU sed 和 BSD/macOS sed 下不一样：
+#   GNU:  sed -i 's/.../.../' file
+#   BSD:  sed -i '' 's/.../.../' file
+# 写死任意一种，换到另一种 sed 上都会失败：GNU sed 会把 BSD 形态里的空串当成脚本文件名，
+# 报 "can't read <空串>: No such file or directory" 并以 rc=2 退出，目标文件不被改动。
+# 这里探测一次（BSD sed 不认识 --version），下面两处版本号回写统一用 "${SED_INPLACE[@]}"。
+if sed --version >/dev/null 2>&1; then
+    SED_INPLACE=(-i)
+else
+    SED_INPLACE=(-i '')
+fi
+
 # 函数：处理目录
 handle_directory() {
     local dir_path="$1"
@@ -61,12 +73,21 @@ handle_directory() {
         dara codegen java ./java || { echo "Failed to generate Java code in $dir_path."; exit 1; }
 
         # 从 Darafile 读取版本号，修正 pom.xml 中的项目 version（2空格缩进的那行）
+        # 这几步失败都要显式报错退出：静默跳过会让 pom.xml 停在 codegen 的默认版本，
+        # 用户看到的是下游依赖解析失败，很难联想到这一步。
         local java_version
         java_version=$(grep '"version"' Darafile | head -1 | sed -E 's/.*"version": "v?([^"]+)".*/\1/')
-        if [ -n "$java_version" ] && [ -f "java/pom.xml" ]; then
-            sed -i '' "s|^  <version>[^<]*</version>|  <version>${java_version}</version>|" java/pom.xml
-            echo "Set Java version to $java_version"
+        if [ -z "$java_version" ]; then
+            echo "Failed to read version from Darafile in $dir_path."; exit 1
         fi
+        if [ ! -f "java/pom.xml" ]; then
+            echo "java/pom.xml not found after codegen in $dir_path."; exit 1
+        fi
+        sed "${SED_INPLACE[@]}" "s|^  <version>[^<]*</version>|  <version>${java_version}</version>|" java/pom.xml \
+            || { echo "Failed to set Java version in java/pom.xml in $dir_path."; exit 1; }
+        grep -q "  <version>${java_version}</version>" java/pom.xml \
+            || { echo "Java version ${java_version} missing in java/pom.xml after rewrite in $dir_path."; exit 1; }
+        echo "Set Java version to $java_version"
 
         # 进入到生成的 java 目录
         cd java || { echo "Failed to change directory to java in $dir_path."; exit 1; }
@@ -115,14 +136,19 @@ handle_directory() {
         # 从 Darafile 读取版本号，修正 codegen 生成的 __version__
         local py_version
         py_version=$(grep '"version"' Darafile | head -1 | sed -E 's/.*"version": "v?([^"]+)".*/\1/')
-        if [ -n "$py_version" ]; then
-            local init_file
-            init_file=$(find python -name '__init__.py' -path '*/__init__.py' | head -1)
-            if [ -n "$init_file" ]; then
-                sed -i '' "s/__version__ = .*/__version__ = \"$py_version\"/" "$init_file"
-                echo "Set Python __version__ to $py_version"
-            fi
+        if [ -z "$py_version" ]; then
+            echo "Failed to read version from Darafile in $dir_path."; exit 1
         fi
+        local init_file
+        init_file=$(find python -name '__init__.py' -path '*/__init__.py' | head -1)
+        if [ -z "$init_file" ]; then
+            echo "No __init__.py found under python in $dir_path."; exit 1
+        fi
+        sed "${SED_INPLACE[@]}" "s/__version__ = .*/__version__ = \"$py_version\"/" "$init_file" \
+            || { echo "Failed to set Python version in $init_file in $dir_path."; exit 1; }
+        grep -q "__version__ = \"$py_version\"" "$init_file" \
+            || { echo "Python version ${py_version} missing in $init_file after rewrite in $dir_path."; exit 1; }
+        echo "Set Python __version__ to $py_version"
         # Python 分支不进 ./python 目录：codegen 产物就地生成、没有构建步骤，
         # 因此这里不配 cd ..，退出模块目录由函数末尾那句统一负责。
     fi
