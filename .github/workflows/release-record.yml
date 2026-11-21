@@ -1,0 +1,142 @@
+# Suggestion draft: keep GitHub Releases in sync with the tags that already publish artifacts.
+# Scope: create/update the release *record* only. Artifact publishing stays in the
+# existing publish* workflows; this file never creates tags and never uploads artifacts.
+# See RELEASING.md for the process this encodes.
+name: Record GitHub Release
+
+on:
+  push:
+    # Primary tags only (RELEASING.md 3): one record per version, not one per
+    # language line. The Python/Go tags of the same version stay tag-only; extend this
+    # list if per-line records are ever preferred, and keep --latest=false for them.
+    tags:
+      - "catalog-v*"
+      - "common-v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to record, e.g. catalog-v0.4.0 (used to backfill records for versions already published)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-record-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Resolve the tag
+        id: tag
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_TAG: ${{ inputs.tag }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            name="$DISPATCH_TAG"
+          else
+            name="$REF_NAME"
+          fi
+          if [ -z "$name" ]; then
+            echo "no tag resolved" >&2
+            exit 1
+          fi
+          echo "NAME=$name" >> "$GITHUB_OUTPUT"
+
+      - name: Classify the tag
+        id: kind
+        env:
+          TAG: ${{ steps.tag.outputs.NAME }}
+        run: |
+          # Strip the line prefix so that the hyphen used as a namespace separator
+          # (catalog-v..., common/go/v...) is not mistaken for a pre-release suffix.
+          case "$TAG" in
+            catalog-api/go/v*) ver="${TAG#catalog-api/go/v}" ;;
+            common/go/v*) ver="${TAG#common/go/v}" ;;
+            catalog-py-v*) ver="${TAG#catalog-py-v}" ;;
+            common-py-v*) ver="${TAG#common-py-v}" ;;
+            catalog-v*) ver="${TAG#catalog-v}" ;;
+            common-v*) ver="${TAG#common-v}" ;;
+            *) ver="${TAG##*/}" ;;
+          esac
+          # A semver pre-release suffix (-SNAPSHOT, -rc.1) must never take the Latest slot.
+          case "$ver" in
+            *-*) prerelease=true ;;
+            *) prerelease=false ;;
+          esac
+          # Only the catalog-api Java tag is the primary record that owns Latest (RELEASING.md 3).
+          case "$TAG" in
+            catalog-v*) latest=true ;;
+            *) latest=false ;;
+          esac
+          if [ "$prerelease" = "true" ]; then
+            latest=false
+          fi
+          {
+            echo "version=$ver"
+            echo "prerelease=$prerelease"
+            echo "latest=$latest"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build the notes body
+        id: notes
+        env:
+          TAG: ${{ steps.tag.outputs.NAME }}
+          REPO: ${{ github.repository }}
+        run: |
+          flat=$(printf '%s' "$TAG" | tr '/' '-')
+          file="release-notes/${flat}.md"
+          out=/tmp/release-notes.md
+          if [ -f "$file" ]; then
+            # Drop the leading preparation note before using the body as release notes.
+            if [ "$(head -n 1 "$file")" = '<!--' ]; then
+              awk 'BEGIN{skip=1} skip==1 && /^-->$/ {skip=0; next} skip==0 {print}' "$file" > "$out"
+            else
+              cp "$file" "$out"
+            fi
+            source_kind=prepared
+          else
+            case "$TAG" in
+              catalog-*) log="catalog-api/CHANGELOG.md" ;;
+              common-*) log="common/CHANGELOG.md" ;;
+              *) log="CHANGELOG.md" ;;
+            esac
+            {
+              printf '## %s\n\n' "$TAG"
+              printf 'Recorded automatically from the tag push.\n\n'
+              printf 'No prepared notes file was found at %s. Changes are listed in [%s](https://github.com/%s/blob/develop/%s).\n' \
+                "release-notes/${flat}.md" "$log" "$REPO" "$log"
+            } > "$out"
+            source_kind=generated
+          fi
+          echo "source=$source_kind" >> "$GITHUB_OUTPUT"
+
+      - name: Create or update the release record
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.tag.outputs.NAME }}
+          PRERELEASE: ${{ steps.kind.outputs.prerelease }}
+          LATEST: ${{ steps.kind.outputs.latest }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release edit "$TAG" \
+              --title "$TAG" \
+              --notes-file /tmp/release-notes.md \
+              --prerelease="$PRERELEASE" \
+              --latest="$LATEST"
+          else
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --notes-file /tmp/release-notes.md \
+              --verify-tag \
+              --prerelease="$PRERELEASE" \
+              --latest="$LATEST"
+          fi
