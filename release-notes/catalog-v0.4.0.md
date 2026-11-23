@@ -53,4 +53,6 @@
 
 - tag：`catalog-v0.4.0`（主记录；`catalog-py-v0.4.0`、`catalog-api/go/v0.4.0` 只留 tag）
 - Pre-release：否
-- 标记为 Latest：是
+- 标记为 Latest：是（前提是先确认当前 Latest 的稳定版本比 0.4.0 旧；现在页面上是 `v0.3.0-SNAPSHOT`，满足）
+- 写入路径：按 `RELEASING.md` 第 5 节，走用内置 `GITHUB_TOKEN` 的 workflow 或 API；在 `catalog-api.yml` / `common.yml` 里那条未按 tag 过滤的 `release: [created]` 触发器摘掉之前，**不要在网页上点 New release**——那会同时启动两条 Maven 发布 job。
+- 写之前要复核制品仍可用（第 4 节三条读数）：Maven jar 200、PyPI 该版本 JSON 200 且未 yank、Go proxy `.info` 200。
