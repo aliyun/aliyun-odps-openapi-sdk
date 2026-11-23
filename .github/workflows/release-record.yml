@@ -1,0 +1,142 @@
+# Records a GitHub Release for an already-published version.
+#
+# Design notes for reviewers:
+#   * Dispatch-only. The recording step must not ride the same tag push as the publish
+#     jobs: they run in parallel, so a record could claim a version whose Maven, PyPI or
+#     Go artifact never landed. The artifact gate below is the replacement.
+#   * It never creates a tag and never publishes an artifact.
+#   * Writes are serialized by one shared concurrency group. Promoting "Latest" is a
+#     read-modify-write on a repository-wide slot, so a per-tag group (and github.ref,
+#     which is the default branch for a dispatch) is not enough.
+#   * Records are written by the built-in GITHUB_TOKEN. Runs created by that token do not
+#     chain into catalog-api.yml / common.yml, which still subscribe to release:created.
+#   * dry_run defaults to true: decide, print, write nothing.
+name: Record GitHub Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to record, e.g. catalog-v0.4.0"
+        required: true
+        type: string
+      lines:
+        description: "Coordinates the record advertises and that must resolve (java,python,go)"
+        required: false
+        type: string
+        default: "java,python,go"
+      promote_latest:
+        description: "May this version take the Latest slot? Leave off when backfilling"
+        required: false
+        type: boolean
+        default: false
+      dry_run:
+        description: "Decide and print only; write no release object"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-record-write
+  cancel-in-progress: false
+
+jobs:
+  self-check:
+    name: Decide offline (no network, no writes)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Run the decision tests
+        working-directory: .github/scripts
+        run: python3 -m unittest -v test_release_record
+
+  record:
+    name: Write the release record
+    needs: self-check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Classify the tag
+        id: cls
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          if [ -z "$TAG" ]; then
+            echo "a tag input is required" >&2
+            exit 1
+          fi
+          python3 .github/scripts/release_record.py classify --tag "$TAG"
+
+      - name: Check that the advertised artifacts resolve
+        # Fail-closed by design: a -SNAPSHOT version has no Central/PyPI artifact, so
+        # recording one needs the lines input narrowed on purpose, not a bypass.
+        id: gate
+        run: >-
+          python3 .github/scripts/release_record.py gate
+          --module "$MODULE" --version "$VERSION" --lines "$LINES"
+          > /tmp/gate.json
+        env:
+          MODULE: ${{ steps.cls.outputs.module }}
+          VERSION: ${{ steps.cls.outputs.version }}
+          LINES: ${{ inputs.lines }}
+
+      - name: Read the current release object and the current Latest
+        id: state
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          if gh release view "$TAG" --json tagName > /dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+          current=$(gh api "repos/${{ github.repository }}/releases/latest" --jq .tag_name 2>/dev/null || true)
+          echo "current_latest=$current" >> "$GITHUB_OUTPUT"
+
+      - name: Build the notes body
+        id: notes
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          python3 .github/scripts/release_record.py notes --tag "$TAG" --out /tmp/release-notes.md
+
+      - name: Plan the write
+        id: plan
+        env:
+          TAG: ${{ inputs.tag }}
+          CURRENT_LATEST: ${{ steps.state.outputs.current_latest }}
+          PROMOTE: ${{ inputs.promote_latest }}
+          EXISTS: ${{ steps.state.outputs.exists }}
+        run: |
+          args=(plan --tag "$TAG" --gate-json /tmp/gate.json)
+          if [ -n "$CURRENT_LATEST" ]; then args+=(--current-latest "$CURRENT_LATEST"); fi
+          if [ "$PROMOTE" = "true" ]; then args+=(--promote-latest); fi
+          if [ "$EXISTS" = "true" ]; then args+=(--exists); fi
+          python3 .github/scripts/release_record.py "${args[@]}"
+
+      - name: Execute, or print what would run when dry_run is on
+        env:
+          GH_ARGS: ${{ steps.plan.outputs.gh_args }}
+          ACTION: ${{ steps.plan.outputs.action }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          if [ "$ACTION" = "skip" ]; then
+            echo "the artifact gate refused this record; nothing was written" >&2
+            exit 1
+          fi
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "dry_run is on, nothing was written. The plan was:"
+            echo "  gh ${GH_ARGS} --notes-file /tmp/release-notes.md"
+            exit 0
+          fi
+          # shellcheck disable=SC2086 # the plan emits one argument per word
+          gh $GH_ARGS --notes-file /tmp/release-notes.md
